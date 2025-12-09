@@ -3,56 +3,57 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { ReactNode } from "react";
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Work_Sans } from "next/font/google";
+import { Nunito_Sans } from "next/font/google";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+// Components
 import TanStackProvider from "@/components/TanStackProvider/TanStackProvider";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
-import AuthProvider from "@/components/AuthProvider/AuthProvider";
 
-const roboto = Roboto({
+const WorkSans = Work_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-roboto",
+  variable: "--font-WorkSans",
+  display: "swap",
+});
+
+const NunitoSans = Nunito_Sans({
+  subsets: ["latin", "cyrillic"],
+  weight: ["400"],
+  variable: "--font-NunitoSans",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Note Hub",
-  description:
-    "Keep your ideas safe and simple with Note Hub — a clean, fast, and reliable personal notebook without the clutter.",
+  title: "ToolNext",
+  description: "",
   openGraph: {
-    title: "Note Hub",
-    description:
-      "Note Hub is a clean and minimal personal notebook for capturing your thoughts and ideas. Fast, reliable, and distraction-free — your space to think clearly.",
-    url: "https://08-zustand-blush-beta.vercel.app",
-    images: [
-      { url: "https://ac.goit.global/fullstack/react/notehub-og-meta.jpg" },
-    ],
+    title: "ToolNext",
+    description: "",
+    url: "",
+    images: [{ url: "" }],
   },
 };
 
 export default function RootLayout({
   children,
-  modal,
 }: Readonly<{
   children: ReactNode;
   modal: ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${roboto.variable}`}>
+    <html lang="uk">
+      <body className={`${WorkSans.variable} ${NunitoSans.variable}`}>
         <TanStackProvider>
-          <AuthProvider>
-            <Header />
+          {/* <Header /> */}
 
-            {children}
-            {modal}
+          {children}
 
-            <Footer />
-            <Toaster />
-            <ReactQueryDevtools initialIsOpen={false} />
-          </AuthProvider>
+          {/* <Footer /> */}
+          <Toaster />
+          <ReactQueryDevtools initialIsOpen={false} />
         </TanStackProvider>
       </body>
     </html>
