@@ -3,20 +3,61 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { ReactNode } from "react";
 import type { Metadata } from "next";
-import { Work_Sans } from "next/font/google";
-import { Nunito_Sans } from "next/font/google";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+// Fonts
+import localFont from "next/font/local";
+import { Nunito_Sans } from "next/font/google";
 
 // Components
 import TanStackProvider from "@/components/TanStackProvider/TanStackProvider";
-import Header from "@/components/Header/Header";
-import Footer from "@/components/Footer/Footer";
+// import Header from "@/components/Header/Header";
+// import Footer from "@/components/Footer/Footer";
 
-const WorkSans = Work_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+const WorkSans = localFont({
+  src: [
+    {
+      path: "../public/fonts/WorkSans/WorkSans-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/WorkSans/WorkSans-Regular.woff",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/WorkSans/WorkSans-Medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/WorkSans/WorkSans-Medium.woff",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/WorkSans/WorkSans-SemiBold.woff2",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/WorkSans/WorkSans-SemiBold.woff",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/WorkSans/WorkSans-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/WorkSans/WorkSans-Bold.woff",
+      weight: "700",
+      style: "normal",
+    },
+  ],
   variable: "--font-WorkSans",
-  display: "swap",
 });
 
 const NunitoSans = Nunito_Sans({
@@ -50,6 +91,7 @@ export default function RootLayout({
           {/* <Header /> */}
 
           {children}
+          <p>12</p>
 
           {/* <Footer /> */}
           <Toaster />
