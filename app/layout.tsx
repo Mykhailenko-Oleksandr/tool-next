@@ -6,61 +6,22 @@ import type { Metadata } from "next";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 // Fonts
-import localFont from "next/font/local";
 import { Nunito_Sans } from "next/font/google";
+import { Inter } from "next/font/google";
 
 // Components
 import TanStackProvider from "@/components/TanStackProvider/TanStackProvider";
 // import Header from "@/components/Header/Header";
 // import Footer from "@/components/Footer/Footer";
 
-const WorkSans = localFont({
-  src: [
-    {
-      path: "../public/fonts/WorkSans/WorkSans-Regular.woff2",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/WorkSans/WorkSans-Regular.woff",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/WorkSans/WorkSans-Medium.woff2",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/WorkSans/WorkSans-Medium.woff",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/WorkSans/WorkSans-SemiBold.woff2",
-      weight: "600",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/WorkSans/WorkSans-SemiBold.woff",
-      weight: "600",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/WorkSans/WorkSans-Bold.woff2",
-      weight: "700",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/WorkSans/WorkSans-Bold.woff",
-      weight: "700",
-      style: "normal",
-    },
-  ],
-  variable: "--font-WorkSans",
+const inter = Inter({
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-Inter",
+  display: "swap",
 });
 
-const NunitoSans = Nunito_Sans({
+const nunitoSans = Nunito_Sans({
   subsets: ["latin", "cyrillic"],
   weight: ["400"],
   variable: "--font-NunitoSans",
@@ -86,7 +47,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="uk">
-      <body className={`${WorkSans.variable} ${NunitoSans.variable}`}>
+      <body className={`${inter.variable} ${nunitoSans.variable}`}>
         <TanStackProvider>
           {/* <Header /> */}
 
