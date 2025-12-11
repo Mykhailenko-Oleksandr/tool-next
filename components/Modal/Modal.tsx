@@ -1,26 +1,37 @@
 "use client";
 
 import { createPortal } from "react-dom";
+import { useEffect, useState, type MouseEvent, type ReactNode } from "react";
 import css from "./Modal.module.css";
-import { useEffect, type MouseEvent, type ReactNode } from "react";
 
 interface ModalProps {
-  onClose: () => void;
-  children: ReactNode;
+  title: string;
+  confirmButtonText?: string;
+  cancelButtonText?: string;
+  onConfirm: () => Promise<void> | void;
+  onCancel: () => void;
+  confirmButtonColor?: "purple" | "red";
+  children?: ReactNode;
 }
 
-export default function Modal({ onClose, children }: ModalProps) {
-  const handleBackdropClick = (event: MouseEvent<HTMLDivElement>) => {
-    if (event.target === event.currentTarget) {
-      onClose();
-    }
+export default function Modal({
+  title,
+  confirmButtonText = "Підтвердити",
+  cancelButtonText = "Скасувати",
+  onConfirm,
+  onCancel,
+  confirmButtonColor = "purple",
+  children,
+}: ModalProps) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleBackdropClick = (e: MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) onCancel();
   };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        onClose();
-      }
+      if (e.key === "Escape") onCancel();
     };
 
     document.addEventListener("keydown", handleKeyDown);
@@ -30,7 +41,20 @@ export default function Modal({ onClose, children }: ModalProps) {
       document.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "";
     };
-  }, [onClose]);
+  }, [onCancel]);
+
+  const handleConfirm = async () => {
+    try {
+      setIsLoading(true);
+      await onConfirm();
+      setIsLoading(false);
+      onCancel();
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
+      alert("Сталася помилка. Спробуйте ще раз.");
+    }
+  };
 
   return createPortal(
     <div
@@ -39,7 +63,46 @@ export default function Modal({ onClose, children }: ModalProps) {
       aria-modal="true"
       onClick={handleBackdropClick}
     >
-      <div>{children}</div>
+      <div className={css.modalContent}>
+        <button className={css.closeBtn} onClick={onCancel} aria-label="Закрыть модалку">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 14 14"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12.1748 0.5C12.3391 0.5 12.4411 0.548503 12.5215 0.628906C12.6017 0.709215 12.6503 0.810702 12.6504 0.974609C12.6504 1.13881 12.6018 1.2409 12.5215 1.32129L7.26758 6.5752L7.62109 6.92871L12.5215 11.8281C12.6019 11.9085 12.6504 12.0106 12.6504 12.1748C12.6504 12.3391 12.6019 12.4411 12.5215 12.5215C12.4411 12.6019 12.3391 12.6504 12.1748 12.6504C12.0106 12.6504 11.9085 12.6019 11.8281 12.5215L6.92871 7.62109L6.5752 7.26758L1.32129 12.5215C1.2409 12.6018 1.13881 12.6504 0.974609 12.6504C0.810702 12.6503 0.709215 12.6017 0.628906 12.5215C0.548503 12.4411 0.5 12.3391 0.5 12.1748C0.500038 12.0106 0.548535 11.9085 0.628906 11.8281L5.88184 6.5752L5.52832 6.22168L0.628906 1.32129C0.548504 1.24089 0.5 1.13888 0.5 0.974609C0.500076 0.810568 0.548567 0.709245 0.628906 0.628906C0.709245 0.548567 0.810568 0.500076 0.974609 0.5C1.13888 0.5 1.24089 0.548504 1.32129 0.628906L6.22168 5.52832L6.5752 5.88184L11.8281 0.628906C11.9085 0.548535 12.0106 0.500038 12.1748 0.5Z"
+              fill="white"
+              stroke="black"
+            />
+          </svg>
+        </button>
+        <h2 className={css.title}>{title}</h2>
+        {children && <div className={css.text}>{children}</div>}
+        <div className={css.divider} />
+        <div className={css.buttons}>
+          <button
+            className={`${css.modalButton} ${css.cancelBtn}`}
+            onClick={onCancel}
+            disabled={isLoading}
+          >
+            {cancelButtonText}
+          </button>
+          <button
+            className={`${css.modalButton} ${
+              confirmButtonColor === "red"
+                ? css["confirmBtn-red"]
+                : css["confirmBtn-purple"]
+            }`}
+            onClick={handleConfirm}
+            disabled={isLoading}
+          >
+            {isLoading ? "Завантаження..." : confirmButtonText}
+          </button>
+        </div>
+      </div>
     </div>,
     document.body
   );
