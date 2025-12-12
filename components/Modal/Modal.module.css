@@ -1,3 +1,5 @@
+/* mobile-first */
+
 .backdrop {
   position: fixed;
   inset: 0;
@@ -14,10 +16,10 @@
   align-items: center;
   justify-content: flex-start;
   gap: 48px;
-  width: 768px;
-  max-width: 90vw;
-  height: auto;
-  padding: 64px;
+  width: 334px;
+  height: 586px;
+  max-width: 768px;
+  padding: 64px 20px;
   border-radius: 16px;
   background: #ffffff;
   position: relative;
@@ -25,17 +27,13 @@
 
 .closeBtn {
   position: absolute;
-  top: 32px;
-  right: 32px;
+  top: 16px;
+  right: 16px;
   background: none;
   border: none;
-  font-size: 28px;
   cursor: pointer;
   opacity: 0.7;
-}
-
-.closeBtn:hover {
-  opacity: 1;
+  transition: opacity 0.2s;
 }
 
 .closeBtn svg {
@@ -63,7 +61,7 @@
   line-height: 1.5;
   text-align: center;
   color: #000;
-  max-width: 500px;
+  max-width: 90%;
 }
 
 .divider {
@@ -74,25 +72,24 @@
 
 .buttons {
   display: flex;
+  flex-direction: column;
   width: 100%;
-  justify-content: center;
-  gap: 24px; /* одинаковый на всех экранах */
+  gap: 16px;
 }
 
 .modalButton {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: row;
-  gap: 8px;
   border-radius: 6px;
   padding: 10px 24px;
-  width: 308px;
+  width: 100%;
   height: 44px;
   font-family: var(--font-main);
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
+  transition: background-color 0.2s, opacity 0.2s;
 }
 
 .cancelBtn {
@@ -118,46 +115,133 @@
   cursor: not-allowed;
 }
 
-/* Tablet */
-@media (max-width: 1024px) {
-  .modalContent {
-    padding: 64px 32px;
-  }
+/* cancelBtn */
 
-  .title {
-    font-size: 32px;
-  }
-
-  .text {
-    font-size: 16px;
-  }
+.cancelBtn {
+  border: 2px solid #000;
+  background: transparent;
+  color: #000;
+  padding: 10px 24px;
+  width: 100%;
+  height: 44px;
 }
 
-/* Mobile */
-@media (max-width: 600px) {
+.cancelBtn:hover,
+.cancelBtn:focus {
+  border: 2px solid #8808cc;
+  padding: 8px 20px;
+  width: 91px;
+  height: 40px;
+  outline: none;
+}
+
+.cancelBtn:active {
+  border: 2px solid #8808cc;
+  padding: 10px 24px;
+  width: 99px;
+  height: 44px;
+}
+
+.cancelBtn:disabled {
+  border: 2px solid #000;
+  padding: 10px 24px;
+  width: 99px;
+  height: 44px;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* modalButton */
+
+.confirmBtn-purple {
+  border: 1px solid #8808cc;
+  background: #8808cc;
+  color: #fff;
+  padding: 10px 24px;
+  width: 100%;
+  height: 44px;
+}
+
+.confirmBtn-red {
+  border: 1px solid #c40202;
+  background: #c40202;
+  color: #fff;
+  padding: 10px 24px;
+  width: 100%;
+  height: 44px;
+}
+
+.confirmBtn-purple:hover,
+.confirmBtn-purple:focus {
+  border: 2px solid #000;
+  padding: 8px 20px;
+  width: 91px;
+  height: 40px;
+  outline: none;
+}
+
+.confirmBtn-red:hover,
+.confirmBtn-red:focus {
+  border: 2px solid #000;
+  padding: 8px 20px;
+  width: 91px;
+  height: 40px;
+  outline: none;
+}
+
+.confirmBtn-purple:active {
+  border: 2px solid #fff;
+  padding: 10px 24px;
+  width: 99px;
+  height: 44px;
+}
+
+.confirmBtn-red:active {
+  border: 2px solid #fff;
+  padding: 10px 24px;
+  width: 99px;
+  height: 44px;
+}
+
+.confirmBtn-purple:disabled,
+.confirmBtn-red:disabled {
+  border: 1px solid #8808cc;
+  padding: 10px 24px;
+  width: 99px;
+  height: 44px;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+   /* tablet */ 
+
+@media (min-width: 768px) {
   .modalContent {
-    padding: 64px 20px;
-  }
-
-  .closeBtn {
-    top: 16px;
-    right: 16px;
-    font-size: 24px;
-  }
-
-  .title {
-    font-size: 24px;
-  }
-
-  .text {
-    font-size: 14px;
+    width: 704px;
+    height: 348px;
+    padding: 64px 32px;
+    gap: 48px;
   }
 
   .buttons {
-    flex-direction: column;
+    flex-direction: row; 
+    justify-content: center;
+    gap: 24px;
   }
 
   .modalButton {
-    width: 100%;
+    width: 308px; 
+  }
+}
+
+/* desktop */
+
+@media (min-width: 1440px) {
+  .modalContent {
+    width: 768px;
+    height: 348px;
+    padding: 64px;
+    gap: 48px;
   }
 }

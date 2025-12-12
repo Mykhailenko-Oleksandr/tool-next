@@ -64,7 +64,7 @@ export default function Modal({
       onClick={handleBackdropClick}
     >
       <div className={css.modalContent}>
-        <button className={css.closeBtn} onClick={onCancel} aria-label="Закрыть модалку">
+        <button className={css.closeBtn} onClick={onCancel} aria-label="Закрити модалку">
           <svg
             width="14"
             height="14"
