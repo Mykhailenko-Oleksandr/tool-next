@@ -1,0 +1,40 @@
+.toolCard {
+  margin: 0 auto;
+  width: 335px;
+}
+
+.image {
+  border-radius: 16px;
+  margin-bottom: 16px;
+}
+
+.rating {
+  margin-bottom: 8px;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 18px;
+  height: 54px;
+  margin-bottom: 8px;
+}
+
+.price {
+  font-weight: 500;
+  font-size: 12px;
+  margin-bottom: 16px;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid var(--color-neutral-darkest);
+  border-radius: 6px;
+  padding: 6px 20px;
+  width: 100%;
+
+  font-weight: 500;
+  color: var(--color-neutral-darkest);
+}
