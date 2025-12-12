@@ -36,8 +36,7 @@ export const metadata: Metadata = {
     title: "ToolNext",
     description: "ToolNext — оренда інструментів у кілька кліків",
 
-    // Треба буде змінити посилання
-    url: "http://localhost:3000",
+    url: "https://tool-next-chi.vercel.app",
     images: [
       {
         url: "https://res.cloudinary.com/ddln4hnns/image/upload/v1765352917/cover_kkf3m7.jpg",
