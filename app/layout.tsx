@@ -11,8 +11,8 @@ import { Inter } from "next/font/google";
 
 // Components
 import TanStackProvider from "@/components/TanStackProvider/TanStackProvider";
-// import Header from "@/components/Header/Header";
-// import Footer from "@/components/Footer/Footer";
+import Header from "@/components/Header/Header";
+import Footer from "@/components/Footer/Footer";
 
 const inter = Inter({
   subsets: ["latin", "cyrillic"],
@@ -30,12 +30,19 @@ const nunitoSans = Nunito_Sans({
 
 export const metadata: Metadata = {
   title: "ToolNext",
-  description: "",
+  description:
+    "ToolNext — платформа для зручної оренди інструментів. Знайди потрібне обладнання для ремонту чи хобі поруч із тобою та орендуй у кілька кліків. Власники можуть легко додавати інструменти, керувати оголошеннями та заробляти на простоюючому обладнанні. Швидка, доступна і вигідна оренда для всіх.",
   openGraph: {
     title: "ToolNext",
-    description: "",
-    url: "",
-    images: [{ url: "" }],
+    description: "ToolNext — оренда інструментів у кілька кліків",
+
+    // Треба буде змінити посилання
+    url: "http://localhost:3000",
+    images: [
+      {
+        url: "https://res.cloudinary.com/ddln4hnns/image/upload/v1765352917/cover_kkf3m7.jpg",
+      },
+    ],
   },
 };
 
@@ -43,18 +50,16 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: ReactNode;
-  modal: ReactNode;
 }>) {
   return (
     <html lang="uk">
       <body className={`${inter.variable} ${nunitoSans.variable}`}>
         <TanStackProvider>
-          {/* <Header /> */}
+          <Header />
 
           {children}
-          <p>12</p>
 
-          {/* <Footer /> */}
+          <Footer />
           <Toaster />
           <ReactQueryDevtools initialIsOpen={false} />
         </TanStackProvider>
