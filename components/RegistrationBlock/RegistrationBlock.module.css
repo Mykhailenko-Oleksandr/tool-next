@@ -1,0 +1,128 @@
+.registrationBlockSection {
+    padding-top: 64px; 
+    padding-bottom: 64px;
+  }
+  
+  .contentWrapper {
+    display: flex;
+    flex-direction: column;
+    
+  }
+  
+ .textContent {
+  max-width: 335px;
+  margin-bottom: 32px;
+  text-align: left;
+ }
+  
+  .title {
+   font-weight: 700;
+   font-size: 36px;
+   line-height: 1.2;
+   letter-spacing: -0.01em;
+   margin-bottom: 24px;
+   
+  }
+  
+  .description {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .buttonRegister {
+    font-family: "Work Sans", sans-serif;
+    display: block;
+    text-align: center;
+    background-color: #8808cc;
+    border: transparent;
+    border-radius: 6px;
+    padding: 10px 24px;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #fff;
+    margin-bottom: 32px;
+    min-width: 335px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .buttonRegister:hover, 
+  .buttonRegister:focus {
+    border: 2px solid #8808cc;
+    color: #000;
+    background-color: #fff;
+  } 
+
+  .buttonRegister:active {
+    background-color: #e7cdf4;
+  }
+  
+  .buttonRegister:disabled{
+    background-color: #8808cc;
+    opacity: 0.4;
+  }
+
+  .imageBlock {
+    position: relative;
+    object-fit: cover;
+    height: 223px;
+    border-radius: 16px;
+   }
+
+
+  @media only screen and (min-width: 768px) {
+  
+       .buttonRegister {
+        display: inline-block;
+         min-width: 166px;
+         margin-bottom: 32px;
+       }
+
+       .textContent {
+        max-width: 704px;
+       }
+
+       .imageBlock {
+        height: 469px;
+       }
+    }
+
+
+    @media only screen and (min-width: 1440px) {
+        .registrationBlockSection {
+            padding-top: 112px; 
+            padding-bottom: 112px;
+          }
+
+        .contentWrapper {
+            flex-direction: row;
+            gap: 32px;
+        }
+        
+        .textAndButton {
+            padding: 11px 0;
+        }
+
+        .textContent {
+          max-width: 755px;
+         }
+
+        .title {
+            font-size: 48px;
+           }
+
+         .description {
+            font-size: 18px;
+          }
+
+          .buttonRegister {
+             min-width: 183px;
+             margin-bottom: 0px;
+           } 
+
+           .imageBlock {
+            height: 350px;
+            width: 525px;
+           }
+      }
