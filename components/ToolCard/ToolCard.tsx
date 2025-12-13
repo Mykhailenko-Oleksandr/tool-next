@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import css from "./ToolCard.module.css";
+import StarsRating from "../StarsRating/StarsRating";
 
 export default function ToolCard() {
   return (
@@ -14,7 +15,7 @@ export default function ToolCard() {
           className={css.image}
         />
 
-        <p className={css.rating}>5</p>
+        <StarsRating rating={3.3} />
         <h4 className={css.title}>Штукатурна станція PFT G4</h4>
         <p className={css.price}>1500 грн/день</p>
         <Link className={css.link} href="/tools/id">

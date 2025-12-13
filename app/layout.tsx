@@ -57,9 +57,11 @@ export default function RootLayout({
         <TanStackProvider>
           <Header />
 
-          <main>{children}</main>
+          <main>
+            <ToolCard />
+            {children}
+          </main>
 
-          <ToolCard />
           <Footer />
           <Toaster />
           <ReactQueryDevtools initialIsOpen={false} />
