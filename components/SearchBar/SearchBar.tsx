@@ -1,6 +1,13 @@
 "use client";
 
-import { Formik, Form, Field, FormikHelpers, useFormikContext, FieldInputProps } from "formik";
+import {
+  Formik,
+  Form,
+  Field,
+  FormikHelpers,
+  useFormikContext,
+  FieldInputProps,
+} from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { useRef, useEffect, useState } from "react";
@@ -18,7 +25,8 @@ const searchSchema = Yup.object().shape({
 });
 
 function SearchForm() {
-  const { errors, submitCount, isSubmitting } = useFormikContext<SearchFormValues>();
+  const { errors, submitCount, isSubmitting } =
+    useFormikContext<SearchFormValues>();
   const inputRef = useRef<HTMLInputElement>(null);
   const [hasChangedAfterSubmit, setHasChangedAfterSubmit] = useState(false);
 
@@ -31,8 +39,7 @@ function SearchForm() {
 
   // Показываем ошибку только если была попытка отправки
   // и пользователь не изменил значение после отправки
-  const showError =
-    errors.search && submitCount > 0 && !hasChangedAfterSubmit;
+  const showError = errors.search && submitCount > 0 && !hasChangedAfterSubmit;
 
   // Устанавливаем фокус на инпут только при ошибке валидации
   useEffect(() => {
@@ -57,9 +64,7 @@ function SearchForm() {
               ref={inputRef}
               type="text"
               placeholder="Дриль алмазного свердління"
-              className={`${css["search-input"]} ${
-                showError ? css.error : ""
-              }`}
+              className={`${css["search-input"]} ${showError ? css.error : ""}`}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 // Вызываем стандартный обработчик Formik
                 field.onChange(e);
@@ -71,9 +76,9 @@ function SearchForm() {
             />
           )}
         </Field>
-        {showError && (
+        {/* {showError && (
           <div className={css["search-error"]}>{errors.search}</div>
-        )}
+        )} */}
       </div>
       <button
         type="submit"
@@ -120,4 +125,3 @@ export default function SearchBar() {
     </Formik>
   );
 }
-
