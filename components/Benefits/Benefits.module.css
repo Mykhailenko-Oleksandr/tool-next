@@ -1,0 +1,128 @@
+.container {
+  max-width: 375px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.benefits {
+  padding: 64px 0;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+
+.benefitsTitle {
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+
+.benefitsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.benefitsContainerTitle {
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.benefitsContainerText {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.benefitsList {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.benefitsListItem {
+  width: 100%;
+}
+.benefitsListIcon {
+  margin-bottom: 24px;
+}
+.benefitsListItemTitle {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  margin-bottom: 24px;
+}
+.benefitsListItemText {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+@media only screen and (min-width: 768px) {
+  .container {
+    max-width: 768px;
+    padding: 0 32px;
+  }
+  .benefitsContainerTitle {
+    font-size: 32px;
+  }
+  .benefitsList {
+    gap: 32px;
+  }
+}
+
+@media only screen and (min-width: 1440px) {
+  .container {
+    max-width: 1440px;
+    padding: 0 64px;
+  }
+
+  .benefits {
+    padding: 112px 0;
+  }
+
+  .benefitsContainer {
+    gap: 80px;
+    margin-bottom: 80px;
+  }
+  .benefitsContainerTitle {
+    display: block;
+    width: 616px;
+    font-size: 40px;
+  }
+  .benefitsContainerText {
+    display: block;
+    width: 616px;
+    font-size: 18px;
+  }
+  .benefitsList {
+    align-items: start;
+    gap: 32px;
+  }
+  .benefitsListItem {
+    width: calc((100% - 64px) / 3);
+  }
+  .benefitsListIcon {
+    margin-bottom: 24px;
+  }
+  .benefitsListItemTitle {
+    font-size: 24px;
+  }
+  .benefitsListItemText {
+    font-size: 16px;
+  }
+}
