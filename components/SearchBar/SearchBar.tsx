@@ -1,6 +1,6 @@
 "use client";
 
-import { Formik, Form, Field, FormikHelpers } from "formik";
+import { Formik, Form, Field, FormikHelpers, useFormikContext, FieldInputProps } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { useRef, useEffect, useState } from "react";
@@ -17,10 +17,76 @@ const searchSchema = Yup.object().shape({
     .required("Введіть пошуковий запит"),
 });
 
-export default function SearchBar() {
+function SearchForm() {
+  const { errors, submitCount, isSubmitting } = useFormikContext<SearchFormValues>();
   const inputRef = useRef<HTMLInputElement>(null);
   const [hasChangedAfterSubmit, setHasChangedAfterSubmit] = useState(false);
 
+  // Сбрасываем флаг при каждой попытке отправки
+  useEffect(() => {
+    if (submitCount > 0) {
+      setHasChangedAfterSubmit(false);
+    }
+  }, [submitCount]);
+
+  // Показываем ошибку только если была попытка отправки
+  // и пользователь не изменил значение после отправки
+  const showError =
+    errors.search && submitCount > 0 && !hasChangedAfterSubmit;
+
+  // Устанавливаем фокус на инпут только при ошибке валидации
+  useEffect(() => {
+    if (showError && inputRef.current) {
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 0);
+    }
+  }, [showError, submitCount]);
+
+  return (
+    <Form className={css["search-form"]}>
+      <div
+        className={`${css["search-input-wrapper"]} ${
+          showError ? css.error : ""
+        }`}
+      >
+        <Field name="search">
+          {({ field }: { field: FieldInputProps<string> }) => (
+            <input
+              {...field}
+              ref={inputRef}
+              type="text"
+              placeholder="Дриль алмазного свердління"
+              className={`${css["search-input"]} ${
+                showError ? css.error : ""
+              }`}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                // Вызываем стандартный обработчик Formik
+                field.onChange(e);
+                // При изменении значения после отправки скрываем ошибку
+                if (submitCount > 0) {
+                  setHasChangedAfterSubmit(true);
+                }
+              }}
+            />
+          )}
+        </Field>
+        {showError && (
+          <div className={css["search-error"]}>{errors.search}</div>
+        )}
+      </div>
+      <button
+        type="submit"
+        className={css["search-button"]}
+        disabled={isSubmitting}
+      >
+        Пошук
+      </button>
+    </Form>
+  );
+}
+
+export default function SearchBar() {
   const initialValues: SearchFormValues = {
     search: "",
   };
@@ -50,70 +116,7 @@ export default function SearchBar() {
       validateOnChange={true}
       validateOnBlur={false}
     >
-      {({ errors, isSubmitting, submitCount }) => {
-        // Сбрасываем флаг при каждой попытке отправки
-        useEffect(() => {
-          if (submitCount > 0) {
-            setHasChangedAfterSubmit(false);
-          }
-        }, [submitCount]);
-
-        // Показываем ошибку только если была попытка отправки
-        // и пользователь не изменил значение после отправки
-        const showError =
-          errors.search && submitCount > 0 && !hasChangedAfterSubmit;
-
-        // Устанавливаем фокус на инпут только при ошибке валидации
-        useEffect(() => {
-          if (showError && inputRef.current) {
-            setTimeout(() => {
-              inputRef.current?.focus();
-            }, 0);
-          }
-        }, [showError, submitCount]);
-
-        return (
-          <Form className={css["search-form"]}>
-            <div
-              className={`${css["search-input-wrapper"]} ${
-                showError ? css.error : ""
-              }`}
-            >
-              <Field name="search">
-                {({ field }: any) => (
-                  <input
-                    {...field}
-                    ref={inputRef}
-                    type="text"
-                    placeholder="Дриль алмазного свердління"
-                    className={`${css["search-input"]} ${
-                      showError ? css.error : ""
-                    }`}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      // Вызываем стандартный обработчик Formik
-                      field.onChange(e);
-                      // При изменении значения после отправки скрываем ошибку
-                      if (submitCount > 0) {
-                        setHasChangedAfterSubmit(true);
-                      }
-                    }}
-                  />
-                )}
-              </Field>
-              {showError && (
-                <div className={css["search-error"]}>{errors.search}</div>
-              )}
-            </div>
-            <button
-              type="submit"
-              className={css["search-button"]}
-              disabled={isSubmitting}
-            >
-              Пошук
-            </button>
-          </Form>
-        );
-      }}
+      <SearchForm />
     </Formik>
   );
 }
