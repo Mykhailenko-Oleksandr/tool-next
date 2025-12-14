@@ -1,3 +1,5 @@
 import css from "./Footer.module.css";
 
-export default function Footer() {}
+export default function Footer() {
+  return <></>;
+}
