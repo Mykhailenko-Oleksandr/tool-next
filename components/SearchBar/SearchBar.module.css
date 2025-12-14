@@ -1,7 +1,7 @@
 .search-form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 24px;
   width: 100%;
   max-width: 600px;
 }
@@ -10,6 +10,7 @@
   .search-form {
     align-items: center;
     flex-direction: row;
+    gap: 32px;
   }
 }
 
