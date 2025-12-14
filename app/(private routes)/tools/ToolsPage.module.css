@@ -1,0 +1,35 @@
+.page {
+  font-family: var(--font-Inter), Inter, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  background: #f2f2f2;
+  width: 100%;
+  padding: 24px 0 48px;
+}
+
+.page :global(.container) {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.header {
+  margin-bottom: 16px;
+}
+
+.title {
+  margin: 0;
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1.05;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .page {
+    padding: 32px 0 56px;
+  }
+
+  .title {
+    font-size: 48px;
+    line-height: 58px;
+  }
+}
