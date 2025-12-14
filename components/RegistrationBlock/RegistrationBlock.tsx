@@ -9,7 +9,6 @@ import Link from 'next/link';
 export default function RegistrationBlock() {
 
   
-
   return (
     <section className={css.registrationBlockSection} id="registration-block"> 
     <div className={`${css.contentWrapper} container`}>
@@ -20,7 +19,7 @@ export default function RegistrationBlock() {
           <p className={css.description}>Не витрачайте гроші на купівлю — орендуйте зручно та швидко.
           Приєднуйтесь до ToolNext вже сьогодні!</p>
           </div>
-         <Link href="/auth/register" className={css.buttonRegister}>Зареєструватися</Link>
+         <Link href="/auth/register"  className={css.buttonRegister}>Зареєструватися</Link>
         </div>
       
 
@@ -37,7 +36,7 @@ export default function RegistrationBlock() {
     srcSet="/images/home-down-mob.jpg, /images/home-down-mob@2x.jpg 2x" 
     media="(min-width: 375px)" 
   />
-  
+
   <Image
     src="/images/home-down-desk.jpg" 
     alt="Tool's workshop"

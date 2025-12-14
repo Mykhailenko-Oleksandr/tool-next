@@ -6,8 +6,8 @@
   .contentWrapper {
     display: flex;
     flex-direction: column;
-    
   }
+  
   
  .textContent {
   max-width: 335px;
@@ -17,66 +17,55 @@
   
   .title {
    font-weight: 700;
-   font-size: 36px;
+   font-size: 36px; 
    line-height: 1.2;
    letter-spacing: -0.01em;
    margin-bottom: 24px;
-   
-  }
-  
-  .description {
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 1.5;
   }
 
   .buttonRegister {
-    font-family: "Work Sans", sans-serif;
     display: block;
     text-align: center;
-    background-color: #8808cc;
+    background-color: var(--color-electric-violet);
     border: transparent;
     border-radius: 6px;
     padding: 10px 24px;
     font-weight: 500;
     font-size: 14px;
-    line-height: 1.5;
-    color: #fff;
+    color: var(--color-white);
     margin-bottom: 32px;
     min-width: 335px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .buttonRegister:hover, 
   .buttonRegister:focus {
-    border: 2px solid #8808cc;
-    color: #000;
-    background-color: #fff;
+    border: 2px solid var(--color-electric-violet);
+    color: var(--color-neutral-darkest);
+    background-color: var(--color-white);
   } 
 
   .buttonRegister:active {
-    background-color: #e7cdf4;
+    background-color: var(--color-electric-violet-lighter);
   }
   
   .buttonRegister:disabled{
-    background-color: #8808cc;
+    background-color: var(--color-electric-violet);
     opacity: 0.4;
   }
 
   .imageBlock {
     position: relative;
-    object-fit: cover;
+    object-fit: cover; 
     height: 223px;
-    border-radius: 16px;
+    border-radius: 16px; 
    }
 
 
   @media only screen and (min-width: 768px) {
   
        .buttonRegister {
-        display: inline-block;
+         display: inline-block;
          min-width: 166px;
-         margin-bottom: 32px;
        }
 
        .textContent {
