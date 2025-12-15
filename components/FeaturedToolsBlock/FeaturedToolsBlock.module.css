@@ -3,8 +3,8 @@
 /* Базові стилі */
 .featuredToolsContainer {
   width: 100%;
-  display: flex; /* додаємо флекс */
-  justify-content: center; /* центруємо wrapper */
+  display: flex;
+  justify-content: center;
   padding: 64px 20px;
 }
 
@@ -22,40 +22,19 @@
   text-align: center;
 }
 
-/* Сітка карток на флексах */
-.grid {
-  display: flex; /* замість grid */
-  flex-wrap: wrap; /* дозволяємо перенос */
-  gap: 20px; /* відступи між картками */
-  justify-content: center; /* центруємо картки */
+/* Список карток на флексах */
+.toolsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
 }
 
-.cardPlaceholder {
-  flex: 1 1 100%; /* мобільна ширина по замовчуванню */
+/* Кожна картка (ToolCard) */
+.toolsList > * {
+  box-sizing: border-box;
+  flex: 0 0 100%; /* мобайл за замовчуванням */
   max-width: 100%;
-  padding: 16px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #fff;
-  text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-}
-
-.cardPlaceholder img {
-  max-width: 100%;
-  height: auto;
-  margin-bottom: 12px;
-}
-
-.cardPlaceholder h3 {
-  font-size: 18px;
-  margin-bottom: 8px;
-}
-
-.cardPlaceholder p {
-  font-size: 16px;
-  color: #666;
 }
 
 /* Кнопка під картками */
@@ -65,19 +44,47 @@
 }
 
 .catalogButton {
-  background-color: var(--color-scheme-1-accent);
+  background-color: var(--color-scheme-1-accent); /* старт: фіолетовий фон */
   color: var(--color-white);
+  border: 1px solid transparent;
   padding: 12px 24px;
   border-radius: 8px;
   font-weight: 600;
-  transition: background-color 0.3s ease;
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  transition:
+    background-color 0.6s ease,
+    color 0.6s ease,
+    border-color 0.6s ease,
+    transform 0.3s ease;
 }
 
-.catalogButton:hover {
-  background-color: var(--color-electric-violet-dark);
+/* Hover / Focus → білий фон, фіолетовий бордер, чорний текст */
+.catalogButton:hover,
+.catalogButton:focus {
+  background-color: #fff;
+  color: #000;
+  border-color: var(--color-scheme-1-accent);
+}
+
+/* Active → світло‑фіолетовий фон, чорний бордер, чорний текст */
+.catalogButton:active {
+  background-color: #e6dbfa;
+  color: #000;
+  border-color: #000;
+  transform: scale(0.97);
+}
+
+/* Disabled → світло‑фіолетовий фон, білий текст, приглушений бордер */
+.catalogButton:disabled {
+  background-color: #e6dbfa;
+  color: #fff;
+  border-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+  transform: none;
 }
 
 /* Mobile ≤767px */
@@ -92,8 +99,9 @@
     margin: 0 auto;
   }
 
-  .cardPlaceholder {
-    flex: 1 1 100%; /* одна картка в ряд */
+  .toolsList > * {
+    flex: 0 0 100%; /* одна картка в ряд */
+    max-width: 100%;
   }
 }
 
@@ -103,8 +111,8 @@
     max-width: 704px;
   }
 
-  .cardPlaceholder {
-    flex: 1 1 calc(50% - 20px); /* дві картки в ряд */
+  .toolsList > * {
+    flex: 0 0 calc(50% - 20px); /* дві картки в ряд */
     max-width: calc(50% - 20px);
   }
 }
@@ -119,8 +127,8 @@
     padding: 112px 64px;
   }
 
-  .cardPlaceholder {
-    flex: 1 1 calc(25% - 20px); /* чотири картки в ряд */
+  .toolsList > * {
+    flex: 0 0 calc(25% - 20px); /* чотири картки в ряд */
     max-width: calc(25% - 20px);
   }
 
