@@ -127,6 +127,6 @@
 /* Изменение паддинга при ошибке только для мобильной версии */
 @media only screen and (max-width: 767px) {
   :global(#hero.has-error) {
-    padding-bottom: 26px !important; /* 44px - 18px = 26px */
+    padding-bottom: 26px; /* 44px - 18px = 26px */
   }
 }
