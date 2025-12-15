@@ -47,14 +47,14 @@ export default function ToolCard({ tool }: ToolCardProps) {
         <StarsRating rating={tool.rating} />
         <h4 className={css.title}>{tool.name}</h4>
         <p className={css.price}>`{tool.pricePerDay} грн/день`</p>
-        {isAuthenticated && user?.id === tool.owner ? (
+        {isAuthenticated && user?._id === tool.owner ? (
           <div className={css.btnBox}>
-            <Link className={css.link} href={`/tools/edit/${tool.id}`}>
+            <Link className={css.link} href={`/tools/edit/${tool._id}`}>
               Редагувати
             </Link>
             <button
               className={css.deleteBtn}
-              onClick={() => handleDeleteTool(tool.id)}
+              onClick={() => handleDeleteTool(tool._id)}
               type="button"
             >
               <svg className={css.icon} width={24} height={24}>
@@ -63,7 +63,7 @@ export default function ToolCard({ tool }: ToolCardProps) {
             </button>
           </div>
         ) : (
-          <Link className={css.link} href={`/tools/${tool.id}`}>
+          <Link className={css.link} href={`/tools/${tool._id}`}>
             Детальніше
           </Link>
         )}
