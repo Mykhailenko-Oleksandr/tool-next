@@ -46,31 +46,6 @@ export const metadata: Metadata = {
   },
 };
 
-const toolOne = {
-  id: "692db3ffab59e437964311d4",
-  owner: "6881563901add19ee16fcffa",
-  category: "6704d9c7f1a3b8c2d5e4f6a8",
-  name: "Мийка високого тиску акумуляторна Karcher K 2 Battery",
-  description:
-    "Повністю автономна мийка, яка не потребує підключення до електромережі…",
-  pricePerDay: 250,
-  images: "https://ftp.goit.study/img/tools-next/692db3ffab59e437964311d4.webp",
-  rating: 4,
-  specifications: {
-    Тиск: "110 бар",
-    Продуктивність: "340 л/год",
-    Часроботи: "14 хв (стандарт)",
-    Акумулятор: "36 В",
-    Вага: "4.5 кг",
-  },
-  rentalTerms: "Застава 2500 грн. Паспорт.",
-  bookedDates: [],
-  feedbacks: [
-    { id: "692db3ffab59e43796432001" },
-    { id: "692db3ffab59e43796432002" },
-  ],
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -82,10 +57,7 @@ export default function RootLayout({
         <TanStackProvider>
           <Header />
 
-          <main>
-            <ToolCard tool={toolOne} />
-            {children}
-          </main>
+          <main>{children}</main>
 
           <Footer />
           <Toaster />
