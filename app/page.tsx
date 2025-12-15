@@ -1,5 +1,9 @@
-import css from "./Home.module.css";
+import FeedbacksBlock from '../components/FeedbacksBlock/FeedbacksBlock';
 
 export default function Home() {
-  return <></>;
+  return (
+    <main>
+      <FeedbacksBlock />
+    </main>
+  );
 }
