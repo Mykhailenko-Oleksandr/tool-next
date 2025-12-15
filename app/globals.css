@@ -157,9 +157,26 @@ input {
   }
 }
 
+#hero.has-error {
+  padding-top: 42px !important;
+  padding-bottom: 32px !important; /* 42 - 14 = 28 */
+}
+
+@media only screen and (min-width: 768px) {
+  #hero.has-error {
+    padding-top: 103px !important;
+    padding-bottom: 77px !important; /* 75 + 2 = 77 */
+  }
+}
+
 @media only screen and (min-width: 1440px) {
   .container {
     max-width: 1440px;
     padding: 0 64px;
+  }
+
+  #hero.has-error {
+    padding-top: 192px !important;
+    padding-bottom: 166px !important;
   }
 }
