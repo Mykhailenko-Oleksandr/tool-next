@@ -22,37 +22,17 @@
   text-align: center;
 }
 
-/* Сітка карток */
+/* Сітка карток на флексах */
 .grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
+  display: flex; /* замість grid */
+  flex-wrap: wrap; /* дозволяємо перенос */
+  gap: 20px; /* відступи між картками */
+  justify-content: center; /* центруємо картки */
 }
 
-/* Кнопка під картками */
-.buttonWrapper {
-  margin-top: 32px;
-  text-align: center;
-}
-
-.catalogButton {
-  background-color: var(--color-scheme-1-accent);
-  color: var(--color-white);
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: background-color 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.catalogButton:hover {
-  background-color: var(--color-electric-violet-dark);
-}
-
-/* Заглушка картки */
 .cardPlaceholder {
+  flex: 1 1 100%; /* мобільна ширина по замовчуванню */
+  max-width: 100%;
   padding: 16px;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -78,6 +58,28 @@
   color: #666;
 }
 
+/* Кнопка під картками */
+.buttonWrapper {
+  margin-top: 32px;
+  text-align: center;
+}
+
+.catalogButton {
+  background-color: var(--color-scheme-1-accent);
+  color: var(--color-white);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.catalogButton:hover {
+  background-color: var(--color-electric-violet-dark);
+}
+
 /* Mobile ≤767px */
 @media (max-width: 767px) {
   .wrapper {
@@ -89,6 +91,10 @@
     max-width: 335px;
     margin: 0 auto;
   }
+
+  .cardPlaceholder {
+    flex: 1 1 100%; /* одна картка в ряд */
+  }
 }
 
 /* Tablet ≥768px і ≤1439px */
@@ -97,8 +103,9 @@
     max-width: 704px;
   }
 
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
+  .cardPlaceholder {
+    flex: 1 1 calc(50% - 20px); /* дві картки в ряд */
+    max-width: calc(50% - 20px);
   }
 }
 
@@ -112,8 +119,9 @@
     padding: 112px 64px;
   }
 
-  .grid {
-    grid-template-columns: repeat(4, 1fr);
+  .cardPlaceholder {
+    flex: 1 1 calc(25% - 20px); /* чотири картки в ряд */
+    max-width: calc(25% - 20px);
   }
 
   .title {
