@@ -56,45 +56,41 @@ export default function Modal({
     }
   };
 
-  return createPortal(
-    <div
-      className={css.backdrop}
-      role="dialog"
-      aria-modal="true"
-      onClick={handleBackdropClick}
-    >
-      <div className={css.modalContent}>
-        <button className={css.closeBtn} onClick={onCancel} aria-label="Закрити модалку">
-  <svg width="14" height="14" viewBox="0 0 32 32">
-    <use href="/icons.svg#icon-close" />
-  </svg>
-</button>
+return createPortal(
+  <div
+    className={css.backdrop}
+    role="dialog"
+    aria-modal="true"
+    onClick={handleBackdropClick}
+  >
+ <div className={css.modalContent}>
+  <button className={css.closeBtn} onClick={onCancel} aria-label="Закрити модалку">
+    <svg width="32" height="32" viewBox="0 0 32 32">
+      <use href="/icons.svg#icon-close" />
+    </svg>
+  </button>
 
-        <h2 className={css.title}>{title}</h2>
-        {children && <div className={css.text}>{children}</div>}
-        <div className={css.divider} />
-        <div className={css.buttons}>
-          <button
-            className={`${css.modalButton} ${css.cancelBtn}`}
-            onClick={onCancel}
-            disabled={isLoading}
-          >
-            {cancelButtonText}
-          </button>
-          <button
-            className={`${css.modalButton} ${
-              confirmButtonColor === "red"
-                ? css["confirmBtn-red"]
-                : css["confirmBtn-purple"]
-            }`}
-            onClick={handleConfirm}
-            disabled={isLoading}
-          >
-            {isLoading ? "Завантаження..." : confirmButtonText}
-          </button>
-        </div>
-      </div>
-    </div>,
-    document.body
-  );
+  <div className={css.content}>
+    <h2 className={css.title}>{title}</h2>
+    {children && <div className={css.text}>{children}</div>}
+  </div>
+
+  <div className={css.buttons}>
+    <button className={`${css.modalButton} ${css.cancelBtn}`} onClick={onCancel} disabled={isLoading}>
+      {cancelButtonText}
+    </button>
+    <button
+      className={`${css.modalButton} ${confirmButtonColor === "red" ? css["confirmBtn-red"] : css["confirmBtn-purple"]}`}
+      onClick={handleConfirm}
+      disabled={isLoading}
+    >
+      {isLoading ? "Завантаження..." : confirmButtonText}
+    </button>
+  </div>
+</div>
+
+
+  </div>,
+  document.body
+);
 }
