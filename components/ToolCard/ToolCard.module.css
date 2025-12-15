@@ -54,6 +54,45 @@
   }
 }
 
+.btnBox {
+  display: flex;
+  gap: 16px;
+}
+
+.deleteBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border: 2px solid var(--color-neutral-darkest);
+  border-radius: 6px;
+
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover,
+  &:focus {
+    border-color: var(--color-neutral-darkest);
+    background-color: var(--color-electric-violet-lighter);
+  }
+
+  &:active {
+    border-color: var(--color-white);
+    background-color: var(--color-electric-violet);
+  }
+
+  &:active .icon {
+    fill: var(--color-white);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+  }
+}
+
+.icon {
+  fill: var(--color-neutral-darkest);
+}
+
 @media only screen and (min-width: 768px) {
 }
 
