@@ -1,0 +1,122 @@
+/* FeaturedToolsBlock.module.css */
+
+/* Базові стилі */
+.featuredToolsContainer {
+  width: 100%;
+  display: flex; /* додаємо флекс */
+  justify-content: center; /* центруємо wrapper */
+  padding: 64px 20px;
+}
+
+.wrapper {
+  padding: 40px 0;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Заголовок */
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+/* Сітка карток */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+/* Кнопка під картками */
+.buttonWrapper {
+  margin-top: 32px;
+  text-align: center;
+}
+
+.catalogButton {
+  background-color: var(--color-scheme-1-accent);
+  color: var(--color-white);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.catalogButton:hover {
+  background-color: var(--color-electric-violet-dark);
+}
+
+/* Заглушка картки */
+.cardPlaceholder {
+  padding: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.cardPlaceholder img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 12px;
+}
+
+.cardPlaceholder h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.cardPlaceholder p {
+  font-size: 16px;
+  color: #666;
+}
+
+/* Mobile ≤767px */
+@media (max-width: 767px) {
+  .wrapper {
+    max-width: 335px;
+  }
+
+  .catalogButton {
+    width: 100%;
+    max-width: 335px;
+    margin: 0 auto;
+  }
+}
+
+/* Tablet ≥768px і ≤1439px */
+@media (min-width: 768px) and (max-width: 1439px) {
+  .wrapper {
+    max-width: 704px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop ≥1440px */
+@media (min-width: 1440px) {
+  .wrapper {
+    max-width: 1312px;
+  }
+
+  .featuredToolsContainer {
+    padding: 112px 64px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .title {
+    font-size: 32px;
+  }
+}
