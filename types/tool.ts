@@ -1,6 +1,7 @@
+import {User} from "./user";
 export interface Tool {
   _id: string;
-  owner: string;
+  owner: User;
   category: string;
   name: string;
   description: string;

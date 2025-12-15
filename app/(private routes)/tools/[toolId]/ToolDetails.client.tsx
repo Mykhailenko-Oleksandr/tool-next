@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
-import { useAuthStore } from "@/lib/store/authStore";
-import AuthRequiredModal from "@/components/AuthRequiredModal/AuthRequiredModal";
-import css from "./ToolDetailsPage.module.css";
-import { fetchToolById } from "@/lib/api/clientApi";
-import Loading from "@/app/loading";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useQuery } from '@tanstack/react-query';
+import { useAuthStore } from '@/lib/store/authStore';
+import AuthRequiredModal from '@/components/AuthRequiredModal/AuthRequiredModal';
+import css from './ToolDetailsPage.module.css';
+import { fetchToolById } from '@/lib/api/clientApi';
+import Loading from '@/app/loading';
 
 interface ToolDetailsClientProps {
   toolId: string;
@@ -25,11 +25,11 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["tool", toolId],
+    queryKey: ['tool', toolId],
     queryFn: () => fetchToolById(toolId),
     refetchOnMount: false,
   });
-
+  console.log('Tool data:', tool);
   const handleBookClick = () => {
     if (isAuthenticated) {
       router.push(`/tools/${toolId}/booking`);
@@ -45,7 +45,7 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
   if (error || !tool) {
     return (
       <section className={css.main}>
-        <div className={"container"}>
+        <div className={'container'}>
           <div className={css.error}>
             Помилка завантаження інструменту. Спробуйте пізніше.
           </div>
@@ -90,23 +90,23 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
               {/* Owner Information */}
               <div className={css.ownerBlock}>
                 <div className={css.ownerInfo}>
-                  {user?.avatarUrl ? (
+                  {tool.owner.avatarUrl ? (
                     <Image
-                      src={user.avatarUrl}
-                      alt={user.name}
+                      src={tool.owner.avatarUrl}
+                      alt={tool.owner.name}
                       width={80}
                       height={80}
                       className={css.ownerAvatar}
                     />
                   ) : (
                     <div className={css.ownerAvatarPlaceholder}>
-                      {user?.name.charAt(0).toUpperCase()}
+                      {tool.owner.name.charAt(0).toUpperCase()}
                     </div>
                   )}
                   <div className={css.ownerDetails}>
-                    <p className={css.ownerName}>{user?.name}</p>
+                    <p className={css.ownerName}>{tool.owner.name}</p>
                     <Link
-                      href={`/profile/${user?._id}`}
+                      href={`/profile/${tool.owner._id}`}
                       className={css.profileLink}
                     >
                       Переглянути профіль
