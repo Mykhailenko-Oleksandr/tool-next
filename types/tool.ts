@@ -1,5 +1,5 @@
 export interface Tool {
-  id: string;
+  _id: string;
   owner: string;
   category: string;
   name: string;
