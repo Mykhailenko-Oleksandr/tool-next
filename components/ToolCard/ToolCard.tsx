@@ -8,13 +8,14 @@ import { Tool } from "@/types/tool";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { deleteTool } from "@/lib/api/clientApi";
+import { useAuthStore } from "@/lib/store/authStore";
 
 interface ToolCardProps {
   tool: Tool;
 }
 
 export default function ToolCard({ tool }: ToolCardProps) {
-  const isAuth = false;
+  const { isAuthenticated, user } = useAuthStore();
 
   const queryClient = useQueryClient();
 
@@ -46,11 +47,7 @@ export default function ToolCard({ tool }: ToolCardProps) {
         <StarsRating rating={tool.rating} />
         <h4 className={css.title}>{tool.name}</h4>
         <p className={css.price}>`{tool.pricePerDay} грн/день`</p>
-        {isAuth ? (
-          <Link className={css.link} href={`/tools/${tool.id}`}>
-            Детальніше
-          </Link>
-        ) : (
+        {isAuthenticated && user?.id === tool.owner ? (
           <div className={css.btnBox}>
             <Link className={css.link} href={`/tools/edit/${tool.id}`}>
               Редагувати
@@ -65,6 +62,10 @@ export default function ToolCard({ tool }: ToolCardProps) {
               </svg>
             </button>
           </div>
+        ) : (
+          <Link className={css.link} href={`/tools/${tool.id}`}>
+            Детальніше
+          </Link>
         )}
       </div>
     </>
