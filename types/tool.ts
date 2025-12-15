@@ -1,19 +1,16 @@
-import { User } from "./user";
-
 export interface Tool {
-    id: string;
-    name: string;
-    price: number;
-    owner: {
-        id: string;
-        username: string;
-        avatar: string;
-    };
-    description: string;
-    specifications: {
-        [key: string]: string;
-    };
-    rentalConditions: string;
-    images: string[];
+  _id: string;
+  owner: string;
+  category: string;
+  name: string;
+  description: string;
+  pricePerDay: number;
+  images: string;
+  rating: number;
+  specifications: object;
+  rentalTerms: string;
+  bookedDates?: string[] | [];
+  feedbacks: object[];
+  createdAt?: string;
+  updatedAt?: string;
 }
-
