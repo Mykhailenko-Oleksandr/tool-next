@@ -1,17 +1,11 @@
 "use client";
 
-import {
-  Formik,
-  Form,
-  Field,
-  FormikHelpers,
-  useFormikContext,
-  FieldInputProps,
-} from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { useRef, useEffect, useState } from "react";
 import css from "./SearchBar.module.css";
+import heroCss from "@/components/Hero/Hero.module.css";
 
 interface SearchFormValues {
   search: string;
@@ -23,42 +17,60 @@ const searchSchema = Yup.object().shape({
     .max(100, "Максимальна довжина пошукового запиту - 100 символів"),
 });
 
-function SearchForm() {
-  const { errors, submitCount, isSubmitting } =
-    useFormikContext<SearchFormValues>();
+export default function SearchBar() {
   const inputRef = useRef<HTMLInputElement>(null);
   const errorRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const [hasChangedAfterSubmit, setHasChangedAfterSubmit] = useState(false);
   const [errorText, setErrorText] = useState<string>("");
 
+  const formik = useFormik<SearchFormValues>({
+    initialValues: {
+      search: "",
+    },
+    validationSchema: searchSchema,
+    validateOnChange: true,
+    validateOnBlur: false,
+    onSubmit: (values) => {
+      try {
+        const trimmedSearch = values.search.trim();
+        window.location.href = `/tools?search=${encodeURIComponent(trimmedSearch)}`;
+      } catch (error) {
+        toast.error("Помилка при виконанні пошуку");
+        formik.setFieldError("search", "Помилка при виконанні пошуку");
+      }
+    },
+  });
+
   // Сбрасываем флаг при каждой попытке отправки
   useEffect(() => {
-    if (submitCount > 0) {
+    if (formik.submitCount > 0) {
       setHasChangedAfterSubmit(false);
     }
-  }, [submitCount]);
+  }, [formik.submitCount]);
 
   // Показываем ошибку только если была попытка отправки
   // и пользователь не изменил значение после отправки
-  const showError = errors.search && submitCount > 0 && !hasChangedAfterSubmit;
+  const showError =
+    formik.errors.search && formik.submitCount > 0 && !hasChangedAfterSubmit;
 
   // Сохраняем текст ошибки для анимации исчезновения
   useEffect(() => {
-    if (errors.search && showError) {
-      // Сохраняем текст ошибки при появлении
-      setErrorText(errors.search);
+    if (formik.errors.search && showError) {
+      // Устанавливаем текст ошибки сразу при появлении
+      setErrorText(formik.errors.search);
     } else if (!showError && errorText) {
-      // Не очищаем текст сразу, чтобы анимация работала
-      // Текст очистится после окончания анимации (500ms)
+      // Удаляем текст ошибки после завершения анимации исчезновения (500ms)
+      // чтобы блок ошибки мог плавно исчезнуть
       const timeoutId = setTimeout(() => {
         setErrorText("");
       }, 500);
       return () => clearTimeout(timeoutId);
-    } else if (!errors.search && !showError) {
-      // Если ошибки нет и не показываем, очищаем текст
+    } else if (!formik.errors.search && !showError) {
+      // Если ошибка исчезла и showError тоже false, удаляем текст сразу
       setErrorText("");
     }
-  }, [errors.search, showError]);
+  }, [formik.errors.search, showError]);
 
   // Устанавливаем фокус на инпут только при ошибке валидации
   useEffect(() => {
@@ -67,99 +79,80 @@ function SearchForm() {
         inputRef.current?.focus();
       }, 0);
     }
-  }, [showError, submitCount]);
+  }, [showError, formik.submitCount]);
 
-  // Добавляем класс на секцию hero при ошибке
+  // Добавляем класс на секцию hero при ошибке для изменения паддинга
   useEffect(() => {
     const heroSection = document.getElementById("hero");
     if (heroSection) {
       if (showError) {
-        // Добавляем класс сразу при появлении ошибки
         heroSection.classList.add("has-error");
       } else {
-        // Удаляем класс сразу, чтобы паддинги hero начинали увеличиваться
-        // синхронно с уменьшением блока ошибки (оба имеют transition 500ms)
         heroSection.classList.remove("has-error");
       }
     }
   }, [showError]);
 
-
   return (
-    <Form className={css["search-form"]}>
-      <div
-        className={`${css["search-input-wrapper"]} ${
-          showError ? css.error : ""
-        }`}
-      >
-        <div className={css["search-input-container"]}>
-          <Field name="search">
-            {({ field }: { field: FieldInputProps<string> }) => (
-              <input
-                {...field}
-                ref={inputRef}
-                type="text"
-                placeholder="Дриль алмазного свердління"
-                className={`${css["search-input"]} ${showError ? css.error : ""}`}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  // Вызываем стандартный обработчик Formik
-                  field.onChange(e);
-                  // При изменении значения после отправки скрываем ошибку
-                  if (submitCount > 0) {
-                    setHasChangedAfterSubmit(true);
-                  }
-                }}
-              />
-            )}
-          </Field>
-          <div
-            ref={errorRef}
-            className={`${css["search-error"]} ${showError ? css.show : ""}`}
-          >
-            {errorText}
-          </div>
+    <>
+      <div className={heroCss["hero-in-wrap"]}>
+        <input
+          ref={inputRef}
+          type="text"
+          name="search"
+          value={formik.values.search}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            formik.handleChange(e);
+            if (formik.submitCount > 0) {
+              setHasChangedAfterSubmit(true);
+            }
+          }}
+          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              formik.handleSubmit();
+            }
+          }}
+          placeholder="Дриль алмазного свердління"
+          className={`${css["search-input"]} ${showError ? css.error : ""}`}
+        />
+        <div
+          ref={errorRef}
+          className={`${css["search-error"]} ${css["search-error-mobile"]} ${
+            showError ? css.show : ""
+          }`}
+        >
+          {errorText}
         </div>
         <button
-          type="submit"
+          ref={buttonRef}
+          type="button"
+          onClick={() => formik.handleSubmit()}
           className={css["search-button"]}
-          disabled={isSubmitting}
+          disabled={formik.isSubmitting}
+          onTouchStart={(e) => {
+            // Эмулируем ховер на touch-устройствах
+            if (buttonRef.current && !formik.isSubmitting) {
+              buttonRef.current.classList.add("hover");
+            }
+          }}
+          onTouchEnd={(e) => {
+            // Убираем ховер после тапа
+            if (buttonRef.current) {
+              buttonRef.current.classList.remove("hover");
+            }
+          }}
         >
           Пошук
         </button>
       </div>
-    </Form>
-  );
-}
-
-export default function SearchBar() {
-  const initialValues: SearchFormValues = {
-    search: "",
-  };
-
-  const handleSubmit = (
-    values: SearchFormValues,
-    { setSubmitting, setFieldError }: FormikHelpers<SearchFormValues>
-  ) => {
-    try {
-      const trimmedSearch = values.search.trim();
-      window.location.href = `/tools?search=${encodeURIComponent(trimmedSearch)}`;
-    } catch (error) {
-      toast.error("Помилка при виконанні пошуку");
-      setFieldError("search", "Помилка при виконанні пошуку");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={searchSchema}
-      onSubmit={handleSubmit}
-      validateOnChange={true}
-      validateOnBlur={false}
-    >
-      <SearchForm />
-    </Formik>
+      <div
+        className={`${css["search-error"]} ${css["search-error-desktop"]} ${
+          showError ? css.show : ""
+        }`}
+      >
+        {errorText}
+      </div>
+    </>
   );
 }
