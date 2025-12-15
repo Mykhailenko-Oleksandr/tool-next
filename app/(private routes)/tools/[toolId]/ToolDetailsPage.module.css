@@ -1,87 +1,79 @@
 .main {
-  padding: 32px 0;
-  min-height: calc(100vh - 200px);
-}
-
-.container {
-  max-width: 1440px;
-  margin: 0 auto;
+  padding-top: 32px;
+  padding-bottom: 64px;
 }
 
 .content {
   display: flex;
-  gap: 48px;
+  gap: 32px;
   flex-direction: column;
 }
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 1440px) {
   .content {
     flex-direction: row;
-    gap: 64px;
   }
 }
 
 .imageWrapper {
   flex: 1;
   position: relative;
-  width: 100%;
-  min-height: 300px;
-  border-radius: 8px;
   overflow: hidden;
-  background-color: var(--color-neutral-lightest);
 }
 
 .image {
   width: 100%;
   height: auto;
   object-fit: cover;
-}
-
-.placeholderImage {
-  width: 100%;
-  height: 100%;
-  min-height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--color-neutral-lightest);
-  color: var(--color-neutral);
-  font-size: 18px;
+  border-radius: 16px;
 }
 
 .details {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 24px;
 }
 
 .title {
   font-size: 32px;
   font-weight: 700;
   line-height: 1.2;
-  color: var(--color-neutral-darkest);
+  letter-spacing: -0.01em;
+  color: var(--color-scheme-1-text);
   margin: 0;
+  margin-bottom: 8px;
 }
 
 @media only screen and (min-width: 768px) {
+  .title {
+    font-size: 28px;
+  }
+}
+
+@media only screen and (min-width: 1440px) {
   .title {
     font-size: 40px;
   }
 }
 
 .price {
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--color-electric-violet);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 140%;
+  color: var(--color-scheme-1-text);
   margin: 0;
+  margin-bottom: 24px;
+}
+
+@media only screen and (min-width: 768px) {
+  .title {
+    font-size: 24px;
+  }
 }
 
 .ownerBlock {
-  padding: 20px;
-  background-color: var(--color-white);
-  border: 1px solid var(--color-neutral-lighter);
-  border-radius: 8px;
+  margin-bottom: 24px;
 }
 
 .ownerInfo {
@@ -91,16 +83,16 @@
 }
 
 .ownerAvatar {
-  width: 48px;
-  height: 48px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
 }
 
 .ownerAvatarPlaceholder {
-  width: 48px;
-  height: 48px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   background-color: var(--color-electric-violet);
   color: var(--color-white);
@@ -115,61 +107,48 @@
 .ownerDetails {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-}
-
-.ownerName {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--color-neutral-darkest);
-  margin: 0;
-}
-
-.profileLink {
-  font-size: 14px;
-  color: var(--color-electric-violet);
-  text-decoration: underline;
-  transition: color 250ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.profileLink:hover {
-  color: var(--color-electric-violet-dark);
-}
-
-.section {
-  display: flex;
-  flex-direction: column;
   gap: 16px;
 }
 
-.sectionTitle {
-  font-size: 20px;
+.ownerName {
   font-weight: 600;
-  color: var(--color-neutral-darkest);
-  margin: 0;
+  font-size: 16px;
 }
 
-.description {
+.profileLink {
+  font-weight: 500;
   font-size: 16px;
-  line-height: 1.6;
-  color: var(--color-neutral-dark);
-  margin: 0;
+  border: 2px solid var(--color-neutral-darkest);
+  border-radius: 6px;
+  padding: 7px 19px;
+  transition: color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover,
+  &:focus {
+    border-color: var(--color-neutral-darkest);
+    background-color: var(--color-electric-violet-lighter);
+  }
+
+  &:active {
+    color: var(--color-white);
+    border-color: var(--color-white);
+    background-color: var(--color-electric-violet);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+  }
+}
+
+.section .description {
+  font-size: 16px;
+  margin-bottom: 24px;
 }
 
 .specsList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-}
-
-.specsListItem {
-  display: flex;
-  gap: 8px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--color-neutral-lighter);
+  margin-bottom: 24px;
 }
 
 .specsListItem:last-child {
@@ -178,14 +157,13 @@
 }
 
 .specKey {
-  font-weight: 600;
-  color: var(--color-neutral-dark);
-  min-width: 200px;
+  font-weight: 700;
+  font-size: 16px;
 }
 
 .specValue {
-  color: var(--color-neutral-dark);
-  flex: 1;
+  font-weight: 400;
+  font-size: 16px;
 }
 
 .rentalConditions {
@@ -203,9 +181,7 @@
   font-size: 18px;
   font-weight: 600;
   color: var(--color-white);
-  cursor: pointer;
   transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
-  margin-top: 8px;
 }
 
 .bookButton:hover {
@@ -223,4 +199,3 @@
 .error {
   color: var(--color-red-dark);
 }
-
