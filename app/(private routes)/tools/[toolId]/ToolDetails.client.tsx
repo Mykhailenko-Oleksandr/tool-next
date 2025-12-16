@@ -6,157 +6,152 @@ import Image from "next/image";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "@/lib/store/authStore";
-import { api } from "@/app/api/api";
-import { Tool } from "@/types/tool";
 import AuthRequiredModal from "@/components/AuthRequiredModal/AuthRequiredModal";
 import css from "./ToolDetailsPage.module.css";
-
-async function fetchTool(toolId: string): Promise<Tool> {
-    const response = await api.get(`/tools/${toolId}`);
-    return response.data;
-}
+import { fetchToolById } from "@/lib/api/clientApi";
+import Loading from "@/app/loading";
 
 interface ToolDetailsClientProps {
-    toolId: string;
+  toolId: string;
 }
 
 export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
-    const router = useRouter();
-    const { isAuthenticated } = useAuthStore();
-    const [showAuthModal, setShowAuthModal] = useState(false);
+  const router = useRouter();
+  const { isAuthenticated, user } = useAuthStore();
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
-    const { data: tool, isLoading, error } = useQuery({
-        queryKey: ["tool", toolId],
-        queryFn: () => fetchTool(toolId),
-    });
+  const {
+    data: tool,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["tool", toolId],
+    queryFn: () => fetchToolById(toolId),
+    refetchOnMount: false,
+  });
 
-    const handleBookClick = () => {
-        if (isAuthenticated) {
-            router.push(`/tools/${toolId}/booking`);
-        } else {
-            setShowAuthModal(true);
-        }
-    };
-
-    if (isLoading) {
-        return (
-            <main className={css.main}>
-                <div className={`container ${css.container}`}>
-                    <div className={css.loading}>Завантаження...</div>
-                </div>
-            </main>
-        );
+  const handleBookClick = () => {
+    if (isAuthenticated) {
+      router.push(`/tools/${toolId}/booking`);
+    } else {
+      setShowAuthModal(true);
     }
+  };
 
-    if (error || !tool) {
-        return (
-            <main className={css.main}>
-                <div className={`container ${css.container}`}>
-                    <div className={css.error}>
-                        Помилка завантаження інструменту. Спробуйте пізніше.
-                    </div>
-                </div>
-            </main>
-        );
-    }
+  if (isLoading) {
+    return <Loading />;
+  }
 
+  if (error || !tool) {
     return (
-        <>
-            <main className={css.main}>
-                <div className={`container ${css.container}`}>
-                    <div className={css.content}>
-                        {/* Tool Image */}
-                        <div className={css.imageWrapper}>
-                            {tool.images && tool.images.length > 0 ? (
-                                <Image
-                                    src={tool.images[0]}
-                                    alt={tool.name}
-                                    width={600}
-                                    height={400}
-                                    className={css.image}
-                                    priority
-                                />
-                            ) : (
-                                <div className={css.placeholderImage}>
-                                    Немає зображення
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Tool Details */}
-                        <div className={css.details}>
-                            <h1 className={css.title}>{tool.name}</h1>
-                            <p className={css.price}>{tool.price} грн/день</p>
-
-                            {/* Owner Information */}
-                            <div className={css.ownerBlock}>
-                                <div className={css.ownerInfo}>
-                                    {tool.owner.avatar ? (
-                                        <Image
-                                            src={tool.owner.avatar}
-                                            alt={tool.owner.username}
-                                            width={48}
-                                            height={48}
-                                            className={css.ownerAvatar}
-                                        />
-                                    ) : (
-                                        <div className={css.ownerAvatarPlaceholder}>
-                                            {tool.owner.username.charAt(0).toUpperCase()}
-                                        </div>
-                                    )}
-                                    <div className={css.ownerDetails}>
-                                        <p className={css.ownerName}>{tool.owner.username}</p>
-                                        <Link
-                                            href={`/profile/${tool.owner.id}`}
-                                            className={css.profileLink}
-                                        >
-                                            Переглянути профіль
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Description */}
-                            <div className={css.section}>
-                                <p className={css.description}>{tool.description}</p>
-                            </div>
-
-                            {/* Technical Specifications */}
-                            <div className={css.section}>
-                                <h2 className={css.sectionTitle}>Технічні характеристики</h2>
-                                <ul className={css.specsList}>
-                                    {Object.entries(tool.specifications).map(([key, value]) => (
-                                        <li key={key} className={css.specsListItem}>
-                                            <span className={css.specKey}>{key}:</span>
-                                            <span className={css.specValue}>{value}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-
-                            {/* Rental Conditions */}
-                            <div className={css.section}>
-                                <h2 className={css.sectionTitle}>Умови оренди</h2>
-                                <p className={css.rentalConditions}>{tool.rentalConditions}</p>
-                            </div>
-
-                            {/* Book Button */}
-                            <button
-                                type="button"
-                                className={css.bookButton}
-                                onClick={handleBookClick}
-                            >
-                                Забронювати
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </main>
-
-            {showAuthModal && (
-                <AuthRequiredModal onClose={() => setShowAuthModal(false)} />
-            )}
-        </>
+      <section className={css.main}>
+        <div className={"container"}>
+          <div className={css.error}>
+            Помилка завантаження інструменту. Спробуйте пізніше.
+          </div>
+        </div>
+      </section>
     );
-}
+  }
 
+  return (
+    <>
+      <section className={css.main}>
+        <div className="container">
+          <div className={css.content}>
+            {/* Tool Image */}
+            <div className={css.imageWrapper}>
+              {tool.images && tool.images.length > 0 ? (
+                <Image
+                  src={tool.images}
+                  alt={tool.name}
+                  width={600}
+                  height={400}
+                  className={css.image}
+                  priority
+                />
+              ) : (
+                <Image
+                  src="/images/blank-image-mob.jpg"
+                  alt={tool.name}
+                  width={600}
+                  height={400}
+                  className={css.image}
+                  priority
+                />
+              )}
+            </div>
+
+            {/* Tool Details */}
+            <div className={css.details}>
+              <h1 className={css.title}>{tool.name}</h1>
+              <p className={css.price}>{tool.pricePerDay} грн/день</p>
+
+              {/* Owner Information */}
+              <div className={css.ownerBlock}>
+                <div className={css.ownerInfo}>
+                  {user?.avatarUrl ? (
+                    <Image
+                      src={user.avatarUrl}
+                      alt={user.name}
+                      width={80}
+                      height={80}
+                      className={css.ownerAvatar}
+                    />
+                  ) : (
+                    <div className={css.ownerAvatarPlaceholder}>
+                      {user?.name.charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                  <div className={css.ownerDetails}>
+                    <p className={css.ownerName}>{user?.name}</p>
+                    <Link
+                      href={`/profile/${user?._id}`}
+                      className={css.profileLink}
+                    >
+                      Переглянути профіль
+                    </Link>
+                  </div>
+                </div>
+              </div>
+
+              {/* Description */}
+              <div className={css.section}>
+                <p className={css.description}>{tool.description}</p>
+              </div>
+
+              {/* Technical Specifications */}
+              <div className={css.section}>
+                <ul className={css.specsList}>
+                  {Object.entries(tool.specifications).map(([key, value]) => (
+                    <li key={key} className={css.specsListItem}>
+                      <span className={css.specKey}>{key}: </span>
+                      <span className={css.specValue}>{value}</span>
+                    </li>
+                  ))}
+                  <li className={css.section}>
+                    <span className={css.specKey}>Умови оренди: </span>
+                    <span className={css.specValue}>{tool.rentalTerms}</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Book Button */}
+              <button
+                type="button"
+                className={css.bookButton}
+                onClick={handleBookClick}
+              >
+                Забронювати
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {showAuthModal && (
+        <AuthRequiredModal onClose={() => setShowAuthModal(false)} />
+      )}
+    </>
+  );
+}
