@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useAuthStore } from '@/lib/store/authStore';
-import Link from 'next/link';
-import styles from './Footer.module.css';
+import { useAuthStore } from "@/lib/store/authStore";
+import Link from "next/link";
+import styles from "./Footer.module.css";
 
 export default function Footer() {
   const { user } = useAuthStore();
@@ -42,7 +42,7 @@ export default function Footer() {
             ) : (
               <>
                 <Link href="/auth/login" className={styles.navLink}>
-                  Вийти
+                  Увійти
                 </Link>
                 <Link href="/auth/register" className={styles.navLink}>
                   Зареєструватися
@@ -80,7 +80,9 @@ export default function Footer() {
 
         {/* Bottom section with copyright */}
         <div className={styles.bottomSection}>
-          <p className={styles.copyright}>© {currentYear} ToolNext. Всі права захищені.</p>
+          <p className={styles.copyright}>
+            © {currentYear} ToolNext. Всі права захищені.
+          </p>
         </div>
       </div>
     </footer>
