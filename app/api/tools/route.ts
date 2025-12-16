@@ -1,4 +1,3 @@
-// app/api/tools/route.ts
 import { NextResponse } from "next/server";
 import { api } from "../api";
 import { isAxiosError } from "axios";
@@ -9,7 +8,6 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const page = searchParams.get("page") || "1";
 
-    // Виклик твого бекенду (наприклад, NestJS/Express API)
     const res = await api.get(`/tools?page=${page}`);
 
     return NextResponse.json(res.data, { status: res.status });
