@@ -1,146 +1,142 @@
 .footer {
-    background: var(--color-scheme-2-background);
-    display: flex;
-    flex-direction: column;
-    padding: 48px 20px;
-
+  background: var(--color-scheme-2-background);
+  display: flex;
+  flex-direction: column;
+  padding: 48px 20px;
 }
 
 .container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 40px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 40px;
 }
 
 .topSection {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    gap: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 32px;
 }
 
 .logo {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    fill: var(--color-scheme-1-text);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  fill: var(--color-scheme-1-text);
 }
 
 .logoInner {
-    display: flex;
-    align-items: center;
-    width: 159px;
-    height: 29px;
+  display: flex;
+  align-items: center;
+  width: 159px;
+  height: 29px;
 }
 
 .nav {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    flex: 1;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  flex: 1;
+  align-items: center;
 }
 
 .navLink {
-    height: 22px;
-    font-family: var(--second-family);
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 150%;
-    color: var(--color-scheme-1-text);
+  height: 22px;
+  font-family: var(--second-family);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 150%;
+  color: var(--color-scheme-1-text);
 }
 
 .navLink:focus,
 .navLink:hover {
-    border-bottom: 1px solid var(--color-scheme-1-border);
+  border-bottom: 1px solid var(--color-scheme-1-border);
 }
 
 .social {
-    display: flex;
-    gap: 12px;
-    white-space: nowrap;
+  display: flex;
+  gap: 12px;
+  white-space: nowrap;
 }
 
 .socialLink {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    color: var(--color-scheme-1-text);
-    text-decoration: none;
-    transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: var(--color-scheme-1-text);
+  text-decoration: none;
+  transition: color 0.3s ease;
 }
 
 .socialIcon {
-    width: 32px;
-    height: 32px;
-    fill: var(--color-scheme-1-text);
+  width: 32px;
+  height: 32px;
+  fill: var(--color-scheme-1-text);
 }
 
 .socialLink:hover {
-    border: 1px solid var(--color-scheme-1-border);
-    border-radius: 6px;
-
+  border: 1px solid var(--color-scheme-1-border);
+  border-radius: 6px;
 }
 
 .bottomSection {
-    border-top: 2px solid var(--color-scheme-1-text);
-    text-align: center;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    height: 50px;
+  border-top: 2px solid var(--color-scheme-1-text);
+  text-align: center;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 50px;
 }
 
 .copyright {
-    font-family: var(--second-family);
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 150%;
-    color: var(--color-scheme-3-text);
+  font-family: var(--second-family);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 150%;
+  color: var(--color-scheme-3-text);
 }
 
 @media only screen and (min-width: 768px) {
-    .footer {
-        padding: 48px 32px;
-    }
+  .footer {
+    padding: 48px 32px;
+  }
 
-    .nav {
-        flex-direction: row;
-        gap: 32px;
-    }
-
+  .nav {
+    flex-direction: row;
+    gap: 32px;
+  }
 }
 
 @media only screen and (min-width: 1440px) {
-    .footer {
-        padding: 80px 64px;
-    }
+  .footer {
+    padding: 80px 64px;
+  }
 
-    .logoInner {
-        width: 83px;
-        height: 15px;
-    }
+  .logoInner {
+    width: 83px;
+    height: 15px;
+  }
 
-    .nav {
-        flex-direction: row;
-        justify-content: center;
-        gap: 32px;
-    }
+  .nav {
+    flex-direction: row;
+    justify-content: center;
+    gap: 32px;
+  }
 
-    .topSection {
-        flex-direction: row;
-        align-items: center;
-        gap: 32px;
-    }
+  .topSection {
+    flex-direction: row;
+    align-items: center;
+    gap: 32px;
+  }
 
-    .socialIcon {
-        width: 24px;
-        height: 24px;
-    }
-
+  .socialIcon {
+    width: 24px;
+    height: 24px;
+  }
 }
