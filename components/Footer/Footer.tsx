@@ -1,7 +1,7 @@
 'use client';
 
-import Link from 'next/link';
 import { useAuthStore } from '@/lib/store/authStore';
+import Link from 'next/link';
 import styles from './Footer.module.css';
 
 export default function Footer() {
@@ -42,7 +42,7 @@ export default function Footer() {
             ) : (
               <>
                 <Link href="/auth/login" className={styles.navLink}>
-                  Уйти
+                  Вийти
                 </Link>
                 <Link href="/auth/register" className={styles.navLink}>
                   Зареєструватися
