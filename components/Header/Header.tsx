@@ -54,73 +54,83 @@ export default function Header() {
             </Link>
 
             {/* DESKTOP NAV */}
-            <nav className={styles.header__nav} aria-label="Головна навігація">
-              <Link href="/">Головна</Link>
-              <Link href="/tools">Інструменти</Link>
-              <div className={styles.header__auth}>
-                {user ? (
-                  <>
-                    <Link href="/profile">Мій профіль</Link>
-                    <button type="button" className={styles.create_post_header}>
-                      <span className={styles.create_post_text}>Опублікувати оголошення</span>
-                    </button>
-                    <div className={styles.header__user}>
-                      <div className={styles.user_wrapper}>
-                        <div className={styles.avatar_container}>
-                          {userAvatar ? (
-                            <Image
-                              src={userAvatar}
-                              alt="User avatar"
-                              className={styles.headers_avatar}
-                              priority
-                            />
-                          ) : (
-                            <span className={styles.header__avatar}>{firstLetter}</span>
-                          )}
+            <div>
+              <nav className={styles.header__nav} aria-label="Головна навігація">
+                <Link href="/">Головна</Link>
+                <Link href="/tools">Інструменти</Link>
+                <div className={styles.header__auth}>
+                  {user ? (
+                    <>
+                      <Link href="/profile">Мій профіль</Link>
+                      <button type="button" className={styles.create_post_header}>
+                        <span className={styles.create_post_text}>Опублікувати оголошення</span>
+                      </button>
+                      <div className={styles.header__user}>
+                        <div className={styles.user_wrapper}>
+                          <div className={styles.avatar_container}>
+                            {userAvatar ? (
+                              <Image
+                                src={userAvatar}
+                                alt="User avatar"
+                                className={styles.headers_avatar}
+                                priority
+                              />
+                            ) : (
+                              <span className={styles.header__avatar}>{firstLetter}</span>
+                            )}
+                          </div>
+                          <span className={styles.header__authButtons}>{user.username}</span>
                         </div>
-                        <span className={styles.header__authButtons}>{user.username}</span>
+                        <span className={styles.divider}></span>
+                        <button
+                          type="button"
+                          onClick={() => setIsLogoutOpen(true)}
+                          className={styles.header__logoutButtons}
+                          aria-label="Вийти"
+                        >
+                          <svg width="18" height="18" aria-hidden="true">
+                            <use href="/icons.svg#icon-logout" />
+                          </svg>
+                        </button>
                       </div>
-                      <span className={styles.divider}></span>
+                    </>
+                  ) : (
+                    <div className={styles.auth_wrapper}>
+                      <Link href="/auth/login">Увійти</Link>
                       <button
                         type="button"
-                        onClick={() => setIsLogoutOpen(true)}
-                        className={styles.header__logoutButtons}
-                        aria-label="Вийти"
+                        onClick={() => {
+                          window.location.href = '/auth/register';
+                        }}
+                        className={styles.register_button}
                       >
-                        <svg width="18" height="18" aria-hidden="true">
-                          <use href="/icons.svg#icon-logout" />
-                        </svg>
+                        Зареєструватися
                       </button>
                     </div>
-                  </>
-                ) : (
-                  <div className={styles.header__authButtons}>
-                    <Link href="/auth/login">Увійти</Link>
-                    <Link href="/auth/register">Реєстрація</Link>
-                  </div>
-                )}
+                  )}
+                </div>
+              </nav>
+
+              {/* Make an announcement */}
+              <div className={styles.create_post_container}>
+                <button type="button" className={styles.create_post}>
+                  <span className={styles.create_post_text}>Опублікувати оголошення</span>
+                </button>
+
+                {/* BURGER */}
+                <button
+                  type="button"
+                  className={styles.header__burger}
+                  aria-label={isMenuOpen ? 'Закрити меню' : 'Відкрити меню'}
+                  aria-expanded={isMenuOpen}
+                  aria-controls="mobile-menu"
+                  onClick={() => setIsMenuOpen((prev) => !prev)}
+                >
+                  <svg className={styles.header__burgerIcon} width="40" height="40" aria-hidden>
+                    <use href={isMenuOpen ? '/icons.svg#icon-close' : '/icons.svg#icon-menu'} />
+                  </svg>
+                </button>
               </div>
-            </nav>
-
-            {/* Make an announcement */}
-            <div className={styles.create_post_container}>
-              <button type="button" className={styles.create_post}>
-                <span className={styles.create_post_text}>Опублікувати оголошення</span>
-              </button>
-
-              {/* BURGER */}
-              <button
-                type="button"
-                className={styles.header__burger}
-                aria-label={isMenuOpen ? 'Закрити меню' : 'Відкрити меню'}
-                aria-expanded={isMenuOpen}
-                aria-controls="mobile-menu"
-                onClick={() => setIsMenuOpen((prev) => !prev)}
-              >
-                <svg className={styles.header__burgerIcon} width="40" height="40" aria-hidden>
-                  <use href={isMenuOpen ? '/icons.svg#icon-close' : '/icons.svg#icon-menu'} />
-                </svg>
-              </button>
             </div>
           </div>
         </div>

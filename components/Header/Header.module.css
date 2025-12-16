@@ -101,6 +101,12 @@
   align-items: center;
 }
 
+.auth_wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
 .header__authButtons {
   font-family: var(--second-family);
   font-weight: 600;
