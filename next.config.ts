@@ -2,8 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    // Змінити хост для зображень
-    remotePatterns: [{ protocol: "https", hostname: "ac.goit.global" }],
+    remotePatterns: [
+      { protocol: "https", hostname: "ac.goit.global" },
+      { protocol: "https", hostname: "ftp.goit.study", pathname: "/img/**" },
+    ],
   },
 };
 
