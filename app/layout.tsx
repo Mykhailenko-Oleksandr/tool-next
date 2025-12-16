@@ -6,7 +6,6 @@ import { ReactNode } from "react";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import TanStackProvider from "@/components/TanStackProvider/TanStackProvider";
-import TestModalWrapper from "@/components/TestModalWrapper/TestModalWrapper"; 
 import { Nunito_Sans } from "next/font/google";
 import localFont from "next/font/local";
 
@@ -37,8 +36,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className={`${WorkSans.variable} ${NunitoSans.variable}`}>
         <TanStackProvider>
           {children}
-
-          <TestModalWrapper /> {/* здесь модалка для теста */}
 
           <Toaster />
           <ReactQueryDevtools initialIsOpen={false} />
