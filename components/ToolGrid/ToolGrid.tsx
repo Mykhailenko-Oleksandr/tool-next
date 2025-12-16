@@ -8,9 +8,12 @@ type Props = {
 
 export default function ToolGrid({ tools }: Props) {
   return (
-    <div className={css.grid}>
+    <div className={`container ${css.grid}`}>
       {tools.map((tool) => (
-        <ToolCard key={tool._id} tool={tool} />
+        <ToolCard
+          key={tool._id}
+          tool={tool}
+        />
       ))}
     </div>
   );

@@ -1,12 +1,17 @@
 .grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 32px;
+  gap: 64px 32px;
 }
 
 @media only screen and (min-width: 768px) {
-  .grid {
-    gap: 32px;
-    column-gap: 64px;
+  .grid div {
+    flex-basis: calc((100% - 32px) / 2);
+  }
+}
+
+@media only screen and (min-width: 1440px) {
+  .grid div {
+    flex-basis: calc((100% - 96px) / 4);
   }
 }

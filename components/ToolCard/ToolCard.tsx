@@ -33,41 +33,49 @@ export default function ToolCard({ tool }: ToolCardProps) {
     deleteToolMutate.mutate(id);
   }
 
-  return (
-    <>
-      <div className={css.toolCard}>
-        <Image
-          src={tool.images}
-          alt={tool.name}
-          width={335}
-          height={413}
-          className={css.image}
-        />
+  if (!tool.images) {
+    tool.images = "/images/blank-image-desk.jpg";
+  }
 
-        <StarsRating rating={tool.rating} />
-        <h4 className={css.title}>{tool.name}</h4>
-        <p className={css.price}>`{tool.pricePerDay} грн/день`</p>
-        {isAuthenticated && user?._id === tool.owner ? (
-          <div className={css.btnBox}>
-            <Link className={css.link} href={`/tools/edit/${tool._id}`}>
-              Редагувати
-            </Link>
-            <button
-              className={css.deleteBtn}
-              onClick={() => handleDeleteTool(tool._id)}
-              type="button"
-            >
-              <svg className={css.icon} width={24} height={24}>
-                <use href="/icons.svg#icon-delete"></use>
-              </svg>
-            </button>
-          </div>
-        ) : (
-          <Link className={css.link} href={`/tools/${tool._id}`}>
-            Детальніше
+  return (
+    <div className={css.toolCard}>
+      <Image
+        src={tool.images}
+        alt={tool.name}
+        width={335}
+        height={413}
+        className={css.image}
+      />
+
+      <StarsRating rating={tool.rating} />
+      <h4 className={css.title}>{tool.name}</h4>
+      <p className={css.price}>`{tool.pricePerDay} грн/день`</p>
+      {isAuthenticated && user?._id === tool.owner ? (
+        <div className={css.btnBox}>
+          <Link
+            className={css.link}
+            href={`/tools/edit/${tool._id}`}>
+            Редагувати
           </Link>
-        )}
-      </div>
-    </>
+          <button
+            className={css.deleteBtn}
+            onClick={() => handleDeleteTool(tool._id)}
+            type="button">
+            <svg
+              className={css.icon}
+              width={24}
+              height={24}>
+              <use href="/icons.svg#icon-delete"></use>
+            </svg>
+          </button>
+        </div>
+      ) : (
+        <Link
+          className={css.link}
+          href={`/tools/${tool._id}`}>
+          Детальніше
+        </Link>
+      )}
+    </div>
   );
 }
