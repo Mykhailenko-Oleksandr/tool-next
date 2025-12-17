@@ -1,15 +1,10 @@
 .featuredToolsContainer {
-  width: 100%;
+  /* width: 100%; */
   display: flex;
   justify-content: center;
-  padding: 64px 20px;
+  padding: 112px 64px;
 }
 
-.wrapper {
-  padding: 40px 0;
-  width: 100%;
-  margin: 0 auto;
-}
 
 /* Заголовок */
 .title {
@@ -66,24 +61,6 @@
   border-color: var(--color-scheme-1-accent);
 }
 
-/* Active → світло‑фіолетовий фон, чорний бордер, чорний текст */
-.catalogButton:active {
-  background-color: #e6dbfa;
-  color: #000;
-  border-color: #000;
-  transform: scale(0.97);
-}
-
-/* Disabled → світло‑фіолетовий фон, білий текст, приглушений бордер */
-.catalogButton:disabled {
-  background-color: #e6dbfa;
-  color: #fff;
-  border-color: #ccc;
-  cursor: not-allowed;
-  opacity: 0.7;
-  transform: none;
-}
-
 /* Mobile ≤767px */
 @media (max-width: 767px) {
   .wrapper {
@@ -109,8 +86,8 @@
   }
 
   .toolsList > * {
-    flex: 0 0 calc(50% - 20px); /* дві картки в ряд */
-    max-width: calc(50% - 20px);
+    flex: 0 0 calc(50% - 32px); /* дві картки в ряд */
+    max-width: calc(50% - 0px);
   }
 }
 
@@ -120,13 +97,18 @@
     max-width: 1312px;
   }
 
-  .featuredToolsContainer {
-    padding: 112px 64px;
-  }
+
+/* Список інструментів */
+.toolsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 64px 32px; /* рядки / колонки */
+}
 
   .toolsList > * {
-    flex: 0 0 calc(25% - 20px); /* чотири картки в ряд */
-    max-width: calc(25% - 20px);
+    flex: 0 0 calc(25% - 32px); /* чотири картки в ряд */
+
+    /* max-width: calc(25% - 0px); */
   }
 
   .title {
