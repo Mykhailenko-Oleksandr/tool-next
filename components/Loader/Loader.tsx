@@ -13,7 +13,10 @@ export default function Loader({ size = 72, backdrop = true }: Props) {
       className={backdrop ? styles.backdrop : styles.wrapper}
       style={{ "--size": `${size}px` } as React.CSSProperties}
     >
-      <div className={styles.spinner} />
+      <div className={styles.spinner}>
+        <span className={styles.outer} />
+        <span className={styles.inner} />
+      </div>
     </div>
   );
 }

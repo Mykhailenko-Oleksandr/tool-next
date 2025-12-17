@@ -15,16 +15,44 @@
 }
 
 .spinner {
+  position: relative;
   width: var(--size);
   height: var(--size);
+}
+
+.outer,
+.inner {
+  position: absolute;
+  inset: 0;
   border-radius: 50%;
-  border: 6px solid rgba(0, 0, 0, 0.12);
+  border-style: solid;
+  border-color: transparent;
+}
+
+/* наружне кільце */
+.outer {
+  border-width: 4px;
   border-top-color: var(--color-electric-violet);
-  animation: spin 0.8s linear infinite;
+  animation: spin 0.9s linear infinite;
+}
+
+/* внутрішнє кільце */
+.inner {
+  inset: 10px;
+  border-width: 4px;
+  border-bottom-color: var(--color-electric-violet);
+  animation: spin-reverse 0.6s linear infinite;
+  opacity: 0.75;
 }
 
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes spin-reverse {
+  to {
+    transform: rotate(-360deg);
   }
 }
