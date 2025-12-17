@@ -32,7 +32,7 @@
 /* наружне кільце */
 .outer {
   border-width: 4px;
-  border-top-color: var(--color-electric-violet);
+  border-top-color: var(--color-neutral-darkest);
   animation: spin 0.9s linear infinite;
 }
 
@@ -40,7 +40,7 @@
 .inner {
   inset: 10px;
   border-width: 4px;
-  border-bottom-color: var(--color-electric-violet);
+  border-bottom-color: var(--color-neutral-darkest);
   animation: spin-reverse 0.6s linear infinite;
   opacity: 0.75;
 }
