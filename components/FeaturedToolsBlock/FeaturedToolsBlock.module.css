@@ -1,17 +1,29 @@
+/* FeaturedToolsBlock/FeaturedToolsBlock.module.css  */
+
 .featuredToolsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   /* width: 100%; */
   display: flex;
   justify-content: center;
   padding: 112px 64px;
 }
-
-
-/* Заголовок */
-.title {
+/* Окремий блок заголовка над картками */
+.titleWrapper {
+  width: 100%;
+  max-width: 1312px; /* як у макеті */
+  height: 50px; /* як у макеті */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* заголовок по центру */
+  margin: 0 auto 32px auto; /* відступ вниз перед картками */
+} /* Текст заголовка */
+.titleText {
   font-size: 24px;
   font-weight: 600;
-  margin-bottom: 24px;
   text-align: center;
+  margin: 0;
 }
 
 /* Список карток на флексах */
@@ -97,13 +109,12 @@
     max-width: 1312px;
   }
 
-
-/* Список інструментів */
-.toolsList {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 64px 32px; /* рядки / колонки */
-}
+  /* Список інструментів */
+  .toolsList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 64px 32px; /* рядки / колонки */
+  }
 
   .toolsList > * {
     flex: 0 0 calc(25% - 32px); /* чотири картки в ряд */
