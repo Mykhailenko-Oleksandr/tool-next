@@ -1,0 +1,140 @@
+.select-container {
+  position: relative;
+  width: 100%;
+}
+
+.select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 44px;
+  padding: 8px 12px;
+  padding-right: 44px;
+  border: 2px solid var(--color-neutral-darkest);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0);
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+  text-align: left;
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.select-trigger:focus {
+  outline: none;
+  border-color: var(--color-electric-violet);
+  background-color: var(--color-electric-violet-lightest);
+}
+
+.select-container.open .select-trigger {
+  border-color: var(--color-electric-violet);
+  background-color: var(--color-electric-violet-lightest);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.select-container.error .select-trigger {
+  border-color: #c40202;
+}
+
+.select-container.disabled .select-trigger {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.placeholder {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.value {
+  color: #000;
+}
+
+.arrow {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11.9998 15.2019C11.8878 15.2019 11.7822 15.1813 11.683 15.1399C11.5837 15.0986 11.4884 15.0323 11.397 14.9409L6.45305 9.99694C6.28305 9.82694 6.20221 9.62385 6.21055 9.38769C6.21888 9.15152 6.30805 8.94844 6.47805 8.77844C6.64805 8.60844 6.85113 8.52344 7.0873 8.52344C7.32346 8.52344 7.52655 8.60844 7.69655 8.77844L11.9998 13.1067L16.328 8.77844C16.498 8.60844 16.697 8.5276 16.9248 8.53594C17.1526 8.54427 17.3515 8.63344 17.5215 8.80344C17.6915 8.97344 17.7765 9.17652 17.7765 9.41269C17.7765 9.64885 17.6915 9.85194 17.5215 10.0219L12.6025 14.9409C12.5112 15.0323 12.4159 15.0986 12.3165 15.1399C12.2174 15.1813 12.1118 15.2019 11.9998 15.2019Z' fill='black' fill-opacity='0.6' /%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.select-container.open .arrow {
+  background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.0002 8.7981C12.1122 8.7981 12.2178 8.8187 12.317 8.8601C12.4163 8.9014 12.5116 8.9677 12.603 9.0591L17.547 14.0031C17.717 14.1731 17.7978 14.3762 17.7895 14.6123C17.7811 14.8485 17.692 15.0516 17.522 15.2216C17.352 15.3916 17.1489 15.4766 16.9127 15.4766C16.6765 15.4766 16.4735 15.3916 16.3035 15.2216L12.0002 10.8933L7.672 15.2216C7.502 15.3916 7.303 15.4724 7.0752 15.4641C6.8474 15.4557 6.6485 15.3666 6.4785 15.1966C6.3085 15.0266 6.2235 14.8235 6.2235 14.5873C6.2235 14.3512 6.3085 14.1481 6.4785 13.9781L11.3975 9.0591C11.4888 8.9677 11.5841 8.9014 11.6835 8.8601C11.7826 8.8187 11.8882 8.7981 12.0002 8.7981Z' fill='black' fill-opacity='0.6' /%3E%3C/svg%3E");
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% - 2px);
+  left: 0;
+  right: 0;
+  background: var(--color-electric-violet-lightest);
+  border: 2px solid #ab52db;
+  border-radius: 0 0 6px 6px;
+  z-index: 100;
+  display: flex;
+  padding: 12px 7px 12px 0;
+}
+
+.options-list {
+  flex: 1;
+  max-height: 280px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.options-list::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-track {
+  position: relative;
+  width: 3px;
+  margin: 12px 7px 12px 0;
+  background: #ab52db;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.scrollbar-thumb {
+  position: absolute;
+  left: -2px;
+  width: 7px;
+  height: 56px;
+  background: #6c06a3;
+  border-radius: 4px;
+  cursor: grab;
+}
+
+.scrollbar-thumb:active {
+  cursor: grabbing;
+}
+
+.option {
+  padding: 8px 28px 8px 12px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #000;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.option:hover {
+  background: var(--color-electric-violet-lighter);
+}
+
+.option.selected {
+  background: var(--color-electric-violet-lighter);
+}

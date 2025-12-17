@@ -6,9 +6,7 @@ export default function Hero() {
     <section className={css.hero} id="hero">
       <div className={`container ${css["hero-container"]}`}>
         <h1 className={css["hero-title"]}>ToolNext — ваш надійний сусід</h1>
-        <div className={css["hero-in-wrap"]}>
-          <SearchBar />
-        </div>
+        <SearchBar />
       </div>
     </section>
   );
