@@ -10,16 +10,16 @@ export default function Footer() {
 
   return (
     <footer className={styles.footer}>
-      <div className={styles.container}>
+      <div className={`container ${styles.container}`}>
         {/* Top section with logo, nav, and social */}
         <div className={styles.topSection}>
           {/* Logo */}
           <div className={styles.logo}>
-            <div className={styles.logoInner}>
-              <svg className={styles.logoIcon}>
-                <use href="/icons.svg#icon-logo" />
-              </svg>
-            </div>
+            {/* <div className={styles.logoInner}> */}
+            <svg className={styles.logoIcon} width={159} height={29}>
+              <use href="/icons.svg#icon-logo" />
+            </svg>
+            {/* </div> */}
           </div>
 
           {/* Navigation */}
@@ -81,7 +81,7 @@ export default function Footer() {
         {/* Bottom section with copyright */}
         <div className={styles.bottomSection}>
           <p className={styles.copyright}>
-            © {currentYear} ToolNext. Всі права захищені.
+            &#169; {currentYear} ToolNext. Всі права захищені.
           </p>
         </div>
       </div>
