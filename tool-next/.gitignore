@@ -1,8 +1,8 @@
-# text files
-*.txt
+# txt
+.txt
 
 # env
-.env*
+.env
 
 # dependencies
 /node_modules
@@ -34,12 +34,13 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+# env files (can opt-in for committing if needed)
+.env*
+
 # vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
+
 next-env.d.ts
-
-
-

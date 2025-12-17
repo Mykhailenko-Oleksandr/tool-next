@@ -1,0 +1,201 @@
+.main {
+  padding-top: 32px;
+  padding-bottom: 64px;
+}
+
+.content {
+  display: flex;
+  gap: 32px;
+  flex-direction: column;
+}
+
+@media only screen and (min-width: 1440px) {
+  .content {
+    flex-direction: row;
+  }
+}
+
+.imageWrapper {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--color-scheme-1-text);
+  margin: 0;
+  margin-bottom: 8px;
+}
+
+@media only screen and (min-width: 768px) {
+  .title {
+    font-size: 28px;
+  }
+}
+
+@media only screen and (min-width: 1440px) {
+  .title {
+    font-size: 40px;
+  }
+}
+
+.price {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 140%;
+  color: var(--color-scheme-1-text);
+  margin: 0;
+  margin-bottom: 24px;
+}
+
+@media only screen and (min-width: 768px) {
+  .title {
+    font-size: 24px;
+  }
+}
+
+.ownerBlock {
+  margin-bottom: 24px;
+}
+
+.ownerInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.ownerAvatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.ownerAvatarPlaceholder {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: var(--color-electric-violet);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.ownerDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ownerName {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.profileLink {
+  font-weight: 500;
+  font-size: 16px;
+  border: 2px solid var(--color-neutral-darkest);
+  border-radius: 6px;
+  padding: 7px 19px;
+  transition: color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover,
+  &:focus {
+    border-color: var(--color-neutral-darkest);
+    background-color: var(--color-electric-violet-lighter);
+  }
+
+  &:active {
+    color: var(--color-white);
+    border-color: var(--color-white);
+    background-color: var(--color-electric-violet);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+  }
+}
+
+.section .description {
+  font-size: 16px;
+  margin-bottom: 24px;
+}
+
+.specsList {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 24px;
+}
+
+.specsListItem:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.specKey {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.specValue {
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.rentalConditions {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-neutral-dark);
+  margin: 0;
+}
+
+.bookButton {
+  padding: 16px 32px;
+  background-color: var(--color-electric-violet);
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-white);
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bookButton:hover {
+  background-color: var(--color-electric-violet-dark);
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: 48px 20px;
+  font-size: 18px;
+  color: var(--color-neutral-dark);
+}
+
+.error {
+  color: var(--color-red-dark);
+}
