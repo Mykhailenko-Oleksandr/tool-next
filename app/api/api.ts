@@ -9,6 +9,6 @@ export type ApiError = AxiosError<{
 }>;
 
 export const api = axios.create({
-  baseURL: "https://notehub-api.goit.study",
+  baseURL: "https://tool-next-backend.onrender.com/api",
   withCredentials: true,
 });

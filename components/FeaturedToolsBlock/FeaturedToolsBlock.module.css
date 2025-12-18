@@ -1,0 +1,135 @@
+.featuredToolsContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 64px 20px;
+}
+
+.wrapper {
+  padding: 40px 0;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Заголовок */
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+/* Список карток на флексах */
+.toolsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+/* Кожна картка (ToolCard) */
+.toolsList > * {
+  box-sizing: border-box;
+  flex: 0 0 100%; /* мобайл за замовчуванням */
+  max-width: 100%;
+}
+
+/* Кнопка під картками */
+.buttonWrapper {
+  margin-top: 32px;
+  text-align: center;
+}
+
+.catalogButton {
+  background-color: var(--color-scheme-1-accent); /* старт: фіолетовий фон */
+  color: var(--color-white);
+  border: 1px solid transparent;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background-color 0.6s ease,
+    color 0.6s ease,
+    border-color 0.6s ease,
+    transform 0.3s ease;
+}
+
+/* Hover / Focus → білий фон, фіолетовий бордер, чорний текст */
+.catalogButton:hover,
+.catalogButton:focus {
+  background-color: #fff;
+  color: #000;
+  border-color: var(--color-scheme-1-accent);
+}
+
+/* Active → світло‑фіолетовий фон, чорний бордер, чорний текст */
+.catalogButton:active {
+  background-color: #e6dbfa;
+  color: #000;
+  border-color: #000;
+  transform: scale(0.97);
+}
+
+/* Disabled → світло‑фіолетовий фон, білий текст, приглушений бордер */
+.catalogButton:disabled {
+  background-color: #e6dbfa;
+  color: #fff;
+  border-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+  transform: none;
+}
+
+/* Mobile ≤767px */
+@media (max-width: 767px) {
+  .wrapper {
+    max-width: 335px;
+  }
+
+  .catalogButton {
+    width: 100%;
+    max-width: 335px;
+    margin: 0 auto;
+  }
+
+  .toolsList > * {
+    flex: 0 0 100%; /* одна картка в ряд */
+    max-width: 100%;
+  }
+}
+
+/* Tablet ≥768px і ≤1439px */
+@media (min-width: 768px) and (max-width: 1439px) {
+  .wrapper {
+    max-width: 704px;
+  }
+
+  .toolsList > * {
+    flex: 0 0 calc(50% - 20px); /* дві картки в ряд */
+    max-width: calc(50% - 20px);
+  }
+}
+
+/* Desktop ≥1440px */
+@media (min-width: 1440px) {
+  .wrapper {
+    max-width: 1312px;
+  }
+
+  .featuredToolsContainer {
+    padding: 112px 64px;
+  }
+
+  .toolsList > * {
+    flex: 0 0 calc(25% - 20px); /* чотири картки в ряд */
+    max-width: calc(25% - 20px);
+  }
+
+  .title {
+    font-size: 32px;
+  }
+}
