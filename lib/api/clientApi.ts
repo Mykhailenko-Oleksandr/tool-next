@@ -43,3 +43,7 @@ export async function checkSession() {
   const res = await nextServer.post<CheckSessionRequest>("/auth/refresh");
   return res.data;
 }
+
+export async function logout(): Promise<void> {
+  await nextServer.post("/auth/logout");
+}
