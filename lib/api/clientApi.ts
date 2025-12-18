@@ -10,10 +10,10 @@ interface responseTools {
   totalTools: number;
 }
 
-export type LoginRequest = {
+export interface UserRequest {
   email: string;
   password: string;
-};
+}
 
 export interface CheckSessionRequest {
   success: boolean;
@@ -34,13 +34,18 @@ export async function fetchPopularTool() {
   return response.data;
 }
 
-export const login = async (data: LoginRequest) => {
+export const login = async (data: UserRequest) => {
   const res = await nextServer.post<User>("/auth/login", data);
   return res.data;
 };
 
 export async function checkSession() {
   const res = await nextServer.post<CheckSessionRequest>("/auth/refresh");
+  return res.data;
+}
+
+export async function register(data: UserRequest) {
+  const res = await nextServer.post<User>("/auth/register", data);
   return res.data;
 }
 
