@@ -1,17 +1,11 @@
-'use client';
+"use client";
 
-import { useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 
-import FeedbacksSwiper from '@/components/FeedbacksBlock/FeedbacksSwiper';
-import styles from './FeedbacksBlock.module.css';
-
-type Feedback = {
-  _id: string;
-  rate: number;
-  description: string;
-  name: string;
-};
+import styles from "./FeedbacksBlock.module.css";
+import { Feedback } from "@/types/feedback";
+import FeedbacksSwiper from "./FeedbacksSwiper";
 
 type FeedbacksResponse = {
   feedbacks: Feedback[];
@@ -19,11 +13,11 @@ type FeedbacksResponse = {
 
 const fetchFeedbacks = async (): Promise<Feedback[]> => {
   const res = await fetch(
-    'https://tool-next-backend.onrender.com/api/feedbacks',
+    "https://tool-next-backend.onrender.com/api/feedbacks"
   );
 
   if (!res.ok) {
-    throw new Error('Не вдалося завантажити відгуки');
+    throw new Error("Не вдалося завантажити відгуки");
   }
 
   const data: FeedbacksResponse = await res.json();
@@ -36,16 +30,13 @@ export default function FeedbacksBlock() {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ['feedbacks'],
+    queryKey: ["feedbacks"],
     queryFn: fetchFeedbacks,
     staleTime: 5 * 60 * 1000,
     retry: 1,
   });
 
-const visibleFeedbacks = useMemo(
-  () => feedbacks ?? [],
-  [feedbacks],
-);
+  const visibleFeedbacks = useMemo(() => feedbacks ?? [], [feedbacks]);
 
   return (
     <section
@@ -70,9 +61,7 @@ const visibleFeedbacks = useMemo(
         )}
 
         {!isLoading && !error && visibleFeedbacks.length === 0 && (
-          <p className={styles.statusText}>
-            Поки немає відгуків
-          </p>
+          <p className={styles.statusText}>Поки немає відгуків</p>
         )}
 
         {!isLoading && !error && visibleFeedbacks.length > 0 && (
