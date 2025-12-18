@@ -15,7 +15,8 @@ export default function ProfilePlaceholder() {
             У вас ще не опубліковано жодного інструменту
           </h4>
           <p className={css.profilePlaceholderText}>
-            Мершій обулікуйте своє перше оголошення, щоб почати отримувати пасивний дохід
+            Мершій обулікуйте своє перше оголошення, щоб почати отримувати
+            пасивний дохід
           </p>
           <Link className={css.profilePlaceholderLink} href="/tools/new">
             Опублікувати інструмент
@@ -29,7 +30,7 @@ export default function ProfilePlaceholder() {
           <p className={css.profilePlaceholderText}>
             У нас є великий вибір інструментів від інших користувачів
           </p>
-          <Link className={css.profilePlaceholderLink} href="/">
+          <Link className={css.profilePlaceholderLink} href="/tools">
             Всі інструменти
           </Link>
         </div>
