@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useQuery } from '@tanstack/react-query';
-import { useAuthStore } from '@/lib/store/authStore';
-import AuthRequiredModal from '@/components/AuthRequiredModal/AuthRequiredModal';
-import css from './ToolDetailsPage.module.css';
-import { fetchToolById } from '@/lib/api/clientApi';
-import Loading from '@/app/loading';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import { useAuthStore } from "@/lib/store/authStore";
+import AuthRequiredModal from "@/components/AuthRequiredModal/AuthRequiredModal";
+import css from "./ToolDetailsPage.module.css";
+import { fetchToolById } from "@/lib/api/clientApi";
+import Loading from "@/app/loading";
 
 interface ToolDetailsClientProps {
   toolId: string;
@@ -17,7 +17,7 @@ interface ToolDetailsClientProps {
 
 export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
   const router = useRouter();
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   const {
@@ -25,11 +25,11 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ['tool', toolId],
+    queryKey: ["tool", toolId],
     queryFn: () => fetchToolById(toolId),
     refetchOnMount: false,
   });
-  console.log('Tool data:', tool);
+  console.log("Tool data:", tool);
   const handleBookClick = () => {
     if (isAuthenticated) {
       router.push(`/tools/${toolId}/booking`);
@@ -45,7 +45,7 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
   if (error || !tool) {
     return (
       <section className={css.main}>
-        <div className={'container'}>
+        <div className={"container"}>
           <div className={css.error}>
             Помилка завантаження інструменту. Спробуйте пізніше.
           </div>
@@ -59,7 +59,6 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
       <section className={css.main}>
         <div className="container">
           <div className={css.content}>
-            {/* Tool Image */}
             <div className={css.imageWrapper}>
               {tool.images && tool.images.length > 0 ? (
                 <Image
@@ -82,12 +81,10 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
               )}
             </div>
 
-            {/* Tool Details */}
             <div className={css.details}>
               <h1 className={css.title}>{tool.name}</h1>
               <p className={css.price}>{tool.pricePerDay} грн/день</p>
 
-              {/* Owner Information */}
               <div className={css.ownerBlock}>
                 <div className={css.ownerInfo}>
                   {tool.owner.avatarUrl ? (
@@ -115,12 +112,10 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
                 </div>
               </div>
 
-              {/* Description */}
               <div className={css.section}>
                 <p className={css.description}>{tool.description}</p>
               </div>
 
-              {/* Technical Specifications */}
               <div className={css.section}>
                 <ul className={css.specsList}>
                   {Object.entries(tool.specifications).map(([key, value]) => (
@@ -136,7 +131,6 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
                 </ul>
               </div>
 
-              {/* Book Button */}
               <button
                 type="button"
                 className={css.bookButton}
