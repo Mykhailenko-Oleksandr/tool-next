@@ -1,4 +1,5 @@
 import { Tool } from "@/types/tool";
+import { User } from "@/types/user";
 import { nextServer } from "./api";
 
 interface responseTools {
@@ -8,6 +9,11 @@ interface responseTools {
   totalPages: number;
   totalTools: number;
 }
+
+export type LoginRequest = {
+  email: string;
+  password: string;
+};
 
 export async function deleteTool(id: string) {
   const res = await nextServer.delete<Tool>(`/tools/${id}`);
@@ -23,3 +29,9 @@ export async function fetchPopularTool() {
   const response = await nextServer.get<responseTools>(`/tools`);
   return response.data;
 }
+
+export const login = async (data: LoginRequest) => {
+  const res = await nextServer.post<User>('/auth/login', data);
+  return res.data;
+};
+
