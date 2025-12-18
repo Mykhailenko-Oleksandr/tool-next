@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { createPortal } from "react-dom";
 import { useEffect, useState, type MouseEvent, type ReactNode } from "react";
@@ -34,12 +34,12 @@ export default function Modal({
       if (e.key === "Escape") onCancel();
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-    document.body.style.overflow = "hidden";
+    document.addEventListener('keydown', handleKeyDown);
+    document.body.style.overflow = 'hidden';
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "";
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
     };
   }, [onCancel]);
 

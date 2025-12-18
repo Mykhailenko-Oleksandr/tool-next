@@ -6,8 +6,8 @@ import { ReactNode } from "react";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 // Fonts
-import { Nunito_Sans } from "next/font/google";
-import { Inter } from "next/font/google";
+import { Nunito_Sans } from 'next/font/google';
+import { Inter } from 'next/font/google';
 
 // Components
 import TanStackProvider from "@/components/TanStackProvider/TanStackProvider";
@@ -16,17 +16,17 @@ import Footer from "@/components/Footer/Footer";
 import { Metadata } from "next";
 
 const inter = Inter({
-  subsets: ["latin", "cyrillic"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-Inter",
-  display: "swap",
+  subsets: ['latin', 'cyrillic'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-Inter',
+  display: 'swap',
 });
 
 const nunitoSans = Nunito_Sans({
-  subsets: ["latin", "cyrillic"],
-  weight: ["400"],
-  variable: "--font-NunitoSans",
-  display: "swap",
+  subsets: ['latin', 'cyrillic'],
+  weight: ['400'],
+  variable: '--font-NunitoSans',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
