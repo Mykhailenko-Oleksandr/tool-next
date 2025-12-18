@@ -13,6 +13,7 @@ import { Inter } from "next/font/google";
 import TanStackProvider from "@/components/TanStackProvider/TanStackProvider";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
+import { Metadata } from "next";
 
 const inter = Inter({
   subsets: ["latin", "cyrillic"],
