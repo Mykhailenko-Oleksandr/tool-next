@@ -1,8 +1,8 @@
+// app/layout.tsx
 import "modern-normalize";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { ReactNode } from "react";
-import type { Metadata } from "next";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 // Fonts
