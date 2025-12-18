@@ -9,6 +9,6 @@ export type ApiError = AxiosError<{
 }>;
 
 export const api = axios.create({
-  baseURL: process.env.NEXT_API_URL,
+  baseURL: "https://tool-next-backend.onrender.com/api",
   withCredentials: true,
 });
