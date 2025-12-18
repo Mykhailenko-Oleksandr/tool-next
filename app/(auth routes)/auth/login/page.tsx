@@ -2,7 +2,7 @@
 
 import css from "./LoginPage.module.css";
 import { ApiError } from "@/app/api/api";
-import { login, LoginRequest } from "@/lib/api/clientApi";
+import { login, UserRequest } from "@/lib/api/clientApi";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import Image from "next/image";
 import Link from "next/link";
@@ -26,7 +26,7 @@ export default function LoginPage() {
   const redirectTo = searchParams.get("from") || "/";
   const [error, setError] = useState("");
 
-  const handleSubmit = async (values: LoginRequest) => {
+  const handleSubmit = async (values: UserRequest) => {
     try {
       const res = await login(values);
       if (res) {
