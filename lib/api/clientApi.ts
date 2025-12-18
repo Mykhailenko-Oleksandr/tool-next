@@ -15,6 +15,10 @@ export type LoginRequest = {
   password: string;
 };
 
+export interface CheckSessionRequest {
+  success: boolean;
+}
+
 export async function deleteTool(id: string) {
   const res = await nextServer.delete<Tool>(`/tools/${id}`);
   return res.data;
@@ -31,7 +35,11 @@ export async function fetchPopularTool() {
 }
 
 export const login = async (data: LoginRequest) => {
-  const res = await nextServer.post<User>('/auth/login', data);
+  const res = await nextServer.post<User>("/auth/login", data);
   return res.data;
 };
 
+export async function checkSession() {
+  const res = await nextServer.post<CheckSessionRequest>("/auth/refresh");
+  return res.data;
+}
