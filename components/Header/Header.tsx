@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-// import ConfirmationModal from '../confirmation-modal/confirmation-modal';
+import ConfirmationModal from '@/components/confirm-logout/ConfirmationModal';
 import styles from './Header.module.css';
 
 export default function Header() {
@@ -162,15 +162,16 @@ export default function Header() {
         </div>
       </header>
 
-      {/* <ConfirmationModal
-        isOpen={isLogoutOpen}
-        title="Вихід з системи"
-        message="Ви впевнені, що хочете вийти?"
-        confirmText="Вийти"
-        cancelText="Залишитись"
-        onConfirm={confirmLogout}
-        onCancel={() => setIsLogoutOpen(false)}
-      /> */}
+      {isLogoutOpen && (
+        <ConfirmationModal
+          onConfirm={confirmLogout}
+          onCancel={() => setIsLogoutOpen(false)}
+          title="Вихід з системи"
+          message="Ви впевнені, що хочете вийти?"
+          confirmText="Вийти"
+          cancelText="Залишитись"
+        />
+      )}
     </>
   );
 }
