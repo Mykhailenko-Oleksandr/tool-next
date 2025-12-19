@@ -1,8 +1,8 @@
+// app/layout.tsx
 import "modern-normalize";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { ReactNode } from "react";
-import type { Metadata } from "next";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 // Fonts
@@ -13,6 +13,7 @@ import { Inter } from "next/font/google";
 import TanStackProvider from "@/components/TanStackProvider/TanStackProvider";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
+import { Metadata } from "next";
 
 const inter = Inter({
   subsets: ["latin", "cyrillic"],

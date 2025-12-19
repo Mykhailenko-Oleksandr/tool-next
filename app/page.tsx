@@ -1,3 +1,4 @@
+import FeedbacksBlock from '../components/FeedbacksBlock/FeedbacksBlock';
 import RegistrationBlock from "@/components/RegistrationBlock/RegistrationBlock";
 import Hero from "@/components/Hero/Hero";
 import Benefits from "@/components/Benefits/Benefits";
@@ -13,6 +14,7 @@ export default async function HomePage() {
       <Hero />
       <Benefits />
       <FeaturedToolsBlock tools={tools} />
+      <FeedbacksBlock />
       <RegistrationBlock />
     </>
   );

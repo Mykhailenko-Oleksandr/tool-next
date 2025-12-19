@@ -1,17 +1,5 @@
-import { BeatLoader } from "react-spinners";
+import Loader from "@/components/Loader/Loader";
 
 export default function Loading() {
-  return (
-    <BeatLoader
-      color="#333"
-      cssOverride={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flex: 1,
-      }}
-      margin={5}
-      size={20}
-    />
-  );
+  return <Loader size={72} backdrop />;
 }

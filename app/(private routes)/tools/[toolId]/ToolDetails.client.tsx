@@ -17,7 +17,7 @@ interface ToolDetailsClientProps {
 
 export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
   const router = useRouter();
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   const {
@@ -29,7 +29,7 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
     queryFn: () => fetchToolById(toolId),
     refetchOnMount: false,
   });
-
+  console.log("Tool data:", tool);
   const handleBookClick = () => {
     if (isAuthenticated) {
       router.push(`/tools/${toolId}/booking`);
@@ -59,7 +59,6 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
       <section className={css.main}>
         <div className="container">
           <div className={css.content}>
-            {/* Tool Image */}
             <div className={css.imageWrapper}>
               {tool.images && tool.images.length > 0 ? (
                 <Image
@@ -82,31 +81,29 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
               )}
             </div>
 
-            {/* Tool Details */}
             <div className={css.details}>
               <h1 className={css.title}>{tool.name}</h1>
               <p className={css.price}>{tool.pricePerDay} грн/день</p>
 
-              {/* Owner Information */}
               <div className={css.ownerBlock}>
                 <div className={css.ownerInfo}>
-                  {user?.avatarUrl ? (
+                  {tool.owner.avatarUrl ? (
                     <Image
-                      src={user.avatarUrl}
-                      alt={user.name}
+                      src={tool.owner.avatarUrl}
+                      alt={tool.owner.name}
                       width={80}
                       height={80}
                       className={css.ownerAvatar}
                     />
                   ) : (
                     <div className={css.ownerAvatarPlaceholder}>
-                      {user?.name.charAt(0).toUpperCase()}
+                      {tool.owner.name.charAt(0).toUpperCase()}
                     </div>
                   )}
                   <div className={css.ownerDetails}>
-                    <p className={css.ownerName}>{user?.name}</p>
+                    <p className={css.ownerName}>{tool.owner.name}</p>
                     <Link
-                      href={`/profile/${user?._id}`}
+                      href={`/profile/${tool.owner._id}`}
                       className={css.profileLink}
                     >
                       Переглянути профіль
@@ -115,12 +112,10 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
                 </div>
               </div>
 
-              {/* Description */}
               <div className={css.section}>
                 <p className={css.description}>{tool.description}</p>
               </div>
 
-              {/* Technical Specifications */}
               <div className={css.section}>
                 <ul className={css.specsList}>
                   {Object.entries(tool.specifications).map(([key, value]) => (
@@ -136,7 +131,6 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
                 </ul>
               </div>
 
-              {/* Book Button */}
               <button
                 type="button"
                 className={css.bookButton}

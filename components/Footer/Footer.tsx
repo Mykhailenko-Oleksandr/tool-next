@@ -5,24 +5,19 @@ import Link from "next/link";
 import styles from "./Footer.module.css";
 
 export default function Footer() {
-  const { user } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
   const currentYear = new Date().getFullYear();
 
   return (
     <footer className={styles.footer}>
-      <div className={styles.container}>
-        {/* Top section with logo, nav, and social */}
+      <div className={`container ${styles.container}`}>
         <div className={styles.topSection}>
-          {/* Logo */}
-          <div className={styles.logo}>
-            <div className={styles.logoInner}>
-              <svg className={styles.logoIcon}>
-                <use href="/icons.svg#icon-logo" />
-              </svg>
-            </div>
-          </div>
+          <Link href={"/"} className={styles.logo} aria-label="Logotype">
+            <svg className={styles.logoIcon} width={159} height={29}>
+              <use href="/icons.svg#icon-logo" />
+            </svg>
+          </Link>
 
-          {/* Navigation */}
           <nav className={styles.nav}>
             <Link href="/" className={styles.navLink}>
               Головна
@@ -30,7 +25,7 @@ export default function Footer() {
             <Link href="/tools" className={styles.navLink}>
               Інструменти
             </Link>
-            {user ? (
+            {isAuthenticated && user ? (
               <>
                 <Link href="/profile" className={styles.navLink}>
                   Мій профіль
@@ -51,7 +46,6 @@ export default function Footer() {
             )}
           </nav>
 
-          {/* Social icons */}
           <div className={styles.social}>
             <a
               href="https://facebook.com"
@@ -78,10 +72,9 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom section with copyright */}
         <div className={styles.bottomSection}>
           <p className={styles.copyright}>
-            © {currentYear} ToolNext. Всі права захищені.
+            &#169; {currentYear} ToolNext. Всі права захищені.
           </p>
         </div>
       </div>
