@@ -1,7 +1,7 @@
 "use client";
 
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
-import { useEffect, useId } from "react";
+import { useId } from "react";
 import * as Yup from "yup";
 import css from "./BookingToolForm.module.css";
 import { Tool } from "@/types/tool";
@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { AxiosError } from "axios";
 import { redirect } from "next/navigation";
 import { useBookingDraftStore } from "@/lib/store/bookingStore";
+import DateRangeCalendar from "@/components/DateRangeCalendar/DateRangeCalendar";
 
 function getDaysCount(startDate: string, endDate: string): number {
   const start = new Date(startDate);
@@ -88,6 +89,43 @@ export default function BookingToolForm({ tool }: Props) {
     setDraft(changeEl);
   };
 
+  const handleDateSelect = (
+    date: Date,
+    setFieldValue: (field: string, value: any) => void
+  ) => {
+    const dateStr = date.toISOString().split("T")[0];
+    const dateOnly = new Date(dateStr);
+    dateOnly.setHours(0, 0, 0, 0);
+
+    const currentStart = draft.startDate ? new Date(draft.startDate) : null;
+    if (currentStart) currentStart.setHours(0, 0, 0, 0);
+
+    const currentEnd = draft.endDate ? new Date(draft.endDate) : null;
+    if (currentEnd) currentEnd.setHours(0, 0, 0, 0);
+
+    // If no start date is selected, set it
+    if (!currentStart) {
+      setFieldValue("startDate", dateStr);
+      setDraft({ ...draft, startDate: dateStr });
+      return;
+    }
+
+    // If clicked date is before or equal to start date, reset and set new start date
+    if (dateOnly <= currentStart) {
+      setFieldValue("startDate", dateStr);
+      setFieldValue("endDate", "");
+      setDraft({ ...draft, startDate: dateStr, endDate: "" });
+      return;
+    }
+
+    // If start date is selected and clicked date is after it, set as end date
+    if (dateOnly > currentStart) {
+      setFieldValue("endDate", dateStr);
+      setDraft({ ...draft, endDate: dateStr });
+      return;
+    }
+  };
+
   const handleSubmit = async (
     values: FormData,
     formikHelpers: FormikHelpers<FormData>
@@ -113,7 +151,7 @@ export default function BookingToolForm({ tool }: Props) {
       onSubmit={handleSubmit}
       validationSchema={BookingSchema}
       enableReinitialize>
-      {({ values }) => {
+      {({ values, setFieldValue }) => {
         const totalPrice =
           values.startDate && values.endDate
             ? getDaysCount(values.startDate, values.endDate) * tool.pricePerDay
@@ -180,34 +218,31 @@ export default function BookingToolForm({ tool }: Props) {
             </fieldset>
 
             <fieldset className={css.fieldset}>
-              <label
-                htmlFor={`${fieldId}-startDate`}
-                className={css.label}>
-                Дата початку
+              <label className={css.label}>
+                Виберіть період бронювання
               </label>
+              <DateRangeCalendar
+                startDate={values.startDate}
+                endDate={values.endDate}
+                onDateSelect={(date) => handleDateSelect(date, setFieldValue)}
+                unavailableDates={tool.bookedDates}
+                fieldId={fieldId}
+              />
+              {/* Hidden inputs for Formik validation */}
               <Field
-                type="date"
+                type="hidden"
                 name="startDate"
-                id={`${fieldId}-startDate`}
-                className={css.input}
-                onChange={handleChange}
+                value={values.startDate}
+              />
+              <Field
+                type="hidden"
+                name="endDate"
+                value={values.endDate}
               />
               <ErrorMessage
                 name="startDate"
                 component="span"
                 className={css.error}
-              />
-              <label
-                htmlFor={`${fieldId}-endDate`}
-                className={css.label}>
-                Дата завершення
-              </label>
-              <Field
-                type="date"
-                name="endDate"
-                id={`${fieldId}-endDate`}
-                className={css.input}
-                onChange={handleChange}
               />
               <ErrorMessage
                 name="endDate"
@@ -256,7 +291,7 @@ export default function BookingToolForm({ tool }: Props) {
             </fieldset>
 
             <div className={css.priceRow}>
-              <p className={css.price}>Вартість: {totalPrice} грн</p>
+              <p className={css.price}>Ціна: {totalPrice} грн</p>
               <button
                 type="submit"
                 className={css.submitBtn}>
