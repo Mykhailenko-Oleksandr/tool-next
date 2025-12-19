@@ -3,14 +3,29 @@ import { nextServer } from "./api";
 import { User } from "@/types/user";
 import { CheckSessionRequest } from "./clientApi";
 
+// export async function getMe() {
+//   const cookieStore = await cookies();
+//   const { data } = await nextServer.get<User>("/users/me", {
+//     headers: {
+//       Cookie: cookieStore.toString(),
+//     },
+//   });
+//   return data;
+// }
+
 export async function getMe() {
-  const cookieStore = await cookies();
-  const { data } = await nextServer.get<User>("/users/me", {
-    headers: {
-      Cookie: cookieStore.toString(),
-    },
-  });
-  return data;
+  return {
+    id: 'me',
+    name: 'Антон Петренко',
+    tools: [
+      {
+        id: '1',
+        title: 'Бензогенератор Honda',
+        price: '800 грн/день',
+        rating: 4.6,
+      },
+    ],
+  };
 }
 
 export async function checkSession() {
@@ -22,3 +37,4 @@ export async function checkSession() {
   });
   return res;
 }
+
