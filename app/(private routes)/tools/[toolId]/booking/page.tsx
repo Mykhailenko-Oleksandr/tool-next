@@ -1,6 +1,11 @@
 import { fetchToolById } from "@/lib/api/clientApi";
 import { Metadata } from "next";
-import css from "./BookingTool.module.css";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import BookingToolClient from "./BookingTool.client";
 
 interface Props {
   params: Promise<{ toolId: string }>;
@@ -22,12 +27,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function BookingTool() {
+export default async function BookingTool({ params }: Props) {
+  const { toolId } = await params;
+
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ["tool", toolId],
+    queryFn: () => fetchToolById(toolId),
+  });
+
   return (
-    <section className={css.section}>
-      <div className="container">
-        <h2 className={css.title}>Підтвердження бронювання</h2>
-      </div>
-    </section>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <BookingToolClient />
+    </HydrationBoundary>
   );
 }

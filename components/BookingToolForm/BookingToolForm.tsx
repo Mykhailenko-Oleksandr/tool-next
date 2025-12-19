@@ -1,14 +1,14 @@
 "use client";
 
-import { api } from "@/lib/api/api";
-import { useFormik } from "formik";
-import { useMemo, useState } from "react";
+import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
+import { useId } from "react";
 import * as Yup from "yup";
-import "./BookingToolForm.css";
+import css from "./BookingToolForm.module.css";
+import { Tool } from "@/types/tool";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
+// const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
 
-interface BookingFormValues {
+interface FormData {
   firstName: string;
   lastName: string;
   phone: string;
@@ -18,240 +18,195 @@ interface BookingFormValues {
   postOffice: string;
 }
 
-interface BookedDate {
-  startDate: string;
-  endDate: string;
-}
+const defaultFormData: FormData = {
+  firstName: "",
+  lastName: "",
+  phone: "",
+  startDate: "",
+  endDate: "",
+  city: "",
+  postOffice: "",
+};
 
-interface Tool {
-  _id: string;
-  name: string;
-  pricePerDay: number;
-  bookedDates: BookedDate[];
-}
+const BookingSchema = Yup.object().shape({
+  firstName: Yup.string()
+    .min(2, "Мінімум 2 символи")
+    .required("Імʼя обовʼязкове"),
+  lastName: Yup.string()
+    .min(2, "Мінімум 2 символи")
+    .required("Прізвище обовʼязкове"),
+  phone: Yup.string()
+    .matches(/^\+?[0-9]{10,15}$/, "Некоректний номер телефону")
+    .required("Телефон обовʼязковий"),
+  startDate: Yup.date().required("Оберіть дату початку"),
+  endDate: Yup.date()
+    .min(Yup.ref("startDate"), "Дата завершення не може бути раніше")
+    .required("Оберіть дату завершення"),
+  city: Yup.string().required("Місто обовʼязкове"),
+  postOffice: Yup.string().required("Відділення обовʼязкове"),
+});
 
 interface Props {
   tool: Tool;
 }
 
 export default function BookingToolForm({ tool }: Props) {
-  const [status, setStatus] = useState<string | null>(null);
+  const fieldId = useId();
 
-  const formik = useFormik<BookingFormValues>({
-    initialValues: {
-      firstName: "",
-      lastName: "",
-      phone: "",
-      startDate: "",
-      endDate: "",
-      city: "",
-      postOffice: "",
-    },
+  const totalPrice = 100;
 
-    validationSchema: Yup.object({
-      firstName: Yup.string()
-        .min(2, "Мінімум 2 символи")
-        .required("Імʼя обовʼязкове"),
-      lastName: Yup.string()
-        .min(2, "Мінімум 2 символи")
-        .required("Прізвище обовʼязкове"),
-      phone: Yup.string()
-        .matches(/^\+?[0-9]{10,15}$/, "Некоректний номер телефону")
-        .required("Телефон обовʼязковий"),
-      startDate: Yup.date().required("Оберіть дату початку"),
-      endDate: Yup.date()
-        .min(Yup.ref("startDate"), "Дата завершення не може бути раніше")
-        .required("Оберіть дату завершення"),
-      city: Yup.string().required("Місто обовʼязкове"),
-      postOffice: Yup.string().required("Відділення обовʼязкове"),
-    }),
+  const handleSubmit = (
+    values: FormData,
+    formikHelpers: FormikHelpers<FormData>
+  ) => {
+    console.log("values", values);
+    formikHelpers.resetForm();
+  };
 
-    onSubmit: async (values, { setSubmitting, resetForm }) => {
-      setStatus(null);
-      try {
-        setSubmitting(true);
+  return (
+    <Formik
+      initialValues={defaultFormData}
+      // className={css.form}
+      onSubmit={handleSubmit}
+      validationSchema={BookingSchema}>
+      <Form className={css.form}>
+        <fieldset className={css.fieldset}>
+          <label
+            htmlFor={`${fieldId}-firstName`}
+            className={css.label}>
+            Ім&apos;я
+          </label>
+          <Field
+            type="text"
+            name="firstName"
+            placeholder="Ваше ім'я"
+            id={`${fieldId}-firstName`}
+            className={css.input}
+          />
+          <ErrorMessage
+            name="firstName"
+            component="span"
+            className={css.error}
+          />
+          <label
+            htmlFor={`${fieldId}-lastName`}
+            className={css.label}>
+            Прізвище
+          </label>
+          <Field
+            type="text"
+            name="lastName"
+            placeholder="Ваше прізвище"
+            id={`${fieldId}-lastName`}
+            className={css.input}
+          />
+          <ErrorMessage
+            name="lastName"
+            component="span"
+            className={css.error}
+          />
+        </fieldset>
+        <fieldset className={css.fieldset}>
+          <label
+            htmlFor={`${fieldId}-phone`}
+            className={css.label}>
+            Номер телефону
+          </label>
+          <Field
+            type="tel"
+            name="phone"
+            placeholder="+38 (XXX) XXX XX XX"
+            id={`${fieldId}-phone`}
+            className={css.input}
+          />
+          <ErrorMessage
+            name="phone"
+            component="span"
+            className={css.error}
+          />
+        </fieldset>
 
-        const start = new Date(values.startDate);
-        const end = new Date(values.endDate);
+        <fieldset className={css.fieldset}>
+          <label
+            htmlFor={`${fieldId}-startDate`}
+            className={css.label}>
+            Дата початку
+          </label>
+          <Field
+            type="date"
+            name="startDate"
+            id={`${fieldId}-startDate`}
+            className={css.input}
+          />
+          <ErrorMessage
+            name="startDate"
+            component="span"
+            className={css.error}
+          />
+          <label
+            htmlFor={`${fieldId}-endDate`}
+            className={css.label}>
+            Дата завершення
+          </label>
+          <Field
+            type="date"
+            name="endDate"
+            id={`${fieldId}-endDate`}
+            className={css.input}
+          />
+          <ErrorMessage
+            name="endDate"
+            component="span"
+            className={css.error}
+          />
+        </fieldset>
 
-        const conflict = tool.bookedDates.find((b) => {
-          const bookedStart = new Date(b.startDate);
-          const bookedEnd = new Date(b.endDate);
-          return start <= bookedEnd && end >= bookedStart;
-        });
+        <fieldset className={css.fieldset}>
+          <label
+            htmlFor={`${fieldId}-deliveryCity`}
+            className={css.label}>
+            Місто доставки
+          </label>
+          <Field
+            type="text"
+            name="deliveryCity"
+            placeholder="Ваше місто"
+            id={`${fieldId}-deliveryCity`}
+            className={css.input}
+          />
+          <ErrorMessage
+            name="deliveryCity"
+            component="span"
+            className={css.error}
+          />
+          <label
+            htmlFor={`${fieldId}-novaPoshtaBranch`}
+            className={css.label}>
+            Відділення Нової Пошти
+          </label>
+          <Field
+            type="text"
+            name="novaPoshtaBranch"
+            placeholder="24"
+            id={`${fieldId}-novaPoshtaBranch`}
+            className={css.input}
+          />
+          <ErrorMessage
+            name="novaPoshtaBranch"
+            component="span"
+            className={css.error}
+          />
+        </fieldset>
 
-        if (conflict) {
-          setStatus(
-            `Інструмент зайнятий з ${new Date(
-              conflict.from
-            ).toLocaleDateString()} по ${new Date(
-              conflict.to
-            ).toLocaleDateString()}`
-          );
-          return;
-        }
-
-        const payload = {
-          startDate: values.startDate,
-          endDate: values.endDate,
-          firstName: values.firstName,
-          lastName: values.lastName,
-          phone: values.phone,
-          deliveryCity: values.city,
-          deliveryBranch: values.postOffice,
-        };
-        console.log("SEND TO API:", payload);
-        await api.post(`/api/bookings/${tool._id}`, payload);
-        setStatus("✅ Бронювання успішне");
-        resetForm();
-      } catch {
-        setStatus("Помилка при бронюванні");
-      } finally {
-        setSubmitting(false);
-      }
-    },
-  });
-
-  const totalPrice = useMemo(() => {
-    if (!formik.values.startDate || !formik.values.endDate) return 0;
-    const start = new Date(formik.values.startDate);
-    const end = new Date(formik.values.endDate);
-    const days =
-      Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) || 1;
-    return days * tool.pricePerDay;
-  }, [formik.values.startDate, formik.values.endDate, tool.pricePerDay]);
-
-  const {
-    values,
-    errors,
-    touched,
-    handleChange,
-    handleBlur,
-    handleSubmit,
-    isSubmitting,
-  } = formik;
-
- return (
-  <form className={styles.form} onSubmit={handleSubmit(handleFormSubmit)} noValidate>
-    <h1 className={styles.title}>Підтвердження бронювання</h1>
-
-    <div className={styles.row}>
-      <div className={styles.field}>
-        <label htmlFor="firstName" className={styles.label}>
-          Ім&apos;я
-        </label>
-        <input
-          id="firstName"
-          type="text"
-          placeholder="Ваше ім'я"
-          className={errors.firstName ? styles.inputError : styles.input}
-          {...register("firstName")}
-        />
-        {errors.firstName && (
-          <span className={styles.error}>{errors.firstName.message}</span>
-        )}
-      </div>
-
-      <div className={styles.field}>
-        <label htmlFor="lastName" className={styles.label}>
-          Прізвище
-        </label>
-        <input
-          id="lastName"
-          type="text"
-          placeholder="Ваше прізвище"
-          className={errors.lastName ? styles.inputError : styles.input}
-          {...register("lastName")}
-        />
-        {errors.lastName && (
-          <span className={styles.error}>{errors.lastName.message}</span>
-        )}
-      </div>
-    </div>
-
-    <div className={styles.field}>
-      <label htmlFor="phone" className={styles.label}>
-        Номер телефону
-      </label>
-      <input
-        id="phone"
-        type="tel"
-        placeholder="+38 (XXX) XXX XX XX"
-        className={errors.phone ? styles.inputError : styles.input}
-        {...register("phone")}
-      />
-      {errors.phone && (
-        <span className={styles.error}>{errors.phone.message}</span>
-      )}
-    </div>
-
-    <div className={styles.row}>
-      <div className={styles.field}>
-        <label htmlFor="startDate" className={styles.label}>
-          Дата початку
-        </label>
-        <input
-          id="startDate"
-          type="date"
-          className={styles.input}
-          {...register("startDate")}
-        />
-      </div>
-
-      <div className={styles.field}>
-        <label htmlFor="endDate" className={styles.label}>
-          Дата завершення
-        </label>
-        <input
-          id="endDate"
-          type="date"
-          className={styles.input}
-          {...register("endDate")}
-        />
-      </div>
-    </div>
-
-    <div className={styles.row}>
-      <div className={styles.field}>
-        <label htmlFor="deliveryCity" className={styles.label}>
-          Місто доставки
-        </label>
-        <input
-          id="deliveryCity"
-          type="text"
-          placeholder="Ваше місто"
-          className={errors.deliveryCity ? styles.inputError : styles.input}
-          {...register("city")}
-        />
-        {errors.city && (
-          <span className={styles.error}>{errors.city.message}</span>
-        )}
-      </div>
-
-      <div className={styles.field}>
-        <label htmlFor="novaPoshtaBranch" className={styles.label}>
-          Відділення Нової Пошти
-        </label>
-        <input
-          id="novaPoshtaBranch"
-          type="text"
-          placeholder="24"
-          className={errors.postOffice ? styles.inputError : styles.input}
-          {...register("postOffice")}
-        />
-        {errors.postOffice && (
-          <span className={styles.error}>{errors.postOffice.message}</span>
-        )}
-      </div>
-    </div>
-
-    <div className={styles.priceRow}>
-      <span className={styles.price}>Вартість: {totalPrice} грн</span>
-      <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
-        {isSubmitting ? "Бронювання..." : "Забронювати"}
-      </button>
-    </div>
-
-    {status && <div className={styles.formStatus}>{status}</div>}
-  </form>
-);
+        <div className={css.priceRow}>
+          <p className={css.price}>Вартість: {totalPrice} грн</p>
+          <button
+            type="submit"
+            className={css.submitBtn}>
+            Забронювати
+          </button>
+        </div>
+      </Form>
+    </Formik>
+  );
+}
