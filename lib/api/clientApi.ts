@@ -1,6 +1,7 @@
 import { Tool } from "@/types/tool";
 import { User } from "@/types/user";
 import { nextServer } from "./api";
+import { Feedback } from "@/types/feedback";
 
 interface responseTools {
   page: number;
@@ -17,6 +18,14 @@ export interface UserRequest {
 
 export interface CheckSessionRequest {
   success: boolean;
+}
+
+export interface FeedbacksResponse {
+  page: number;
+  perPage: number;
+  totalItems: number;
+  totalPages: number;
+  feedbacks: Feedback[];
 }
 
 export async function deleteTool(id: string) {
@@ -53,29 +62,8 @@ export async function logout(): Promise<void> {
   await nextServer.post("/auth/logout");
 }
 
-export interface FeedbacksResponse {
-  page: number;
-  perPage: number;
-  totalItems: number;
-  totalPages: number;
-  feedbacks: Array<{
-    _id: string;
-    name: string;
-    description: string;
-    rate: number;
-  }>;
-}
-
-export interface FetchFeedbacksParams {
-  page?: number;
-  perPage?: number;
-}
-
-export async function fetchFeedbacks(
-  params: FetchFeedbacksParams = {}
-): Promise<FeedbacksResponse["feedbacks"]> {
-  const { page = 1, perPage = 15 } = params;
-  const response = await nextServer.get<FeedbacksResponse>("/api/feedbacks", {
+export async function fetchFeedbacks(page?: number, perPage?: number) {
+  const response = await nextServer.get<FeedbacksResponse>("/feedbacks", {
     params: {
       page,
       perPage,

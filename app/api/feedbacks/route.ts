@@ -1,35 +1,34 @@
 import { NextRequest, NextResponse } from "next/server";
-import { serverApi } from "@/lib/api/serverApi";
+import { isAxiosError } from "axios";
+import { logErrorResponse } from "../_utils/utils";
+import { api } from "../api";
 
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
-    const page = searchParams.get("page") || "1";
-    const perPage = searchParams.get("perPage") || "15";
+    const page = Number(searchParams.get("page")) || 1;
+    const perPage = Number(searchParams.get("perPage")) || 15;
 
-    const response = await serverApi.get("/api/feedbacks", {
+    const res = await api.get("/feedbacks", {
       params: {
         page,
         perPage,
       },
     });
 
-    return NextResponse.json(response.data);
-  } catch (error: unknown) {
-    console.error("Error fetching feedbacks:", error);
-    
-    if (error && typeof error === "object" && "response" in error) {
-      const axiosError = error as { response?: { status?: number; data?: unknown } };
+    return NextResponse.json(res.data, { status: res.status });
+  } catch (error) {
+    if (isAxiosError(error)) {
+      logErrorResponse(error.response?.data);
       return NextResponse.json(
-        { error: "Не вдалося завантажити відгуки" },
-        { status: axiosError.response?.status || 500 }
+        { error: error.message, response: error.response?.data },
+        { status: error.status }
       );
     }
-
+    logErrorResponse({ message: (error as Error).message });
     return NextResponse.json(
-      { error: "Не вдалося завантажити відгуки" },
+      { error: "Internal Server Error" },
       { status: 500 }
     );
   }
 }
-
