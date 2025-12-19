@@ -20,8 +20,6 @@ export default function BookingToolClient() {
     refetchOnMount: false,
   });
 
-  console.log(tool);
-
   if (isLoading) return <p>Триває завантаження...</p>;
 
   if (error || !tool) return <p>Щось пішло не так</p>;
