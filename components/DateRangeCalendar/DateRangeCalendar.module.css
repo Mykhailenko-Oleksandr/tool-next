@@ -1,0 +1,159 @@
+.calendar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 335px;
+}
+
+.calendarHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+}
+
+.navButton {
+  background: transparent;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-neutral-darkest);
+  transition: color 0.2s ease;
+}
+
+.navButton:hover {
+  color: var(--color-electric-violet);
+}
+
+.navButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.navButton svg {
+  width: 24px;
+  height: 24px;
+}
+
+.monthYear {
+  font-family: var(--font-Inter), sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 150%;
+  color: var(--color-neutral-darkest);
+  margin: 0;
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  width: 100%;
+}
+
+.dayHeader {
+  font-family: var(--font-Inter), sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 150%;
+  color: var(--color-neutral-dark);
+  text-align: center;
+  padding: 8px 4px;
+}
+
+.dayCell {
+  aspect-ratio: 1;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dayButton {
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  font-family: var(--font-Inter), sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  color: var(--color-neutral-darkest);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.dayButton:hover:not(:disabled) {
+  background: var(--color-electric-violet-lightest);
+  border-color: var(--color-electric-violet-light);
+}
+
+.dayButton.past {
+  color: var(--color-neutral-light);
+  cursor: not-allowed;
+}
+
+.dayButton.unavailable {
+  color: var(--color-neutral-light);
+  background: var(--color-neutral-lightest);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.dayButton.selected {
+  background: var(--color-electric-violet);
+  color: var(--color-white);
+  border-color: var(--color-electric-violet);
+  font-weight: 500;
+}
+
+.dayButton.startDate {
+  background: var(--color-electric-violet);
+  color: var(--color-white);
+  border-color: var(--color-electric-violet);
+  font-weight: 600;
+}
+
+.dayButton.endDate {
+  background: var(--color-electric-violet);
+  color: var(--color-white);
+  border-color: var(--color-electric-violet);
+  font-weight: 600;
+}
+
+.dayButton:disabled {
+  cursor: not-allowed;
+}
+
+@media only screen and (min-width: 768px) {
+  .calendar {
+    max-width: 420px;
+  }
+
+  .dayCell {
+    min-height: 48px;
+  }
+
+  .dayButton {
+    font-size: 18px;
+  }
+}
+
+@media only screen and (min-width: 1440px) {
+  .calendar {
+    max-width: 500px;
+  }
+
+  .dayCell {
+    min-height: 56px;
+  }
+
+  .monthYear {
+    font-size: 20px;
+  }
+}
+
