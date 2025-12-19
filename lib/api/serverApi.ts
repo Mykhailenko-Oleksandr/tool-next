@@ -1,7 +1,13 @@
+import axios from "axios";
 import { cookies } from "next/headers";
 import { nextServer } from "./api";
 import { User } from "@/types/user";
 import { CheckSessionRequest } from "./clientApi";
+
+export const serverApi = axios.create({
+  baseURL: process.env.BACKEND_API_URL || "https://tool-next-backend.onrender.com",
+  withCredentials: true,
+});
 
 export async function getMe() {
   const cookieStore = await cookies();
