@@ -1,3 +1,5 @@
+/* ================= HEADER ================= */
+
 .header {
   position: sticky;
   top: 0;
@@ -19,6 +21,7 @@
   width: 100%;
 }
 
+/* ================= LOGO ================= */
 .logo {
   display: flex;
   align-items: center;
@@ -26,13 +29,19 @@
   width: 124px;
   height: 20px;
   text-decoration: none;
+  transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover,
+  &:focus {
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
 }
 
-.logoIcon {
-  width: 83px;
-  height: 15px;
-}
-
+/* ================= NAVIGATION ================= */
 .nav {
   position: fixed;
   top: 72px;
@@ -54,31 +63,55 @@
   transform: translateX(0);
 }
 
+/* ================= NAV LINKS ================= */
 .navLink {
-  font-family: var(--font-family);
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 150%;
-  color: var(--color-scheme-1-text);
-  text-decoration: none;
-  text-align: center;
-  padding: 10px 0;
-}
-
-.navLink:hover,
-.navLink:focus {
-  border-bottom: 1px solid var(--color-scheme-1-border);
-}
-
-.activeLink {
-  font-family: var(--font-family);
+  position: relative;
   font-weight: 500;
   font-size: 16px;
   line-height: 150%;
-  color: var(--color-electric-violet);
-  border-bottom: 1px solid var(--color-electric-violet);
+  color: var(--color-scheme-1-text);
+  text-align: center;
+  padding: 10px 0;
+
+
+  &:hover::after,
+  &:focus::after {
+    transform: scaleX(1);
+  }
+
+  &:active {
+    color: var(--color-electric-violet);
+
+    &::after {
+      background-color: var(--color-electric-violet);
+    }
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* плавний перехід */
 }
 
+.navLink::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-scheme-1-border);
+
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+
+/* ================= BURGER ================= */
 .burger {
   background: none;
   border: 2px solid var(--color-neutral-darkest);
@@ -89,12 +122,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover,
+  &:focus {
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
 }
 
-.burgerActive {
-  background-color: inherit;
-}
 
+
+/* ================= USER ================= */
 .user {
   display: flex;
   align-items: center;
@@ -149,48 +191,64 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+
+  &:hover,
+  &:focus {
+    transform: scale(1.3);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
 }
 
-.register {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* ================= BUTTONS (однаковий стиль для "Зареєструватись" і "Опублікувати оголошення") ================= */
+.purpleButton {
   border: 1px solid var(--color-electric-violet);
   border-radius: 6px;
-  padding: 8px 20px;
-  width: 335px;
-  height: 40px;
+  background: var(--color-electric-violet);
+  color: var(--color-white);
   font-family: var(--font-family);
   font-weight: 500;
   font-size: 16px;
   line-height: 150%;
+  width: 248px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+
+}
+
+.purpleButton:hover,
+.purpleButton:focus {
+  border: 2px solid var(--color-electric-violet);
+  background-color: var(--color-scheme-3-background);
+  color: var(--color-scheme-1-text);
+}
+
+.purpleButton:active {
+  border: 2px solid var(--color-electric-violet);
+  background: var(--color-electric-violet-lighter);
+  color: var(--color-scheme-1-text);
+}
+
+.purpleButton:disabled {
+  border: 1px solid var(--color-electric-violet);
+  background: var(--color-electric-violet);
+  opacity: 0.4;
   color: var(--color-white);
-  transition: all 0.2s ease;
+  cursor: var(--color-scheme-1-text);
 }
 
-.register:hover {
-  background-color: #fff;
-  color: var(--color-text);
-}
-
-.desktopOnly {
+/* ================= RESPONSIVE ================= */
+.tabletOnly {
   display: none;
 }
 
-.purpleButton {
-  background: var(--color-electric-violet);
-  border: 1px solid var(--color-electric-violet);
-  border-radius: 6px;
-  padding: 8px 20px;
-  width: 335px;
-  height: 40px;
-  padding: 0px 20px;
-  color: var(--color-white);
-  align-items: center;
-  justify-content: center;
-}
-
-.tabletOnly {
+.desktopOnly {
   display: none;
 }
 
@@ -200,7 +258,12 @@
   gap: 16px;
 }
 
+/* ===== MEDIA QUERIES ===== */
 @media only screen and (min-width: 768px) {
+  .fullWidth {
+    padding: 16px 32px;
+  }
+
   .tabletOnly {
     display: flex;
   }
@@ -209,30 +272,32 @@
     display: none;
   }
 
-  .register {
-    width: 178px;
-  }
-
   .createPost {
     width: 248px;
+  }
+
+  .register {
+    width: 178px;
+
   }
 }
 
 @media only screen and (min-width: 1440px) {
+  .fullWidth {
+    padding: 16px 64px;
+  }
+
   .nav {
     position: static;
     transform: none;
-
     top: auto;
     left: auto;
     right: auto;
     bottom: auto;
     overflow: visible;
-
     flex-direction: row;
     align-items: center;
     gap: 32px;
-
     width: auto;
     height: auto;
     background: transparent;
@@ -243,6 +308,10 @@
   }
 
   .burger {
+    display: none;
+  }
+
+  .tabletOnly {
     display: none;
   }
 

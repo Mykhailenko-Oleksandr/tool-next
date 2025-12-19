@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useAuthStore } from '@/lib/store/authStore';
-import clsx from 'clsx';
-import Image from 'next/image';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import Modal from '@/components/Modal/Modal';
-import styles from './Header.module.css';
+import Modal from "@/components/Modal/Modal";
+import { useAuthStore } from "@/lib/store/authStore";
+import clsx from "clsx";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import styles from "./Header.module.css";
 
 export default function Header() {
   const router = useRouter();
@@ -17,26 +17,26 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
 
-  const firstLetter = user?.name?.[0]?.toUpperCase() ?? '';
+  const firstLetter = user?.name?.[0]?.toUpperCase() ?? "";
   const userAvatar = user?.avatarUrl;
   const closeMenu = () => setIsMenuOpen(false);
 
   useEffect(() => {
-    document.body.classList.toggle('no-scroll', isMenuOpen);
-    return () => document.body.classList.remove('no-scroll');
+    document.body.classList.toggle("no-scroll", isMenuOpen);
+    return () => document.body.classList.remove("no-scroll");
   }, [isMenuOpen]);
 
   useEffect(() => {
-    const onEsc = (e: KeyboardEvent) => e.key === 'Escape' && closeMenu();
-    if (isMenuOpen) window.addEventListener('keydown', onEsc);
-    return () => window.removeEventListener('keydown', onEsc);
+    const onEsc = (e: KeyboardEvent) => e.key === "Escape" && closeMenu();
+    if (isMenuOpen) window.addEventListener("keydown", onEsc);
+    return () => window.removeEventListener("keydown", onEsc);
   }, [isMenuOpen]);
 
   const confirmLogout = async () => {
     await clearIsAuthenticated();
     setIsLogoutOpen(false);
     closeMenu();
-    router.push('/');
+    router.push("/");
   };
 
   const isActive = (path: string) => pathname === path;
@@ -55,7 +55,7 @@ export default function Header() {
               {user && (
                 <button
                   className={clsx(styles.createPost, styles.tabletOnly, styles.purpleButton)}
-                  onClick={() => router.push('/posts/create')}
+                  onClick={() => router.push("/posts/create")}
                 >
                   Опублікувати оголошення
                 </button>
@@ -69,7 +69,7 @@ export default function Header() {
                 onClick={() => setIsMenuOpen((prev) => !prev)}
               >
                 <svg width="24" height="24" aria-hidden>
-                  <use href={isMenuOpen ? '/icons.svg#icon-close' : '/icons.svg#icon-menu'} />
+                  <use href={isMenuOpen ? "/icons.svg#icon-close" : "/icons.svg#icon-menu"} />
                 </svg>
               </button>
             </div>
@@ -78,14 +78,14 @@ export default function Header() {
               <Link
                 href="/"
                 onClick={closeMenu}
-                className={clsx(styles.navLink, { [styles.activeLink]: isActive('/') })}
+                className={clsx(styles.navLink, { [styles.activeLink]: isActive("/") })}
               >
                 Головна
               </Link>
               <Link
                 href="/tools"
                 onClick={closeMenu}
-                className={clsx(styles.navLink, { [styles.activeLink]: isActive('/tools') })}
+                className={clsx(styles.navLink, { [styles.activeLink]: isActive("/tools") })}
               >
                 Інструменти
               </Link>
@@ -95,14 +95,14 @@ export default function Header() {
                   <Link
                     href="/profile"
                     onClick={closeMenu}
-                    className={clsx(styles.navLink, { [styles.activeLink]: isActive('/profile') })}
+                    className={clsx(styles.navLink, { [styles.activeLink]: isActive("/profile") })}
                   >
                     Мій профіль
                   </Link>
 
                   <button
                     className={clsx(styles.createPost, styles.desktopOnly, styles.purpleButton)}
-                    onClick={() => router.push('/posts/create')}
+                    onClick={() => router.push("/posts/create")}
                   >
                     Опублікувати оголошення
                   </button>
@@ -144,14 +144,14 @@ export default function Header() {
                     href="/auth/login"
                     onClick={closeMenu}
                     className={clsx(styles.navLink, {
-                      [styles.activeLink]: isActive('/auth/login'),
+                      [styles.activeLink]: isActive("/auth/login"),
                     })}
                   >
                     Увійти
                   </Link>
                   <button
                     className={clsx(styles.register, styles.purpleButton)}
-                    onClick={() => router.push('/auth/register')}
+                    onClick={() => router.push("/auth/register")}
                   >
                     Зареєструватися
                   </button>
