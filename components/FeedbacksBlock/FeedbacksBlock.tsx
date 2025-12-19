@@ -6,23 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import styles from "./FeedbacksBlock.module.css";
 import { Feedback } from "@/types/feedback";
 import FeedbacksSwiper from "./FeedbacksSwiper";
-
-type FeedbacksResponse = {
-  feedbacks: Feedback[];
-};
-
-const fetchFeedbacks = async (): Promise<Feedback[]> => {
-  const res = await fetch(
-    "https://tool-next-backend.onrender.com/api/feedbacks"
-  );
-
-  if (!res.ok) {
-    throw new Error("Не вдалося завантажити відгуки");
-  }
-
-  const data: FeedbacksResponse = await res.json();
-  return data.feedbacks;
-};
+import { fetchFeedbacks } from "@/lib/api/clientApi";
 
 export default function FeedbacksBlock() {
   const {

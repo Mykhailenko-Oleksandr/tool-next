@@ -52,3 +52,34 @@ export async function register(data: UserRequest) {
 export async function logout(): Promise<void> {
   await nextServer.post("/auth/logout");
 }
+
+export interface FeedbacksResponse {
+  page: number;
+  perPage: number;
+  totalItems: number;
+  totalPages: number;
+  feedbacks: Array<{
+    _id: string;
+    name: string;
+    description: string;
+    rate: number;
+  }>;
+}
+
+export interface FetchFeedbacksParams {
+  page?: number;
+  perPage?: number;
+}
+
+export async function fetchFeedbacks(
+  params: FetchFeedbacksParams = {}
+): Promise<FeedbacksResponse["feedbacks"]> {
+  const { page = 1, perPage = 15 } = params;
+  const response = await nextServer.get<FeedbacksResponse>("/api/feedbacks", {
+    params: {
+      page,
+      perPage,
+    },
+  });
+  return response.data.feedbacks;
+}
