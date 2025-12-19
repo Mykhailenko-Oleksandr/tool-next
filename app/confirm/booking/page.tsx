@@ -1,14 +1,15 @@
-import Link from 'next/link';
-import styles from './BookingConfirmation.module.css';
-import '@/app/globals.css';
+import Link from "next/link";
+import styles from "./BookingConfirmation.module.css";
+import "@/app/globals.css";
 
 export const metadata = {
-  title: 'Інструмент успішно заброньовано',
-  description: 'Підтвердження бронювання інструменту. Дякуємо за бронювання!',
+  title: "Інструмент успішно заброньовано",
+  description: "Підтвердження бронювання інструменту. Дякуємо за бронювання!",
   openGraph: {
-    title: 'Інструмент успішно заброньовано',
-    description: 'Власник інструменту скоро з вами звʼяжеться стосовно деталей та оплати вашої броні.',
-    url: '/confirm/booking',
+    title: "Інструмент успішно заброньовано",
+    description:
+      "Власник інструменту скоро з вами звʼяжеться стосовно деталей та оплати вашої броні.",
+    url: "https://tool-next-chi.vercel.app/confirm/booking",
   },
 };
 
@@ -19,7 +20,8 @@ export default function BookingConfirmationPage() {
         <div className={styles.content}>
           <h1 className={styles.title}>Інструмент успішно заброньовано</h1>
           <p className={styles.text}>
-            Власник інструменту скоро з вами звʼяжеться стосовно деталей та оплати вашої броні
+            Власник інструменту скоро з вами звʼяжеться стосовно деталей та
+            оплати вашої броні
           </p>
           <Link href="/" className={styles.button}>
             На головну

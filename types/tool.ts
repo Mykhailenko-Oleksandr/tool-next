@@ -1,4 +1,4 @@
-import {User} from "./user";
+import { User } from "./user";
 export interface Tool {
   _id: string;
   owner: User;
@@ -10,8 +10,13 @@ export interface Tool {
   rating: number;
   specifications: object;
   rentalTerms: string;
-  bookedDates?: string[] | [];
+  bookedDates?: BookedDate[] | [];
   feedbacks: object[];
   createdAt?: string;
   updatedAt?: string;
+}
+
+export interface BookedDate {
+  startDate: string;
+  endDate: string;
 }

@@ -6,7 +6,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "@/lib/store/authStore";
-import AuthRequiredModal from "@/components/AuthRequiredModal/AuthRequiredModal";
 import css from "./ToolDetailsPage.module.css";
 import { fetchToolById } from "@/lib/api/clientApi";
 import Loading from "@/app/loading";
@@ -143,9 +142,9 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
         </div>
       </section>
 
-      {showAuthModal && (
+      {/* {showAuthModal && (
         <AuthRequiredModal onClose={() => setShowAuthModal(false)} />
-      )}
+      )} */}
     </>
   );
 }
