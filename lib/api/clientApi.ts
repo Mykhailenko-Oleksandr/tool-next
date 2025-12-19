@@ -2,6 +2,7 @@ import { Tool } from "@/types/tool";
 import { User } from "@/types/user";
 import { nextServer } from "./api";
 import { Feedback } from "@/types/feedback";
+import { Booked } from "@/types/booked";
 
 interface responseTools {
   page: number;
@@ -26,6 +27,24 @@ export interface FeedbacksResponse {
   totalItems: number;
   totalPages: number;
   feedbacks: Feedback[];
+}
+
+interface BookingRequest {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  startDate: string;
+  endDate: string;
+  deliveryCity: string;
+  deliveryBranch: string;
+}
+
+interface BookingResponse {
+  message: string;
+  booked: Booked;
+  totalPrice: number;
+  status: string;
+  createdAt: string;
 }
 
 export async function deleteTool(id: string) {
@@ -70,4 +89,12 @@ export async function fetchFeedbacks(page?: number, perPage?: number) {
     },
   });
   return response.data.feedbacks;
+}
+
+export async function bookingTool(data: BookingRequest, id: string) {
+  const response = await nextServer.post<BookingResponse>(
+    `/bookings/${id}`,
+    data
+  );
+  return response.data;
 }
