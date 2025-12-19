@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useParams, useRouter } from "next/navigation";
+import { redirect, useParams, useRouter } from "next/navigation";
 import css from "./BookingTool.module.css";
 import { fetchToolById } from "@/lib/api/clientApi";
 import BookingToolForm from "@/components/BookingToolForm/BookingToolForm";
@@ -19,6 +19,10 @@ export default function BookingToolClient() {
     queryFn: () => fetchToolById(toolId),
     refetchOnMount: false,
   });
+
+  if (!tool) {
+    redirect("/");
+  }
 
   if (isLoading) return <p>Триває завантаження...</p>;
 

@@ -1,12 +1,15 @@
 "use client";
 
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
-import { useId } from "react";
+import { useEffect, useId } from "react";
 import * as Yup from "yup";
 import css from "./BookingToolForm.module.css";
 import { Tool } from "@/types/tool";
 import { bookingTool } from "@/lib/api/clientApi";
 import toast from "react-hot-toast";
+import { AxiosError } from "axios";
+import { redirect } from "next/navigation";
+import { useBookingDraftStore } from "@/lib/store/bookingStore";
 
 function getDaysCount(startDate: string, endDate: string): number {
   const start = new Date(startDate);
@@ -71,7 +74,19 @@ interface Props {
 }
 
 export default function BookingToolForm({ tool }: Props) {
+  const { draft, setDraft, clearDraft } = useBookingDraftStore();
   const fieldId = useId();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const key = e.target.name;
+    const value = e.target.value;
+
+    const changeEl = {
+      ...draft,
+      [key]: value,
+    };
+    setDraft(changeEl);
+  };
 
   const handleSubmit = async (
     values: FormData,
@@ -80,31 +95,35 @@ export default function BookingToolForm({ tool }: Props) {
     try {
       const res = await bookingTool(values, tool._id);
       console.log(res);
+      formikHelpers.resetForm();
+      clearDraft();
+      redirect("/");
+    } catch (error: unknown) {
+      const err = error as AxiosError;
 
-      // formikHelpers.resetForm();
-    } catch (error) {
       console.log("error", error);
 
-      // toast.error(error)
+      toast.error(err.response?.statusText || err.message);
     }
   };
 
   return (
     <Formik
-      initialValues={defaultFormData}
+      initialValues={draft}
       onSubmit={handleSubmit}
       validationSchema={BookingSchema}
-    >
+      enableReinitialize>
       {({ values }) => {
         const totalPrice =
           values.startDate && values.endDate
             ? getDaysCount(values.startDate, values.endDate) * tool.pricePerDay
             : 0;
-
         return (
           <Form className={css.form}>
             <fieldset className={css.fieldset}>
-              <label htmlFor={`${fieldId}-firstName`} className={css.label}>
+              <label
+                htmlFor={`${fieldId}-firstName`}
+                className={css.label}>
                 Ім&apos;я
               </label>
               <Field
@@ -113,13 +132,16 @@ export default function BookingToolForm({ tool }: Props) {
                 placeholder="Ваше ім'я"
                 id={`${fieldId}-firstName`}
                 className={css.input}
+                onChange={handleChange}
               />
               <ErrorMessage
                 name="firstName"
                 component="span"
                 className={css.error}
               />
-              <label htmlFor={`${fieldId}-lastName`} className={css.label}>
+              <label
+                htmlFor={`${fieldId}-lastName`}
+                className={css.label}>
                 Прізвище
               </label>
               <Field
@@ -128,6 +150,7 @@ export default function BookingToolForm({ tool }: Props) {
                 placeholder="Ваше прізвище"
                 id={`${fieldId}-lastName`}
                 className={css.input}
+                onChange={handleChange}
               />
               <ErrorMessage
                 name="lastName"
@@ -136,7 +159,9 @@ export default function BookingToolForm({ tool }: Props) {
               />
             </fieldset>
             <fieldset className={css.fieldset}>
-              <label htmlFor={`${fieldId}-phone`} className={css.label}>
+              <label
+                htmlFor={`${fieldId}-phone`}
+                className={css.label}>
                 Номер телефону
               </label>
               <Field
@@ -145,6 +170,7 @@ export default function BookingToolForm({ tool }: Props) {
                 placeholder="+38 (XXX) XXX XX XX"
                 id={`${fieldId}-phone`}
                 className={css.input}
+                onChange={handleChange}
               />
               <ErrorMessage
                 name="phone"
@@ -154,7 +180,9 @@ export default function BookingToolForm({ tool }: Props) {
             </fieldset>
 
             <fieldset className={css.fieldset}>
-              <label htmlFor={`${fieldId}-startDate`} className={css.label}>
+              <label
+                htmlFor={`${fieldId}-startDate`}
+                className={css.label}>
                 Дата початку
               </label>
               <Field
@@ -162,13 +190,16 @@ export default function BookingToolForm({ tool }: Props) {
                 name="startDate"
                 id={`${fieldId}-startDate`}
                 className={css.input}
+                onChange={handleChange}
               />
               <ErrorMessage
                 name="startDate"
                 component="span"
                 className={css.error}
               />
-              <label htmlFor={`${fieldId}-endDate`} className={css.label}>
+              <label
+                htmlFor={`${fieldId}-endDate`}
+                className={css.label}>
                 Дата завершення
               </label>
               <Field
@@ -176,6 +207,7 @@ export default function BookingToolForm({ tool }: Props) {
                 name="endDate"
                 id={`${fieldId}-endDate`}
                 className={css.input}
+                onChange={handleChange}
               />
               <ErrorMessage
                 name="endDate"
@@ -185,7 +217,9 @@ export default function BookingToolForm({ tool }: Props) {
             </fieldset>
 
             <fieldset className={css.fieldset}>
-              <label htmlFor={`${fieldId}-deliveryCity`} className={css.label}>
+              <label
+                htmlFor={`${fieldId}-deliveryCity`}
+                className={css.label}>
                 Місто доставки
               </label>
               <Field
@@ -194,6 +228,7 @@ export default function BookingToolForm({ tool }: Props) {
                 placeholder="Ваше місто"
                 id={`${fieldId}-deliveryCity`}
                 className={css.input}
+                onChange={handleChange}
               />
               <ErrorMessage
                 name="deliveryCity"
@@ -202,8 +237,7 @@ export default function BookingToolForm({ tool }: Props) {
               />
               <label
                 htmlFor={`${fieldId}-deliveryBranch`}
-                className={css.label}
-              >
+                className={css.label}>
                 Відділення Нової Пошти
               </label>
               <Field
@@ -212,6 +246,7 @@ export default function BookingToolForm({ tool }: Props) {
                 placeholder="24"
                 id={`${fieldId}-deliveryBranch`}
                 className={css.input}
+                onChange={handleChange}
               />
               <ErrorMessage
                 name="deliveryBranch"
@@ -222,7 +257,9 @@ export default function BookingToolForm({ tool }: Props) {
 
             <div className={css.priceRow}>
               <p className={css.price}>Вартість: {totalPrice} грн</p>
-              <button type="submit" className={css.submitBtn}>
+              <button
+                type="submit"
+                className={css.submitBtn}>
                 Забронювати
               </button>
             </div>
