@@ -2,14 +2,21 @@
 
 import css from "./RegistrationForm.module.css";
 import { ApiError } from "@/app/api/api";
-import { register, RegisterRequest } from "@/lib/api/clientApi";
+import { register } from "@/lib/api/clientApi";
 import { useAuthStore } from "@/lib/store/authStore";
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
+
+interface FormData {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
 
 const RegistrationFormSchema = Yup.object({
   name: Yup.string()
@@ -36,7 +43,10 @@ export default function RegistrationForm() {
   const router = useRouter();
   const { setUser } = useAuthStore();
 
-  const handleSubmit = async (values: RegisterRequest) => {
+  const handleSubmit = async (
+    values: FormData,
+    formikHelpers: FormikHelpers<FormData>
+  ) => {
     try {
       const newUser = await register({
         name: values.name,
@@ -45,6 +55,7 @@ export default function RegistrationForm() {
       });
 
       setUser(newUser);
+      formikHelpers.resetForm();
       router.replace("/profile");
     } catch (error: unknown) {
       const err = error as ApiError;
@@ -62,14 +73,8 @@ export default function RegistrationForm() {
       <div className={css.pageWrapper}>
         <div className={`container ${css.contentWrapper}`}>
           <div className={css.leftBoxContent}>
-            <Link
-              className={css.logoLink}
-              href="/"
-              aria-label="На головну">
-              <svg
-                width="92"
-                height="20"
-                className={css.logo}>
+            <Link className={css.logoLink} href="/" aria-label="На головну">
+              <svg width="92" height="20" className={css.logo}>
                 <use href="/icons.svg#icon-logo"></use>
               </svg>
             </Link>
@@ -81,8 +86,9 @@ export default function RegistrationForm() {
                   password: "",
                   confirmPassword: "",
                 }}
+                onSubmit={handleSubmit}
                 validationSchema={RegistrationFormSchema}
-                onSubmit={handleSubmit}>
+              >
                 {({ isSubmitting, isValid, dirty }) => (
                   <Form className={css.form}>
                     <fieldset>
@@ -155,7 +161,8 @@ export default function RegistrationForm() {
                       <button
                         type="submit"
                         className={css.btn}
-                        disabled={isSubmitting || !isValid || !dirty}>
+                        disabled={isSubmitting || !isValid || !dirty}
+                      >
                         Зареєструватися
                       </button>
                     </fieldset>
@@ -164,9 +171,7 @@ export default function RegistrationForm() {
               </Formik>
               <p className={css.formText}>
                 Вже маєте акаунт?&nbsp;
-                <Link
-                  href="/auth/login"
-                  className={css.textLink}>
+                <Link href="/auth/login" className={css.textLink}>
                   Вхід
                 </Link>
               </p>

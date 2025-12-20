@@ -31,23 +31,20 @@ export default async function ProfilePage() {
   const tools = await fetchToolsUserId(user._id);
 
   return (
-    <>
-      <UserProfile
-        user={{
-          name: user.name,
-        }}
-      />
+    <section className={css.profilePage}>
       <div className="container">
+        <UserProfile user={user} />
+
         <div className={css.titleWrap}>
           <h2 className={css.profileToolsTitle}>Інструменти</h2>
         </div>
-      </div>
 
-      {tools.length > 0 ? (
-        <ToolGrid tools={tools} />
-      ) : (
-        <PrivateProfilePlaceholder />
-      )}
-    </>
+        {tools.length > 0 ? (
+          <ToolGrid tools={tools} />
+        ) : (
+          <PrivateProfilePlaceholder />
+        )}
+      </div>
+    </section>
   );
 }

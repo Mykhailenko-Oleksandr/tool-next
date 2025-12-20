@@ -1,26 +1,28 @@
-import css from './UserProfile.module.css';
+import { User } from "@/types/user";
+import css from "./UserProfile.module.css";
+import Image from "next/image";
 
 interface UserProfileProps {
-  user: {
-    name: string;
-  };
+  user: User;
 }
 
 const UserProfile = ({ user }: UserProfileProps) => {
   const displayName = user.name.trim();
-  const firstLetter = displayName.charAt(0).toUpperCase();
 
   return (
-    <div className="container">
-      <div className={css.userProfileContainer}>
-        <div className={css.letterAvatar}>
-          {firstLetter}
-        </div>
-
-        <h1 className={css.userName}>
-          {displayName}
-        </h1>
+    <div className={css.userProfileContainer}>
+      <div className={css.letterAvatar}>
+        <Image
+          className={css.avatar}
+          src={user.avatarUrl}
+          width={128}
+          height={128}
+          alt="Avatar"
+          priority
+        />
       </div>
+
+      <h3 className={css.userName}>{displayName}</h3>
     </div>
   );
 };

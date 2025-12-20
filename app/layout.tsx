@@ -61,7 +61,6 @@ export default function RootLayout({
 
           <Footer />
           <Toaster />
-          <ReactQueryDevtools initialIsOpen={false} />
         </TanStackProvider>
       </body>
     </html>
