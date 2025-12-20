@@ -28,7 +28,6 @@
 }
 
 .formWrapper {
-  min-height: calc(100vh - 172px);
   padding: 86px 0;
 }
 
@@ -58,10 +57,17 @@
   border: 2px solid var(--color-neutral-darkest);
   border-radius: 6px;
   height: 48px;
+  outline: none;
+
+  &:hover,
+  &:focus {
+    border-color: var(--color-electric-violet);
+  }
 }
 
-.formInput:active {
-  border: 2px solid var(--color-electric-violet);
+.formInput:has(+ .formError) {
+  border-color: var(--color-red-dark);
+  color: var(--color-red-dark);
 }
 
 .formError {
@@ -143,9 +149,13 @@
 }
 
 @media only screen and (min-width: 1440px) {
-  .pageWrapper {
+  .contentWrapper {
     display: flex;
-    justify-content: space-between;
+    gap: 32px;
+  }
+
+  .leftBoxContent {
+    flex: auto;
   }
 
   .formImg {
@@ -154,5 +164,13 @@
 
   .formWrapper {
     min-height: auto;
+  }
+
+  .title {
+    font-size: 42px;
+  }
+
+  .formFooterText {
+    font-size: 14px;
   }
 }
