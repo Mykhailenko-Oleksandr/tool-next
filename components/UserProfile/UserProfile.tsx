@@ -3,7 +3,6 @@ import css from './UserProfile.module.css';
 interface UserProfileProps {
   user: {
     name: string;
-    tools?: unknown[];
   };
 }
 
@@ -21,12 +20,6 @@ const UserProfile = ({ user }: UserProfileProps) => {
         <h1 className={css.userName}>
           {displayName}
         </h1>
-      </div>
-
-      <div className={css.titleWrap}>
-        <h2 className={css.profileToolsTitle}>
-          Інструменти
-        </h2>
       </div>
     </div>
   );
