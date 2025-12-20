@@ -1,15 +1,15 @@
 "use client";
 
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
-import { useEffect, useId } from "react";
+import { useId } from "react";
 import * as Yup from "yup";
 import css from "./BookingToolForm.module.css";
 import { Tool } from "@/types/tool";
 import { bookingTool } from "@/lib/api/clientApi";
 import toast from "react-hot-toast";
-import { AxiosError } from "axios";
 import { redirect } from "next/navigation";
 import { useBookingDraftStore } from "@/lib/store/bookingStore";
+import { ApiError } from "@/app/api/api";
 
 function getDaysCount(startDate: string, endDate: string): number {
   const start = new Date(startDate);
@@ -30,16 +30,6 @@ interface FormData {
   deliveryCity: string;
   deliveryBranch: string;
 }
-
-const defaultFormData: FormData = {
-  firstName: "",
-  lastName: "",
-  phone: "",
-  startDate: "",
-  endDate: "",
-  deliveryCity: "",
-  deliveryBranch: "",
-};
 
 const BookingSchema = Yup.object().shape({
   firstName: Yup.string()
@@ -99,11 +89,13 @@ export default function BookingToolForm({ tool }: Props) {
       clearDraft();
       redirect("/");
     } catch (error: unknown) {
-      const err = error as AxiosError;
+      const err = error as ApiError;
 
-      console.log("error", error);
-
-      toast.error(err.response?.statusText || err.message);
+      toast.error(
+        err.response?.data?.response?.validation?.body?.message ||
+          err.response?.data?.response?.message ||
+          err.message
+      );
     }
   };
 
@@ -112,7 +104,8 @@ export default function BookingToolForm({ tool }: Props) {
       initialValues={draft}
       onSubmit={handleSubmit}
       validationSchema={BookingSchema}
-      enableReinitialize>
+      enableReinitialize
+    >
       {({ values }) => {
         const totalPrice =
           values.startDate && values.endDate
@@ -121,9 +114,7 @@ export default function BookingToolForm({ tool }: Props) {
         return (
           <Form className={css.form}>
             <fieldset className={css.fieldset}>
-              <label
-                htmlFor={`${fieldId}-firstName`}
-                className={css.label}>
+              <label htmlFor={`${fieldId}-firstName`} className={css.label}>
                 Ім&apos;я
               </label>
               <Field
@@ -139,9 +130,7 @@ export default function BookingToolForm({ tool }: Props) {
                 component="span"
                 className={css.error}
               />
-              <label
-                htmlFor={`${fieldId}-lastName`}
-                className={css.label}>
+              <label htmlFor={`${fieldId}-lastName`} className={css.label}>
                 Прізвище
               </label>
               <Field
@@ -159,9 +148,7 @@ export default function BookingToolForm({ tool }: Props) {
               />
             </fieldset>
             <fieldset className={css.fieldset}>
-              <label
-                htmlFor={`${fieldId}-phone`}
-                className={css.label}>
+              <label htmlFor={`${fieldId}-phone`} className={css.label}>
                 Номер телефону
               </label>
               <Field
@@ -180,9 +167,7 @@ export default function BookingToolForm({ tool }: Props) {
             </fieldset>
 
             <fieldset className={css.fieldset}>
-              <label
-                htmlFor={`${fieldId}-startDate`}
-                className={css.label}>
+              <label htmlFor={`${fieldId}-startDate`} className={css.label}>
                 Дата початку
               </label>
               <Field
@@ -197,9 +182,7 @@ export default function BookingToolForm({ tool }: Props) {
                 component="span"
                 className={css.error}
               />
-              <label
-                htmlFor={`${fieldId}-endDate`}
-                className={css.label}>
+              <label htmlFor={`${fieldId}-endDate`} className={css.label}>
                 Дата завершення
               </label>
               <Field
@@ -217,9 +200,7 @@ export default function BookingToolForm({ tool }: Props) {
             </fieldset>
 
             <fieldset className={css.fieldset}>
-              <label
-                htmlFor={`${fieldId}-deliveryCity`}
-                className={css.label}>
+              <label htmlFor={`${fieldId}-deliveryCity`} className={css.label}>
                 Місто доставки
               </label>
               <Field
@@ -237,7 +218,8 @@ export default function BookingToolForm({ tool }: Props) {
               />
               <label
                 htmlFor={`${fieldId}-deliveryBranch`}
-                className={css.label}>
+                className={css.label}
+              >
                 Відділення Нової Пошти
               </label>
               <Field
@@ -257,9 +239,7 @@ export default function BookingToolForm({ tool }: Props) {
 
             <div className={css.priceRow}>
               <p className={css.price}>Вартість: {totalPrice} грн</p>
-              <button
-                type="submit"
-                className={css.submitBtn}>
+              <button type="submit" className={css.submitBtn}>
                 Забронювати
               </button>
             </div>
