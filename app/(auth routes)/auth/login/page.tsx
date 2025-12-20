@@ -9,11 +9,11 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import * as Yup from "yup";
+//* Потрібно добавити для оновлення стану глобального стору після логіну
+import { useAuthStore } from "../../../../lib/store/authStore";
 
 const LoginPageSchema = Yup.object().shape({
-  email: Yup.string()
-    .email("Email format is invalid")
-    .required("Email is required"),
+  email: Yup.string().email("Email format is invalid").required("Email is required"),
   password: Yup.string()
     .min(8, "Password must be at least 8 characters")
     .max(128, "Password must be at most 128 characters")
@@ -26,11 +26,17 @@ export default function LoginPage() {
   const redirectTo = searchParams.get("from") || "/";
   const [error, setError] = useState("");
 
+  // Додаємо setUser для оновлення стану глобального стору після логіну
+  const setUser = useAuthStore.getState().setUser;
+
   const handleSubmit = async (values: UserRequest) => {
     try {
       const res = await login(values);
       if (res) {
+        // Оновлюємо стан глобального стору після успішного логіну
+        setUser(res);
         router.push(redirectTo);
+        return;
       } else {
         setError("Invalid email or password");
       }
@@ -38,7 +44,7 @@ export default function LoginPage() {
       setError(
         (error as ApiError).response?.data?.error ??
           (error as ApiError).message ??
-          "There are some error"
+          "There are some error",
       );
     }
   };
@@ -77,11 +83,7 @@ export default function LoginPage() {
                         placeholder="Ваша пошта"
                         required
                       />
-                      <ErrorMessage
-                        name="email"
-                        component="span"
-                        className={css.formError}
-                      />
+                      <ErrorMessage name="email" component="span" className={css.formError} />
                     </div>
                     <div className={css.formGroup}>
                       <label htmlFor="password">Пароль*</label>
@@ -93,17 +95,9 @@ export default function LoginPage() {
                         placeholder="*******"
                         required
                       />
-                      <ErrorMessage
-                        name="password"
-                        component="span"
-                        className={css.formError}
-                      />
+                      <ErrorMessage name="password" component="span" className={css.formError} />
                     </div>
-                    <button
-                      type="submit"
-                      className={css.formButton}
-                      disabled={isSubmitting}
-                    >
+                    <button type="submit" className={css.formButton} disabled={isSubmitting}>
                       Увійти
                     </button>
                   </fieldset>
@@ -118,13 +112,7 @@ export default function LoginPage() {
         </div>
 
         <div className={css.formImgWrapper}>
-          <Image
-            src="/images/login.jpg"
-            width={704}
-            height={900}
-            alt="Tools"
-            priority
-          />
+          <Image src="/images/login.jpg" width={704} height={900} alt="Tools" priority />
         </div>
       </div>
     </>

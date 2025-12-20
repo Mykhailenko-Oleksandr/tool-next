@@ -12,13 +12,17 @@ import styles from "./Header.module.css";
 export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, clearIsAuthenticated } = useAuthStore();
+
+  // ⛔️ НЕ ДЕСТРУКТУРУЄМО ЦІЛИЙ STORE
+  const user = useAuthStore((state) => state.user);
+  const clearIsAuthenticated = useAuthStore((state) => state.clearIsAuthenticated);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
 
   const firstLetter = user?.name?.[0]?.toUpperCase() ?? "";
   const userAvatar = user?.avatarUrl;
+
   const closeMenu = () => setIsMenuOpen(false);
 
   useEffect(() => {
@@ -33,7 +37,7 @@ export default function Header() {
   }, [isMenuOpen]);
 
   const confirmLogout = async () => {
-    await clearIsAuthenticated();
+    clearIsAuthenticated();
     setIsLogoutOpen(false);
     closeMenu();
     router.push("/");
@@ -51,6 +55,7 @@ export default function Header() {
                 <use href="/icons.svg#icon-logo" />
               </svg>
             </Link>
+
             <div className={styles.rightSection}>
               {user && (
                 <button
@@ -82,6 +87,7 @@ export default function Header() {
               >
                 Головна
               </Link>
+
               <Link
                 href="/tools"
                 onClick={closeMenu}
@@ -116,6 +122,8 @@ export default function Header() {
                             alt="User avatar"
                             className={styles.avatar}
                             priority
+                            width={40}
+                            height={40}
                           />
                         ) : (
                           <span className={clsx(styles.avatar, styles.avatarFallback)}>
@@ -125,6 +133,7 @@ export default function Header() {
                       </div>
                       <span className={styles.username}>{user.name}</span>
                     </div>
+
                     <span className={styles.divider}></span>
 
                     <button
@@ -149,6 +158,7 @@ export default function Header() {
                   >
                     Увійти
                   </Link>
+
                   <button
                     className={clsx(styles.register, styles.purpleButton)}
                     onClick={() => router.push("/auth/register")}
@@ -161,6 +171,7 @@ export default function Header() {
           </div>
         </div>
       </header>
+
       {isLogoutOpen && (
         <Modal
           title="Вихід з системи"
