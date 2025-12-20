@@ -104,3 +104,8 @@ export async function bookingTool(data: BookingRequest, id: string) {
   );
   return response.data;
 }
+
+export async function fetchToolsUserId(id: string) {
+  const { data } = await nextServer.get<Tool[]>(`/users/${id}/tools`);
+  return data;
+}

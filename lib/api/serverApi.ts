@@ -2,50 +2,16 @@ import { cookies } from "next/headers";
 import { nextServer } from "./api";
 import { User } from "@/types/user";
 import { CheckSessionRequest } from "./clientApi";
-import { Tool } from "@/types/tool";
-
-// export async function getMe() {
-//   const cookieStore = await cookies();
-//   const { data } = await nextServer.get<User>("/users/me", {
-//     headers: {
-//       Cookie: cookieStore.toString(),
-//     },
-//   });
-//   return data;
-// }
-
 
 export async function getMe() {
-  return {
-    name: 'Антон Петренко',
-  };
-}
-
-export const getMyTools = async (): Promise<Tool[]> => {
- 
   const cookieStore = await cookies();
-  const token = cookieStore.get("accessToken")?.value;
-
-  if (!token) {
-    return [];
-  }
-
-  const res = await fetch(`${process.env.API_URL}/tools/my`, {
-    method: "GET",
+  const { data } = await nextServer.get<User>("/users/me", {
     headers: {
-     
-      'Authorization': `Bearer ${token}`,
+      Cookie: cookieStore.toString(),
     },
-    cache: "no-store",
   });
-
-  if (!res.ok) {
-    return [];
-  }
-
-  return res.json();
-};
-
+  return data;
+}
 
 export async function checkSession() {
   const cookieStore = await cookies();
@@ -56,4 +22,3 @@ export async function checkSession() {
   });
   return res;
 }
-

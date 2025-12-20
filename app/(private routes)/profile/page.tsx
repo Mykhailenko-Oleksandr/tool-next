@@ -1,60 +1,53 @@
 import UserProfile from "@/components/UserProfile/UserProfile";
 import ToolGrid from "@/components/ToolGrid/ToolGrid";
-import { getMe, getMyTools } from "@/lib/api/serverApi";
+import { getMe } from "@/lib/api/serverApi";
 import { redirect } from "next/navigation";
-import css from './ProfilePage.module.css';
+import css from "./ProfilePage.module.css";
 import { Metadata } from "next";
-import ProfilePlaceholder from "@/components/ProfilePlaceholder/ProfilePlaceholder";
-
+import PrivateProfilePlaceholder from "@/components/PrivateProfilePlaceholder/PrivateProfilePlaceholder";
+import { fetchToolsUserId } from "@/lib/api/clientApi";
 
 export async function generateMetadata(): Promise<Metadata> {
   const user = await getMe();
 
   if (!user) {
-    return { title: 'Профіль' };
+    return { title: "Профіль" };
   }
 
   return {
     title: `${user.name}`,
-    description: "",
-    robots: { index: false, follow: false }, 
+    description: "Ваш профіль",
+    robots: { index: false, follow: false },
   };
 }
 
-const ProfilePage = async () => {
+export default async function ProfilePage() {
   const user = await getMe();
 
-
   if (!user) {
-    redirect('/'); 
+    redirect("/");
   }
 
-  const tools = await getMyTools();
+  const tools = await fetchToolsUserId(user._id);
 
   return (
     <>
-     
       <UserProfile
         user={{
-          name: user.name
+          name: user.name,
         }}
-       
       />
-       <div className="container">
-       <div className={css.titleWrap}>
-        <h2 className={css.profileToolsTitle}>
-          Інструменти
-        </h2>
+      <div className="container">
+        <div className={css.titleWrap}>
+          <h2 className={css.profileToolsTitle}>Інструменти</h2>
         </div>
       </div>
-    
-       {tools.length > 0 ? (  
-         <ToolGrid tools={tools} />  
-       ) : (  
-         <ProfilePlaceholder />
-       )} 
+
+      {tools.length > 0 ? (
+        <ToolGrid tools={tools} />
+      ) : (
+        <PrivateProfilePlaceholder />
+      )}
     </>
   );
-};
-
-export default ProfilePage;
+}
