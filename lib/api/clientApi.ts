@@ -3,6 +3,7 @@ import { User } from "@/types/user";
 import { nextServer } from "./api";
 import { Feedback } from "@/types/feedback";
 import { Booked } from "@/types/booked";
+import { Category } from "@/types/category";
 
 interface responseTools {
   page: number;
@@ -107,5 +108,10 @@ export async function bookingTool(data: BookingRequest, id: string) {
 
 export async function fetchToolsUserId(id: string) {
   const { data } = await nextServer.get<Tool[]>(`/users/${id}/tools`);
+  return data;
+}
+
+export async function getCategories() {
+  const { data } = await nextServer.get<Category[]>(`/api/categories`);
   return data;
 }
