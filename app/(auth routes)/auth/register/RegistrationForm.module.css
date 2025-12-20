@@ -1,0 +1,129 @@
+.formImg {
+  display: none;
+}
+
+.logo {
+  margin-top: 26px;
+  margin-left: 20px;
+  margin-bottom: 26px;
+}
+
+.contentWrapper {
+  flex: 1;
+  position: relative;
+}
+
+.formWrapper {
+  min-height: calc(100vh - 172px);
+  padding: 86px 0;
+  margin: 0 20px;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-align: center;
+  color: var(--color-neutral-darkest);
+  margin-bottom: 32px;
+}
+
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.formInput {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+  padding: 12px;
+  border: 2px solid var(--color-neutral-darkest);
+  border-radius: 6px;
+  height: 48px;
+}
+
+.formInput:active {
+  border: 2px solid var(--color-electric-violet);
+}
+
+.formError {
+  font-size: 12px;
+  line-height: 150%;
+  color: var(--color-red-dark);
+}
+
+.btn {
+  background: var(--color-electric-violet);
+  color: var(--color-white);
+  border: 2px solid var(--color-electric-violet);
+  border-radius: 6px;
+  padding: 10px 24px;
+  display: block;
+  box-sizing: border-box;
+  margin: 24px auto;
+}
+
+.btn:hover,
+.btn:focus,
+.btn:active {
+  background-color: var(--color-white);
+  border: 2px solid var(--color-electric-violet);
+  color: var(--color-scheme-1-text);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+}
+
+.formText {
+  text-align: center;
+}
+
+.textLink {
+  text-decoration: underline;
+  text-decoration-skip-ink: none;
+}
+
+.formFooterText {
+  position: absolute;
+  left: 20px;
+  bottom: 27px;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--color-neutral-darkest);
+}
+
+@media only screen and (min-width: 768px) {
+  .logo {
+    margin-left: 32px;
+  }
+
+  .title {
+    font-size: 30px;
+  }
+
+  .formFooterText {
+    left: 32px;
+  }
+}
+
+@media only screen and (min-width: 1440px) {
+  .pageWrapper {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .formImg {
+    display: block;
+  }
+
+  .formWrapper {
+    min-height: auto;
+  }
+}
