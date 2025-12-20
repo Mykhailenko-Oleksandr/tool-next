@@ -1,14 +1,15 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
-import { useAuthStore } from "@/lib/store/authStore";
-import css from "./ToolDetailsPage.module.css";
-import { fetchToolById } from "@/lib/api/clientApi";
-import Loading from "@/app/loading";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useQuery } from '@tanstack/react-query';
+import { useAuthStore } from '@/lib/store/authStore';
+import css from './ToolDetailsPage.module.css';
+import { fetchToolById } from '@/lib/api/clientApi';
+import Loading from '@/app/loading';
+import Modal from '@/components/Modal/Modal';
 
 interface ToolDetailsClientProps {
   toolId: string;
@@ -18,17 +19,17 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
   const router = useRouter();
   const { isAuthenticated } = useAuthStore();
   const [showAuthModal, setShowAuthModal] = useState(false);
-
+  // const isAuthenticated = true;
   const {
     data: tool,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["tool", toolId],
+    queryKey: ['tool', toolId],
     queryFn: () => fetchToolById(toolId),
     refetchOnMount: false,
   });
-  console.log("Tool data:", tool);
+  console.log('Tool data:', tool);
   const handleBookClick = () => {
     if (isAuthenticated) {
       router.push(`/tools/${toolId}/booking`);
@@ -36,7 +37,7 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
       setShowAuthModal(true);
     }
   };
-
+  console.log(isAuthenticated);
   if (isLoading) {
     return <Loading />;
   }
@@ -44,7 +45,7 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
   if (error || !tool) {
     return (
       <section className={css.main}>
-        <div className={"container"}>
+        <div className={'container'}>
           <div className={css.error}>
             Помилка завантаження інструменту. Спробуйте пізніше.
           </div>
@@ -141,10 +142,28 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
           </div>
         </div>
       </section>
-
       {/* {showAuthModal && (
         <AuthRequiredModal onClose={() => setShowAuthModal(false)} />
       )} */}
+      {showAuthModal && (
+        <Modal
+          title="Спочатку авторизуйтесь"
+          confirmButtonText="Реєстрація"
+          cancelButtonText="Вхід"
+          onClose={() => setShowAuthModal(false)}
+          onConfirm={() => {
+            setShowAuthModal(false);
+            router.push('/auth/register');
+          }}
+          onCancel={() => {
+            setShowAuthModal(false);
+            router.push('/auth/login');
+          }}
+        >
+          Щоб забронювати інструмент, треба спочатку зареєструватись або
+          авторизуватись на платформі
+        </Modal>
+      )}
     </>
   );
 }
