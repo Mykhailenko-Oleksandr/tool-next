@@ -15,6 +15,12 @@ export interface UserRequest {
   password: string;
 }
 
+export interface RegisterRequest {
+  name: string;
+  email: string;
+  password: string;
+}
+
 export interface CheckSessionRequest {
   success: boolean;
 }
@@ -44,7 +50,7 @@ export async function checkSession() {
   return res.data;
 }
 
-export async function register(data: UserRequest) {
+export async function register(data: RegisterRequest) {
   const res = await nextServer.post<User>("/auth/register", data);
   return res.data;
 }
