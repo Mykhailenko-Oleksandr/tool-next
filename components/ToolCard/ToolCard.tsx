@@ -52,7 +52,7 @@ export default function ToolCard({ tool }: ToolCardProps) {
       <p className={css.price}>{tool.pricePerDay} грн/день</p>
       {isAuthenticated && user?._id === tool.owner._id ? (
         <div className={css.btnBox}>
-          <Link className={css.link} href={`/tools/edit/${tool._id}`}>
+          <Link className={css.link} href={`/tools/${tool._id}/edit`}>
             Редагувати
           </Link>
           <button

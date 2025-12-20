@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import toast from "react-hot-toast";
 import { BeatLoader } from "react-spinners";
 import {
@@ -158,7 +159,7 @@ export default function AddEditToolForm({
         toast.success(
           toolId ? "Інструмент успішно оновлено" : "Інструмент успішно створено"
         );
-        router.push(`/tools/${result.id || result._id}`);
+        router.push(`/tools/${result._id}`);
       } catch (error) {
         toast.error(
           error instanceof Error
@@ -219,7 +220,14 @@ export default function AddEditToolForm({
               />
               {imagePreview ? (
                 <div className={css["image-preview"]}>
-                  <img src={imagePreview} alt="Превью" />
+                  <Image
+                    src={imagePreview}
+                    alt="Превью"
+                    width={400}
+                    height={400}
+                    style={{ objectFit: "contain" }}
+                    unoptimized
+                  />
                 </div>
               ) : (
                 <label
@@ -311,7 +319,7 @@ export default function AddEditToolForm({
               onBlur={() => formik.setFieldTouched("category", true)}
               options={categories.map((category) => ({
                 value: category._id,
-                label: category.name,
+                label: category.title,
               }))}
               placeholder="Категорія"
               disabled={isLoadingCategories}

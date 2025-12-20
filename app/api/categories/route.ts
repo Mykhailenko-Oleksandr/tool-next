@@ -5,7 +5,7 @@ import { logErrorResponse } from "../_utils/utils";
 
 export async function GET() {
   try {
-    const res = await api.get(`/api/categories`);
+    const res = await api.get(`/categories`);
 
     return NextResponse.json(res.data, { status: res.status });
   } catch (error) {
@@ -13,7 +13,7 @@ export async function GET() {
       logErrorResponse(error.response?.data);
       return NextResponse.json(
         { error: error.message, response: error.response?.data },
-        { status: error.status }
+        { status: error.response?.status || 500 }
       );
     }
     logErrorResponse({ message: (error as Error).message });

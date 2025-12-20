@@ -112,6 +112,6 @@ export async function fetchToolsUserId(id: string) {
 }
 
 export async function getCategories() {
-  const { data } = await nextServer.get<Category[]>(`/api/categories`);
+  const { data } = await nextServer.get<Category[]>(`/categories`);
   return data;
 }
