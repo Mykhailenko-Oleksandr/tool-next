@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 
   return {
-    title: `Профіль ${user.name} | ToolNext`,
+    title: `${user.name}`,
     description: "",
     robots: { index: false, follow: false }, 
   };

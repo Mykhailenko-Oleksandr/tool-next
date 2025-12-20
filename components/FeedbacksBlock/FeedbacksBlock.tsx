@@ -4,25 +4,8 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import styles from "./FeedbacksBlock.module.css";
-import { Feedback } from "@/types/feedback";
 import FeedbacksSwiper from "./FeedbacksSwiper";
-
-type FeedbacksResponse = {
-  feedbacks: Feedback[];
-};
-
-const fetchFeedbacks = async (): Promise<Feedback[]> => {
-  const res = await fetch(
-    "https://tool-next-backend.onrender.com/api/feedbacks"
-  );
-
-  if (!res.ok) {
-    throw new Error("Не вдалося завантажити відгуки");
-  }
-
-  const data: FeedbacksResponse = await res.json();
-  return data.feedbacks;
-};
+import { fetchFeedbacks } from "@/lib/api/clientApi";
 
 export default function FeedbacksBlock() {
   const {
@@ -31,9 +14,8 @@ export default function FeedbacksBlock() {
     error,
   } = useQuery({
     queryKey: ["feedbacks"],
-    queryFn: fetchFeedbacks,
+    queryFn: () => fetchFeedbacks(),
     staleTime: 5 * 60 * 1000,
-    retry: 1,
   });
 
   const visibleFeedbacks = useMemo(() => feedbacks ?? [], [feedbacks]);
@@ -41,21 +23,27 @@ export default function FeedbacksBlock() {
   return (
     <section
       className={styles.sectionWrapper}
-      aria-labelledby="feedbacks-title"
-    >
+      aria-labelledby="feedbacks-title">
       <div className={styles.container}>
-        <h2 id="feedbacks-title" className={styles.title}>
+        <h2
+          id="feedbacks-title"
+          className={styles.title}>
           Останні відгуки
         </h2>
 
         {isLoading && (
-          <p className={styles.statusText} aria-live="polite">
+          <p
+            className={styles.statusText}
+            aria-live="polite">
             Завантаження відгуків...
           </p>
         )}
 
         {error && (
-          <p className={styles.statusText} role="status" aria-live="polite">
+          <p
+            className={styles.statusText}
+            role="status"
+            aria-live="polite">
             Помилка завантаження відгуків
           </p>
         )}

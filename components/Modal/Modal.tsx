@@ -1,58 +1,59 @@
-"use client";
+'use client';
 
-import { createPortal } from "react-dom";
-import { useEffect, useState, type MouseEvent, type ReactNode } from "react";
-import css from "./Modal.module.css";
+import { createPortal } from 'react-dom';
+import { useEffect, useState, type MouseEvent, type ReactNode } from 'react';
+import css from './Modal.module.css';
 
 interface ModalProps {
   title: string;
   confirmButtonText?: string;
   cancelButtonText?: string;
   onConfirm: () => Promise<void> | void;
-  onCancel: () => void;
-  confirmButtonColor?: "purple" | "red";
+  onCancel?: () => void; /// onCancel не обов'язковий
+  onClose: () => void; /// додав onClose чисто для закриття модалки
+  confirmButtonColor?: 'purple' | 'red';
   children?: ReactNode;
 }
 
 export default function Modal({
   title,
-  confirmButtonText = "Підтвердити",
-  cancelButtonText = "Скасувати",
+  confirmButtonText = 'Підтвердити',
+  cancelButtonText = 'Скасувати',
   onConfirm,
   onCancel,
-  confirmButtonColor = "purple",
+  onClose, /// додав onClose чисто для закриття модалки
+  confirmButtonColor = 'purple',
   children,
 }: ModalProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleBackdropClick = (e: MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) onCancel();
+    if (e.target === e.currentTarget) onClose();
   };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onCancel();
+      if (e.key === 'Escape') onClose();
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-    document.body.style.overflow = "hidden";
+    document.addEventListener('keydown', handleKeyDown);
+    document.body.style.overflow = 'hidden';
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "";
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
     };
-  }, [onCancel]);
+  }, [onClose]); /// oncCancel замінив на  onClose
 
   const handleConfirm = async () => {
     try {
       setIsLoading(true);
       await onConfirm();
-      setIsLoading(false);
-      onCancel();
+      setIsLoading(false); /// Тут ще було Onclose() я його прибрав
     } catch (error) {
       console.error(error);
       setIsLoading(false);
-      alert("Сталася помилка. Спробуйте ще раз.");
+      alert('Сталася помилка. Спробуйте ще раз.');
     }
   };
 
@@ -61,16 +62,15 @@ export default function Modal({
       className={css.backdrop}
       role="dialog"
       aria-modal="true"
-      onClick={handleBackdropClick}>
+      onClick={handleBackdropClick}
+    >
       <div className={css.modalContent}>
         <button
           className={css.closeBtn}
-          onClick={onCancel}
-          aria-label="Закрити модалку">
-          <svg
-            width="32"
-            height="32"
-            viewBox="0 0 32 32">
+          onClick={onClose}
+          aria-label="Закрити модалку"
+        >
+          <svg width="32" height="32" viewBox="0 0 32 32">
             <use href="/icons.svg#icon-close" />
           </svg>
         </button>
@@ -83,15 +83,17 @@ export default function Modal({
         <div className={css.buttons}>
           <button
             className={`${css.modalButton} ${css.cancelBtn}`}
-            onClick={onCancel}
-            disabled={isLoading}>
+            onClick={onCancel || onClose} /// якщо onCancel не передано, викликаємо onClose
+            disabled={isLoading}
+          >
             {cancelButtonText}
           </button>
           <button
-            className={`${css.modalButton} ${confirmButtonColor === "red" ? css["confirmBtn-red"] : css["confirmBtn-purple"]}`}
+            className={`${css.modalButton} ${confirmButtonColor === 'red' ? css['confirmBtn-red'] : css['confirmBtn-purple']}`}
             onClick={handleConfirm}
-            disabled={isLoading}>
-            {isLoading ? "Завантаження..." : confirmButtonText}
+            disabled={isLoading}
+          >
+            {isLoading ? 'Завантаження...' : confirmButtonText}
           </button>
         </div>
       </div>

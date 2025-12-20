@@ -1,8 +1,8 @@
-import ProfilePlaceholder from "@/components/ProfilePlaceholder/ProfilePlaceholder";
+import PublicProfilePlaceholder from "@/components/PublicProfilePlaceholder/PublicProfilePlaceholder";
 export default function Foo() {
   return (
     <>
-      <ProfilePlaceholder />
+      <PublicProfilePlaceholder />
     </>
   );
 }

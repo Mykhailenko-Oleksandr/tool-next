@@ -6,10 +6,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "@/lib/store/authStore";
-import AuthRequiredModal from "@/components/AuthRequiredModal/AuthRequiredModal";
 import css from "./ToolDetailsPage.module.css";
 import { fetchToolById } from "@/lib/api/clientApi";
 import Loading from "@/app/loading";
+import Modal from "@/components/Modal/Modal";
 
 interface ToolDetailsClientProps {
   toolId: string;
@@ -29,7 +29,7 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
     queryFn: () => fetchToolById(toolId),
     refetchOnMount: false,
   });
-  console.log("Tool data:", tool);
+
   const handleBookClick = () => {
     if (isAuthenticated) {
       router.push(`/tools/${toolId}/booking`);
@@ -144,7 +144,23 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
       </section>
 
       {showAuthModal && (
-        <AuthRequiredModal onClose={() => setShowAuthModal(false)} />
+        <Modal
+          title="Спочатку авторизуйтесь"
+          confirmButtonText="Реєстрація"
+          cancelButtonText="Вхід"
+          onClose={() => setShowAuthModal(false)}
+          onConfirm={() => {
+            setShowAuthModal(false);
+            router.push("/auth/register");
+          }}
+          onCancel={() => {
+            setShowAuthModal(false);
+            router.push("/auth/login");
+          }}
+        >
+          Щоб забронювати інструмент, треба спочатку зареєструватись або
+          авторизуватись на платформі
+        </Modal>
       )}
     </>
   );
