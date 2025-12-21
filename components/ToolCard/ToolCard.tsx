@@ -9,6 +9,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { deleteTool } from "@/lib/api/clientApi";
 import { useAuthStore } from "@/lib/store/authStore";
+import { ApiError } from "@/app/api/api";
 
 interface ToolCardProps {
   tool: Tool;
@@ -24,8 +25,13 @@ export default function ToolCard({ tool }: ToolCardProps) {
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: ["tools"] });
     },
-    onError(error) {
-      toast.error(error.message);
+    onError(error: unknown) {
+      const err = error as ApiError;
+      toast.error(
+        err.response?.data?.response?.validation?.body?.message ||
+          err.response?.data?.response?.message ||
+          "Не вдалося видалити інструмент"
+      );
     },
   });
 
@@ -33,14 +39,12 @@ export default function ToolCard({ tool }: ToolCardProps) {
     deleteToolMutate.mutate(id);
   }
 
-  if (!tool.images) {
-    tool.images = "/images/blank-image-desk.jpg";
-  }
+  const imageSrc = tool.images || "/images/blank-image-desk.jpg";
 
   return (
     <div className={css.toolCard}>
       <Image
-        src={tool.images}
+        src={imageSrc}
         alt={tool.name}
         width={335}
         height={413}
@@ -52,21 +56,27 @@ export default function ToolCard({ tool }: ToolCardProps) {
       <p className={css.price}>{tool.pricePerDay} грн/день</p>
       {isAuthenticated && user?._id === tool.owner._id ? (
         <div className={css.btnBox}>
-          <Link className={css.link} href={`/tools/${tool._id}/edit`}>
+          <Link
+            className={css.link}
+            href={`/tools/${tool._id}/edit`}>
             Редагувати
           </Link>
           <button
             className={css.deleteBtn}
             onClick={() => handleDeleteTool(tool._id)}
-            type="button"
-          >
-            <svg className={css.icon} width={24} height={24}>
+            type="button">
+            <svg
+              className={css.icon}
+              width={24}
+              height={24}>
               <use href="/icons.svg#icon-delete"></use>
             </svg>
           </button>
         </div>
       ) : (
-        <Link className={css.link} href={`/tools/${tool._id}`}>
+        <Link
+          className={css.link}
+          href={`/tools/${tool._id}`}>
           Детальніше
         </Link>
       )}

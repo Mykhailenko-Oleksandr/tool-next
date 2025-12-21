@@ -12,8 +12,15 @@ export async function GET(request: Request, { params }: Props) {
   try {
     const cookieStore = await cookies();
     const { id } = await params;
+    const { searchParams } = new URL(request.url);
+    const page = Number(searchParams.get("page")) || 1;
+    const perPage = Number(searchParams.get("perPage")) ?? 8;
 
     const res = await api(`/users/${id}/tools`, {
+      params: {
+        page,
+        perPage,
+      },
       headers: {
         Cookie: cookieStore.toString(),
       },

@@ -7,6 +7,7 @@ import Loading from "@/app/loading";
 import toast from "react-hot-toast";
 import { Tool } from "@/types/tool";
 import { fetchToolById } from "@/lib/api/clientApi";
+import { ApiError } from "@/app/api/api";
 
 export default function EditToolPage() {
   const params = useParams();
@@ -22,10 +23,11 @@ export default function EditToolPage() {
         const data = await fetchToolById(toolId);
         setTool(data);
       } catch (error) {
+        const err = error as ApiError;
         toast.error(
-          error instanceof Error
-            ? error.message
-            : "Не вдалося завантажити інструмент"
+          err.response?.data?.response?.validation?.body?.message ||
+            err.response?.data?.response?.message ||
+            "Не вдалося завантажити інструмент"
         );
         router.push("/tools");
       } finally {
@@ -46,5 +48,10 @@ export default function EditToolPage() {
     return null;
   }
 
-  return <AddEditToolForm toolId={toolId} initialData={tool} />;
+  return (
+    <AddEditToolForm
+      toolId={toolId}
+      initialData={tool}
+    />
+  );
 }
