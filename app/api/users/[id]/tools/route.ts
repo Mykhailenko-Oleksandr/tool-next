@@ -1,35 +1,40 @@
+import axios, { isAxiosError } from "axios";
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { isAxiosError } from "axios";
-import { api } from "@/app/api/api";
-import { logErrorResponse } from "@/app/api/_utils/utils";
 
-type Props = {
-  params: Promise<{ id: string }>;
-};
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
-export async function GET(request: Request, { params }: Props) {
+const backend = axios.create({
+  baseURL: "https://tool-next-backend.onrender.com/api",
+  withCredentials: true,
+});
+
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
-    const cookieStore = await cookies();
     const { id } = await params;
 
-    const res = await api(`/users/${id}/tools`, {
-      headers: {
-        Cookie: cookieStore.toString(),
-      },
+    const { searchParams } = new URL(request.url);
+    const page = searchParams.get("page") ?? "1";
+    const perPage = searchParams.get("perPage") ?? "8";
+
+    const res = await backend.get(`/users/${id}/tools`, {
+      params: { page, perPage },
     });
+
     return NextResponse.json(res.data, { status: res.status });
   } catch (error) {
     if (isAxiosError(error)) {
-      logErrorResponse(error.response?.data);
       return NextResponse.json(
-        { error: error.message, response: error.response?.data },
-        { status: error.status }
+        error.response?.data ?? { message: error.message },
+        { status: error.response?.status || 500 }
       );
     }
-    logErrorResponse({ message: (error as Error).message });
+
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { message: "Internal Server Error" },
       { status: 500 }
     );
   }
