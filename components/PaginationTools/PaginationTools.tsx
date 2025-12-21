@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import ToolGrid from "@/components/ToolGrid/ToolGrid";
 import { fetchTools } from "@/lib/api/clientApi";
 import { Tool } from "@/types/tool";
@@ -10,35 +11,33 @@ import FilterBar from "../FilterBar/FilterBar";
 import EmptyToolCard from "../EmptyToolCard/EmptyToolCard";
 
 interface Props {
-	initialTools: Tool[];
-	totalPages: number;
 	categories: Category[];
 }
 
-export default function PaginationTools({
-	initialTools,
-	totalPages,
-	categories,
-}: Props) {
+export default function PaginationTools({ categories }: Props) {
+	const router = useRouter();
+	const searchParams = useSearchParams();
+	const [searchQuery, setSearchQuery] = useState(
+		searchParams.get("search") || ""
+	);
+
 	const [perPage, setPerPage] = useState(16);
-	const [tools, setTools] = useState<Tool[]>(initialTools);
+	const [tools, setTools] = useState<Tool[] | null>(null);
 	const [page, setPage] = useState(1);
-	const [totalPagesState, setTotalPagesState] = useState(totalPages);
+	const [totalPages, setTotalPages] = useState(1);
 	const [loading, setLoading] = useState(false);
 	const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
-	const hasActiveFilters = selectedCategories.length > 0;
 
 	useEffect(() => {
-		const updatePerPage = () => {
-			const width = window.innerWidth;
-			if (width < 1440) setPerPage(8);
-			else setPerPage(16);
-		};
-
+		const updatePerPage = () => setPerPage(window.innerWidth < 1440 ? 8 : 16);
 		updatePerPage();
 		window.addEventListener("resize", updatePerPage);
 		return () => window.removeEventListener("resize", updatePerPage);
 	}, []);
+
+	useEffect(() => {
+		setSearchQuery(searchParams.get("search") || "");
+	}, [searchParams]);
 
 	useEffect(() => {
 		const fetchFilteredTools = async () => {
@@ -46,36 +45,37 @@ export default function PaginationTools({
 			setPage(1);
 
 			const categoryIds = selectedCategories.map((c) => c._id);
-			const categoryParam = categoryIds.length
-				? categoryIds.join(",")
-				: undefined;
 
 			try {
-				const response = await fetchTools(1, categoryParam, perPage);
+				const response = await fetchTools(1, categoryIds, perPage, searchQuery);
 				setTools(response.tools);
-				setTotalPagesState(response.totalPages);
+				setTotalPages(response.totalPages);
 			} finally {
 				setLoading(false);
 			}
 		};
 
 		fetchFilteredTools();
-	}, [selectedCategories, perPage]);
+	}, [searchQuery, selectedCategories, perPage]);
 
 	const handleShowMore = async () => {
-		if (page >= totalPagesState) return;
+		if (page >= totalPages) return;
 
 		const nextPage = page + 1;
 		setLoading(true);
 
 		const categoryIds = selectedCategories.map((c) => c._id);
-		const categoryParam = categoryIds.length
-			? categoryIds.join(",")
-			: undefined;
 
 		try {
-			const response = await fetchTools(nextPage, categoryParam, perPage);
-			setTools((prev) => [...prev, ...response.tools]);
+			const response = await fetchTools(
+				nextPage,
+				categoryIds,
+				perPage,
+				searchQuery
+			);
+			setTools((prev) =>
+				prev ? [...prev, ...response.tools] : response.tools
+			);
 			setPage(nextPage);
 		} finally {
 			setLoading(false);
@@ -84,6 +84,21 @@ export default function PaginationTools({
 
 	const handleResetFilters = () => {
 		setSelectedCategories([]);
+		const params = new URLSearchParams(window.location.search);
+		params.delete("search");
+		router.replace(`${window.location.pathname}?${params.toString()}`);
+		setSearchQuery("");
+	};
+
+	const handleCategoryChange = (newSelected: Category[]) => {
+		setSelectedCategories(newSelected);
+
+		if (searchQuery) {
+			const params = new URLSearchParams(window.location.search);
+			params.delete("search");
+			router.replace(`${window.location.pathname}?${params.toString()}`);
+			setSearchQuery("");
+		}
 	};
 
 	return (
@@ -91,20 +106,26 @@ export default function PaginationTools({
 			<FilterBar
 				categories={categories}
 				selectedCategories={selectedCategories}
-				onChange={setSelectedCategories}
+				onChange={handleCategoryChange}
 				onReset={handleResetFilters}
 			/>
-			{/* Список інструментів */}
-			{tools.length > 0 && <ToolGrid tools={tools} />}
 
-			{/* Empty state — ТІЛЬКИ якщо фільтри активні і не loading */}
-			{!loading && hasActiveFilters && tools.length === 0 && (
-				<EmptyToolCard
-					categoryName={selectedCategories.map((c) => c.title).join(", ")}
-				/>
+			{tools ? (
+				tools.length > 0 ? (
+					<ToolGrid tools={tools} />
+				) : (
+					!loading && (
+						<EmptyToolCard
+							searchQuery={searchQuery}
+							categoryName={selectedCategories.map((c) => c.title).join(", ")}
+						/>
+					)
+				)
+			) : (
+				<div>Завантаження...</div>
 			)}
 
-			{page < totalPagesState && (
+			{tools && page < totalPages && (
 				<LoadMoreButton
 					onClick={handleShowMore}
 					disabled={loading}
