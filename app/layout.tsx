@@ -10,8 +10,6 @@ import { Inter } from "next/font/google";
 
 // Components
 import TanStackProvider from "@/components/TanStackProvider/TanStackProvider";
-import Header from "@/components/Header/Header";
-import Footer from "@/components/Footer/Footer";
 import { Metadata } from "next";
 
 const inter = Inter({
@@ -54,11 +52,8 @@ export default function RootLayout({
     <html lang="uk">
       <body className={`${inter.variable} ${nunitoSans.variable}`}>
         <TanStackProvider>
-          <Header />
+          {children}
 
-          <main>{children}</main>
-
-          <Footer />
           <Toaster />
         </TanStackProvider>
       </body>

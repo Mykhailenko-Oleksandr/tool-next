@@ -157,7 +157,7 @@ export const login = async (data: UserRequest) => {
 };
 
 export async function checkSession() {
-  const res = await nextServer.post<CheckSessionRequest>("/auth/refresh");
+  const res = await nextServer.get<CheckSessionRequest>("/auth/refresh");
   return res.data;
 }
 

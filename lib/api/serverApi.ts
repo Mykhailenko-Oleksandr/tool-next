@@ -15,7 +15,7 @@ export async function getMe() {
 
 export async function checkSession() {
   const cookieStore = await cookies();
-  const res = await nextServer.post<CheckSessionRequest>("/auth/refresh", {
+  const res = await nextServer.get<CheckSessionRequest>("/auth/refresh", {
     headers: {
       Cookie: cookieStore.toString(),
     },
