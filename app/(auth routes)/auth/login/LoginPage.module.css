@@ -1,13 +1,25 @@
-.contentWrapper {
+.leftContentWrapper {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   position: relative;
 }
 
+.formLogoLink {
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+  padding-top: 26px;
+  padding-bottom: 26px;
+}
+
 .logo {
-  position: absolute;
-  top: 26px;
-  left: 20px;
+  transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logo:hover,
+.logo:focus {
+  transform: scale(1.1);
 }
 
 .formWrapper {
@@ -33,6 +45,7 @@
 }
 
 .formGroup {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -49,14 +62,20 @@
   resize: none;
 }
 
+.formInput:hover,
+.formInput:focus,
 .formInput:active {
-  border: 2px solid var(--color-electric-violet);
+  border-color: var(--color-electric-violet);
+}
+
+.formInput:has(+ .formError) {
+  border-color: var(--color-red-dark);
 }
 
 .formButton {
   display: block;
   margin: 0 auto;
-  border: 1px solid var(--color-electric-violet);
+  border: 2px solid var(--color-electric-violet);
   background-color: var(--color-electric-violet);
   border-radius: 6px;
   padding: 10px 24px;
@@ -66,6 +85,10 @@
   line-height: 150%;
   color: var(--color-white);
   margin-bottom: 24px;
+  transition:
+    background-color 250ms ease,
+    color 250ms ease,
+    border-color 250ms ease;
 }
 
 .formButton:hover,
@@ -91,6 +114,7 @@
 
 .formText a {
   text-decoration: underline;
+  transition: color 250ms ease;
 }
 
 .formText a:hover {
@@ -98,6 +122,9 @@
 }
 
 .formError {
+  position: absolute;
+  bottom: -20px;
+  left: 0;
   font-size: 12px;
   line-height: 150%;
   color: var(--color-red-dark);
@@ -109,17 +136,12 @@
 
 .formFooterText {
   position: absolute;
-  left: 20px;
   bottom: 27px;
   font-size: 12px;
   line-height: 150%;
 }
 
 @media only screen and (min-width: 768px) {
-  .logo {
-    left: 32px;
-  }
-
   .formTitle {
     font-size: 30px;
   }
@@ -127,27 +149,12 @@
   .formInput {
     width: 704px;
   }
-
-  .formFooterText {
-    left: 32px;
-  }
 }
 
 @media only screen and (min-width: 1440px) {
-  .pageWrapper {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .logo {
-    width: 124px;
-    height: 20px;
-    top: 26px;
-    left: 64px;
-  }
-
   .contentWrapper {
-    padding-left: 64px;
+    display: flex;
+    gap: 32px;
   }
 
   .formTitle {
@@ -163,6 +170,6 @@
   }
 
   .formFooterText {
-    left: 64px;
+    font-size: 14px;
   }
 }
