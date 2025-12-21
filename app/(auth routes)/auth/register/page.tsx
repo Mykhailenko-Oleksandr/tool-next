@@ -2,51 +2,68 @@
 
 import css from "./RegistrationForm.module.css";
 import { ApiError } from "@/app/api/api";
-import { register, RegisterRequest } from "@/lib/api/clientApi";
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { register } from "@/lib/api/clientApi";
+import { useAuthStore } from "@/lib/store/authStore";
+import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import * as Yup from "yup";
+
+interface FormData {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
 
 const RegistrationFormSchema = Yup.object({
   name: Yup.string()
-    .min(2, "Name must be at least 2 characters")
-    .max(32, "Name must be at most 32 characters")
-    .required("Name is required"),
+    .min(2, "Ім’я повинно містити щонайменше 2 символи")
+    .max(32, "Ім’я повинно містити не більше 32 символів")
+    .required("Ім’я є обов’язковим"),
 
   email: Yup.string()
-    .email("Email format is invalid")
-    .max(64)
-    .required("Email is required"),
+    .email("Неправильний формат електронної пошти")
+    .max(64, "Електронна пошта повинна містити не більше 64 символів")
+    .required("Електронна пошта є обов’язковою"),
 
-  password: Yup.string().min(8).max(128).required("Password is required"),
+  password: Yup.string()
+    .min(8, "Пароль повинний містити щонайменше 8 символів")
+    .max(128, "Пароль повинний містити не більше 128 символів")
+    .required("Пароль є обов’язковим"),
 
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password")], "Passwords do not match")
-    .required("Confirm password is required"),
+    .oneOf([Yup.ref("password")], "Паролі не співпадають")
+    .required("Підтвердження пароля є обов’язковим"),
 });
 
 export default function RegistrationForm() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("from") || "/";
-  const [error, setError] = useState("");
+  const { setUser } = useAuthStore();
 
-  const handleSubmit = async (values: RegisterRequest) => {
+  const handleSubmit = async (
+    values: FormData,
+    formikHelpers: FormikHelpers<FormData>
+  ) => {
     try {
-      await register({
+      const newUser = await register({
         name: values.name,
         email: values.email,
         password: values.password,
       });
-      router.replace(redirectTo || "/");
-    } catch (error) {
-      setError(
-        (error as ApiError).response?.data?.error ??
-          (error as ApiError).message ??
-          "Registration error"
+
+      setUser(newUser);
+      formikHelpers.resetForm();
+      router.replace("/profile");
+    } catch (error: unknown) {
+      const err = error as ApiError;
+
+      toast.error(
+        err.response?.data?.response?.validation?.body?.message ||
+          err.response?.data?.response?.message ||
+          err.message
       );
     }
   };
@@ -54,121 +71,123 @@ export default function RegistrationForm() {
   return (
     <>
       <div className={css.pageWrapper}>
-        <div className={css.contentWrapper}>
-          <Link href="/">
-            <svg width="92" height="20" className={css.logo}>
-              <use href="/icons.svg#icon-logo"></use>
-            </svg>
-          </Link>
-          <div className={css.formWrapper}>
-            <Formik
-              initialValues={{
-                name: "",
-                email: "",
-                password: "",
-                confirmPassword: "",
-              }}
-              validationSchema={RegistrationFormSchema}
-              onSubmit={handleSubmit}
-            >
-              {({ isSubmitting, isValid, dirty }) => (
-                <Form className={css.form}>
-                  <fieldset>
-                    <legend className={css.title}>Реєстрація</legend>
-                    <div className={css.inputWrapper}>
-                      <label htmlFor="name">Ім&#39;я*</label>
-                      <Field
-                        id="name"
-                        name="name"
-                        type="text"
-                        className={css.formInput}
-                        placeholder="Ваше ім'я"
-                      />
-                      <ErrorMessage
-                        name="name"
-                        component="span"
-                        className={css.formError}
-                      />
-                    </div>
+        <div className={`container ${css.contentWrapper}`}>
+          <div className={css.leftBoxContent}>
+            <Link className={css.logoLink} href="/" aria-label="На головну">
+              <svg width="92" height="20" className={css.logo}>
+                <use href="/icons.svg#icon-logo"></use>
+              </svg>
+            </Link>
+            <div className={css.formWrapper}>
+              <Formik
+                initialValues={{
+                  name: "",
+                  email: "",
+                  password: "",
+                  confirmPassword: "",
+                }}
+                onSubmit={handleSubmit}
+                validationSchema={RegistrationFormSchema}
+              >
+                {({ isSubmitting, isValid, dirty }) => (
+                  <Form className={css.form}>
+                    <fieldset>
+                      <legend className={css.title}>Реєстрація</legend>
+                      <div className={css.inputWrapper}>
+                        <label htmlFor="name">Ім&#39;я*</label>
+                        <Field
+                          id="name"
+                          name="name"
+                          type="text"
+                          className={css.formInput}
+                          placeholder="Ваше ім'я"
+                        />
+                        <ErrorMessage
+                          name="name"
+                          component="span"
+                          className={css.formError}
+                        />
+                      </div>
 
-                    <div className={css.inputWrapper}>
-                      <label htmlFor="email">Пошта*</label>
-                      <Field
-                        id="email"
-                        name="email"
-                        type="email"
-                        className={css.formInput}
-                        placeholder="Ваша пошта"
-                      />
-                      <ErrorMessage
-                        name="email"
-                        component="span"
-                        className={css.formError}
-                      />
-                    </div>
+                      <div className={css.inputWrapper}>
+                        <label htmlFor="email">Пошта*</label>
+                        <Field
+                          id="email"
+                          name="email"
+                          type="email"
+                          className={css.formInput}
+                          placeholder="Ваша пошта"
+                        />
+                        <ErrorMessage
+                          name="email"
+                          component="span"
+                          className={css.formError}
+                        />
+                      </div>
 
-                    <div className={css.inputWrapper}>
-                      <label htmlFor="password">Пароль*</label>
-                      <Field
-                        id="password"
-                        name="password"
-                        type="password"
-                        className={css.formInput}
-                        placeholder="*******"
-                      />
-                      <ErrorMessage
-                        name="password"
-                        component="span"
-                        className={css.formError}
-                      />
-                    </div>
+                      <div className={css.inputWrapper}>
+                        <label htmlFor="password">Пароль*</label>
+                        <Field
+                          id="password"
+                          name="password"
+                          type="password"
+                          className={css.formInput}
+                          placeholder="*******"
+                        />
+                        <ErrorMessage
+                          name="password"
+                          component="span"
+                          className={css.formError}
+                        />
+                      </div>
 
-                    <div className={css.inputWrapper}>
-                      <label htmlFor="confirmPassword">
-                        Підтвердіть пароль*
-                      </label>
-                      <Field
-                        id="confirmPassword"
-                        name="confirmPassword"
-                        type="password"
-                        className={css.formInput}
-                        placeholder="*******"
-                      />
-                      <ErrorMessage
-                        name="confirmPassword"
-                        component="span"
-                        className={css.formError}
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      className={css.btn}
-                      disabled={isSubmitting || !isValid || !dirty}
-                    >
-                      Зареєструватися
-                    </button>
-                  </fieldset>
-                </Form>
-              )}
-            </Formik>
-            <p className={css.formText}>
-              Вже маєте акаунт?{" "}
-              <Link href="/auth/login" className={css.textLink}>
-                Вхід
-              </Link>
-            </p>
+                      <div className={css.inputWrapper}>
+                        <label htmlFor="confirmPassword">
+                          Підтвердіть пароль*
+                        </label>
+                        <Field
+                          id="confirmPassword"
+                          name="confirmPassword"
+                          type="password"
+                          className={css.formInput}
+                          placeholder="*******"
+                        />
+                        <ErrorMessage
+                          name="confirmPassword"
+                          component="span"
+                          className={css.formError}
+                        />
+                      </div>
+                      <button
+                        type="submit"
+                        className={css.btn}
+                        disabled={isSubmitting || !isValid || !dirty}
+                      >
+                        Зареєструватися
+                      </button>
+                    </fieldset>
+                  </Form>
+                )}
+              </Formik>
+              <p className={css.formText}>
+                Вже маєте акаунт?&nbsp;
+                <Link href="/auth/login" className={css.textLink}>
+                  Вхід
+                </Link>
+              </p>
+            </div>
+            <p className={css.formFooterText}>&#169; 2025 ToolNext</p>
           </div>
-          <p className={css.formFooterText}>&#169; 2025 ToolNext</p>
-        </div>
-
-        <div className={css.formImg}>
-          <Image
-            src="/images/login.jpg"
-            width={704}
-            height={900}
-            alt="Tools"
-            priority
-          />
+          <picture className={css.formImg}>
+            <source srcSet="/images/login.jpg 1x, /images/login@2x.jpg 2x" />
+            <Image
+              src="/images/login.jpg"
+              width={704}
+              height={900}
+              alt="Tools"
+              priority
+            />
+          </picture>
         </div>
       </div>
     </>

@@ -1,16 +1,18 @@
-import { NextRequest, NextResponse } from "next/server";
-import { api } from "../api";
-import { isAxiosError } from "axios";
-import { logErrorResponse } from "../_utils/utils";
+import { NextResponse } from "next/server";
+import { api } from "../../api";
 import { cookies } from "next/headers";
+import { logErrorResponse } from "../../_utils/utils";
+import { isAxiosError } from "axios";
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url);
-    const page = searchParams.get("page") || "1";
+    const cookieStore = await cookies();
 
-    const res = await api.get(`/tools?page=${page}`);
-
+    const res = await api.get("/users/me", {
+      headers: {
+        Cookie: cookieStore.toString(),
+      },
+    });
     return NextResponse.json(res.data, { status: res.status });
   } catch (error) {
     if (isAxiosError(error)) {
@@ -28,18 +30,16 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function PATCH(request: Request) {
   try {
     const cookieStore = await cookies();
+    const body = await request.json();
 
-    const formData = await request.formData();
-
-    const res = await api.post("/tools", formData, {
+    const res = await api.patch("/users/me", body, {
       headers: {
         Cookie: cookieStore.toString(),
       },
     });
-
     return NextResponse.json(res.data, { status: res.status });
   } catch (error) {
     if (isAxiosError(error)) {

@@ -59,8 +59,12 @@ export default function Header() {
             <div className={styles.rightSection}>
               {user && (
                 <button
-                  className={clsx(styles.createPost, styles.tabletOnly, styles.purpleButton)}
-                  onClick={() => router.push("/posts/create")}
+                  className={clsx(
+                    styles.createPost,
+                    styles.tabletOnly,
+                    styles.purpleButton
+                  )}
+                  onClick={() => router.push("/tools/new")}
                 >
                   Опублікувати оголошення
                 </button>
@@ -68,22 +72,35 @@ export default function Header() {
 
               <button
                 type="button"
-                className={clsx(styles.burger, { [styles.burgerActive]: isMenuOpen })}
+                className={clsx(styles.burger, {
+                  [styles.burgerActive]: isMenuOpen,
+                })}
                 aria-expanded={isMenuOpen}
                 aria-controls="mobile-menu"
                 onClick={() => setIsMenuOpen((prev) => !prev)}
               >
                 <svg width="24" height="24" aria-hidden>
-                  <use href={isMenuOpen ? "/icons.svg#icon-close" : "/icons.svg#icon-menu"} />
+                  <use
+                    href={
+                      isMenuOpen
+                        ? "/icons.svg#icon-close"
+                        : "/icons.svg#icon-menu"
+                    }
+                  />
                 </svg>
               </button>
             </div>
 
-            <nav id="mobile-menu" className={clsx(styles.nav, { [styles.navOpen]: isMenuOpen })}>
+            <nav
+              id="mobile-menu"
+              className={clsx(styles.nav, { [styles.navOpen]: isMenuOpen })}
+            >
               <Link
                 href="/"
                 onClick={closeMenu}
-                className={clsx(styles.navLink, { [styles.activeLink]: isActive("/") })}
+                className={clsx(styles.navLink, {
+                  [styles.activeLink]: isActive("/"),
+                })}
               >
                 Головна
               </Link>
@@ -91,7 +108,9 @@ export default function Header() {
               <Link
                 href="/tools"
                 onClick={closeMenu}
-                className={clsx(styles.navLink, { [styles.activeLink]: isActive("/tools") })}
+                className={clsx(styles.navLink, {
+                  [styles.activeLink]: isActive("/tools"),
+                })}
               >
                 Інструменти
               </Link>
@@ -101,14 +120,20 @@ export default function Header() {
                   <Link
                     href="/profile"
                     onClick={closeMenu}
-                    className={clsx(styles.navLink, { [styles.activeLink]: isActive("/profile") })}
+                    className={clsx(styles.navLink, {
+                      [styles.activeLink]: isActive("/profile"),
+                    })}
                   >
                     Мій профіль
                   </Link>
 
                   <button
-                    className={clsx(styles.createPost, styles.desktopOnly, styles.purpleButton)}
-                    onClick={() => router.push("/posts/create")}
+                    className={clsx(
+                      styles.createPost,
+                      styles.desktopOnly,
+                      styles.purpleButton
+                    )}
+                    onClick={() => router.push("/tools/new")}
                   >
                     Опублікувати оголошення
                   </button>
@@ -126,7 +151,12 @@ export default function Header() {
                             height={40}
                           />
                         ) : (
-                          <span className={clsx(styles.avatar, styles.avatarFallback)}>
+                          <span
+                            className={clsx(
+                              styles.avatar,
+                              styles.avatarFallback
+                            )}
+                          >
                             {firstLetter}
                           </span>
                         )}
