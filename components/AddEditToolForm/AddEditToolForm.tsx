@@ -7,16 +7,13 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { BeatLoader } from "react-spinners";
-import {
-  fetchCategories,
-  createTool,
-  updateTool,
-  Category,
-  Tool,
-} from "@/lib/api/toolsApi";
 import { ApiError } from "@/app/api/api";
 import css from "./AddEditToolForm.module.css";
 import CustomSelect from "@/components/CustomSelect/CustomSelect";
+import { Tool } from "@/types/tool";
+import { Category } from "@/types/category";
+import { getCategories } from "@/lib/api/clientApi";
+import { createTool, updateTool } from "@/lib/api/serverApi";
 
 interface AddEditToolFormProps {
   toolId?: string;
@@ -82,7 +79,7 @@ export default function AddEditToolForm({
     const loadCategories = async () => {
       try {
         setIsLoadingCategories(true);
-        const data = await fetchCategories();
+        const data = await getCategories();
         setCategories(data);
       } catch (error: unknown) {
         const err = error as ApiError;
@@ -164,7 +161,6 @@ export default function AddEditToolForm({
           toolId ? "Інструмент успішно оновлено" : "Інструмент успішно створено"
         );
         router.push(`/tools/${result._id}`);
-        
       } catch (error: unknown) {
         const err = error as ApiError;
 

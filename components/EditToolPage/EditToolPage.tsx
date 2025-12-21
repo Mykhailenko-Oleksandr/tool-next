@@ -5,7 +5,6 @@ import { useParams, useRouter } from "next/navigation";
 import { fetchToolById, Tool } from "@/lib/api/toolsApi";
 import AddEditToolForm from "@/components/AddEditToolForm/AddEditToolForm";
 import Loading from "@/app/loading";
-import AddEditToolPage from "@/components/AddEditToolPage/AddEditToolPage";
 import toast from "react-hot-toast";
 
 export default function EditToolPage() {
@@ -39,21 +38,12 @@ export default function EditToolPage() {
   }, [toolId, router]);
 
   if (isLoading) {
-    return (
-      <AddEditToolPage>
-        <Loading />
-      </AddEditToolPage>
-    );
+    return <Loading />;
   }
 
   if (!tool) {
     return null;
   }
 
-  return (
-    <AddEditToolPage>
-      <AddEditToolForm toolId={toolId} initialData={tool} />
-    </AddEditToolPage>
-  );
+  return <AddEditToolForm toolId={toolId} initialData={tool} />;
 }
-

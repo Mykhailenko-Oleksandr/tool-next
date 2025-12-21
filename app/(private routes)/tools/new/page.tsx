@@ -1,10 +1,12 @@
 import AddEditToolForm from "@/components/AddEditToolForm/AddEditToolForm";
-import AddEditToolPage from "@/components/AddEditToolPage/AddEditToolPage";
+import css from "./AddToolPage.module.css";
 
 export default function AddToolPage() {
   return (
-    <AddEditToolPage>
-      <AddEditToolForm />
-    </AddEditToolPage>
+    <section className={css.pageSection}>
+      <div className="container">
+        <AddEditToolForm />
+      </div>
+    </section>
   );
 }

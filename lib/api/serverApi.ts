@@ -4,7 +4,7 @@ import { User } from "@/types/user";
 import { CheckSessionRequest } from "./clientApi";
 import { Tool } from "@/types/tool";
 
-export interface CreateToolRequest {
+export interface CreateToolData {
   name: string;
   pricePerDay: number;
   category: string;
@@ -14,14 +14,15 @@ export interface CreateToolRequest {
   image: File;
 }
 
-export interface UpdateToolRequest {
+export interface UpdateToolData {
+  id: string;
   name?: string;
   pricePerDay?: number;
   category?: string;
   rentalTerms?: string;
   description?: string;
   specifications?: object;
-  image?: File;
+  images?: File | null;
 }
 
 export async function getMe() {
@@ -44,7 +45,44 @@ export async function checkSession() {
   return res;
 }
 
-export async function createTool(data: CreateToolRequest) {
+export async function updateTool(data: UpdateToolData): Promise<Tool> {
+  const cookieStore = await cookies();
+  const { id, ...toolData } = data;
+  const formData = new FormData();
+
+  if (toolData.name) {
+    formData.append("name", toolData.name);
+  }
+  if (toolData.pricePerDay !== undefined) {
+    formData.append("pricePerDay", String(toolData.pricePerDay));
+  }
+  if (toolData.category) {
+    formData.append("category", toolData.category);
+  }
+  if (toolData.rentalTerms) {
+    formData.append("rentalTerms", toolData.rentalTerms);
+  }
+  if (toolData.description) {
+    formData.append("description", toolData.description);
+  }
+  if (data.specifications) {
+    formData.append("specifications", JSON.stringify(data.specifications));
+  }
+  if (toolData.images) {
+    formData.append("image", toolData.images);
+  }
+
+  const response = await nextServer.patch<Tool>(`/tools/${id}`, formData, {
+    headers: {
+      Cookie: cookieStore.toString(),
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return response.data;
+}
+
+export async function createTool(data: CreateToolData) {
   const cookieStore = await cookies();
   const formData = new FormData();
 
@@ -58,46 +96,12 @@ export async function createTool(data: CreateToolRequest) {
   }
   formData.append("image", data.image);
 
-  const res = await nextServer.post<Tool>("/tools", formData, {
+  const response = await nextServer.post<Tool>("/tools", formData, {
     headers: {
       Cookie: cookieStore.toString(),
       "Content-Type": "multipart/form-data",
     },
   });
-  return res.data;
-}
 
-export async function updateTool(id: string, data: UpdateToolRequest) {
-  const cookieStore = await cookies();
-  const formData = new FormData();
-
-  if (data.name) {
-    formData.append("name", data.name);
-  }
-  if (data.pricePerDay) {
-    formData.append("pricePerDay", String(data.pricePerDay));
-  }
-  if (data.category) {
-    formData.append("category", data.category);
-  }
-  if (data.rentalTerms) {
-    formData.append("rentalTerms", data.rentalTerms);
-  }
-  if (data.description) {
-    formData.append("description", data.description);
-  }
-  if (data.specifications) {
-    formData.append("specifications", JSON.stringify(data.specifications));
-  }
-  if (data.image) {
-    formData.append("image", data.image);
-  }
-
-  const res = await nextServer.patch<Tool>(`/tools/${id}`, formData, {
-    headers: {
-      Cookie: cookieStore.toString(),
-      "Content-Type": "multipart/form-data",
-    },
-  });
-  return res.data;
+  return response.data;
 }
