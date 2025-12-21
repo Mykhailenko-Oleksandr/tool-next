@@ -50,8 +50,13 @@ export default function LoginPage() {
       <div className={css.pageWrapper}>
         <div className={`container ${css.contentWrapper}`}>
           <div className={css.leftBoxContent}>
-            <Link href="/" className={css.logoLink}>
-              <svg width="92" height="20" className={css.logo}>
+            <Link
+              href="/"
+              className={css.logoLink}>
+              <svg
+                width="92"
+                height="20"
+                className={css.logo}>
                 <use href="/icons.svg#icon-logo"></use>
               </svg>
             </Link>
@@ -62,14 +67,15 @@ export default function LoginPage() {
                   password: "",
                 }}
                 onSubmit={handleSubmit}
-                validationSchema={LoginPageSchema}
-              >
+                validationSchema={LoginPageSchema}>
                 {({ isSubmitting, isValid, dirty }) => (
                   <Form className={css.form}>
                     <fieldset>
                       <legend className={css.title}>Вхід</legend>
                       <div className={css.inputWrapper}>
-                        <label htmlFor="email" className={css.formLable}>
+                        <label
+                          htmlFor="email"
+                          className={css.formLable}>
                           Пошта*
                         </label>
                         <Field
@@ -105,8 +111,7 @@ export default function LoginPage() {
                       <button
                         type="submit"
                         className={css.btn}
-                        disabled={isSubmitting || !isValid || !dirty}
-                      >
+                        disabled={isSubmitting || !isValid || !dirty}>
                         Увійти
                       </button>
                     </fieldset>
@@ -114,7 +119,12 @@ export default function LoginPage() {
                 )}
               </Formik>
               <p className={css.formText}>
-                Не маєте аккаунту? <Link href="/auth/register">Реєстрація</Link>
+                Не маєте аккаунту?{" "}
+                <Link
+                  className={css.textLink}
+                  href="/auth/register">
+                  Реєстрація
+                </Link>
               </p>
             </div>
             <p className={css.formFooterText}>&#169; 2025 ToolNext</p>

@@ -10,8 +10,8 @@ export interface CreateToolData {
   category: string;
   rentalTerms: string;
   description: string;
-  specifications?: object;
-  image: File;
+  specifications?: Record<string, string>;
+  images: File;
 }
 
 export interface UpdateToolData {
@@ -21,8 +21,8 @@ export interface UpdateToolData {
   category?: string;
   rentalTerms?: string;
   description?: string;
-  specifications?: object;
-  images?: File | null;
+  specifications?: Record<string, string>;
+  images?: File;
 }
 
 export async function getMe() {
@@ -94,7 +94,7 @@ export async function createTool(data: CreateToolData) {
   if (data.specifications) {
     formData.append("specifications", JSON.stringify(data.specifications));
   }
-  formData.append("image", data.image);
+  formData.append("image", data.images);
 
   const response = await nextServer.post<Tool>("/tools", formData, {
     headers: {
