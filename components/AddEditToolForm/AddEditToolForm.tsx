@@ -160,7 +160,6 @@ export default function AddEditToolForm({
               return acc;
             }, {}),
         };
-        console.log(baseToolData);
 
         if (!toolId) {
           if (!values.images) {
@@ -231,7 +230,9 @@ export default function AddEditToolForm({
       <div className={css["form-wrap"]}>
         <div className={css["form-fields"]}>
           <div className={css["form-group"]}>
-            <label htmlFor="images" className={css["form-label"]}>
+            <label
+              htmlFor="images"
+              className={css["form-label"]}>
               Фото інструменту
             </label>
             <div className={css["image-upload"]}>
@@ -258,8 +259,7 @@ export default function AddEditToolForm({
               ) : (
                 <label
                   htmlFor="images"
-                  className={css["image-placeholder"]}
-                ></label>
+                  className={css["image-placeholder"]}></label>
               )}
             </div>
             {formik.errors.images &&
@@ -274,13 +274,14 @@ export default function AddEditToolForm({
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className={css["upload-button"]}
-          >
+            className={css["upload-button"]}>
             Завантажити фото
           </button>
 
           <div className={css["form-group"]}>
-            <label htmlFor="name" className={css["form-label"]}>
+            <label
+              htmlFor="name"
+              className={css["form-label"]}>
               Назва
             </label>
             <input
@@ -298,14 +299,15 @@ export default function AddEditToolForm({
               placeholder="Введить назву"
             />
             <div
-              className={`${css["error-wrapper"]} ${formik.errors.name && formik.touched.name ? css["error-wrapper-visible"] : ""}`}
-            >
+              className={`${css["error-wrapper"]} ${formik.errors.name && formik.touched.name ? css["error-wrapper-visible"] : ""}`}>
               <div className={css["error-message"]}>{displayErrors.name}</div>
             </div>
           </div>
 
           <div className={css["form-group"]}>
-            <label htmlFor="pricePerDay" className={css["form-label"]}>
+            <label
+              htmlFor="pricePerDay"
+              className={css["form-label"]}>
               Ціна/день
             </label>
             <input
@@ -325,8 +327,7 @@ export default function AddEditToolForm({
               step="0.01"
             />
             <div
-              className={`${css["error-wrapper"]} ${formik.errors.pricePerDay && formik.touched.pricePerDay ? css["error-wrapper-visible"] : ""}`}
-            >
+              className={`${css["error-wrapper"]} ${formik.errors.pricePerDay && formik.touched.pricePerDay ? css["error-wrapper-visible"] : ""}`}>
               <div className={css["error-message"]}>
                 {displayErrors.pricePerDay}
               </div>
@@ -334,7 +335,9 @@ export default function AddEditToolForm({
           </div>
 
           <div className={css["form-group"]}>
-            <label htmlFor="category" className={css["form-label"]}>
+            <label
+              htmlFor="category"
+              className={css["form-label"]}>
               Категорія
             </label>
             <CustomSelect
@@ -352,8 +355,7 @@ export default function AddEditToolForm({
               hasError={!!(formik.errors.category && formik.touched.category)}
             />
             <div
-              className={`${css["error-wrapper"]} ${formik.errors.category && formik.touched.category ? css["error-wrapper-visible"] : ""}`}
-            >
+              className={`${css["error-wrapper"]} ${formik.errors.category && formik.touched.category ? css["error-wrapper-visible"] : ""}`}>
               <div className={css["error-message"]}>
                 {displayErrors.category}
               </div>
@@ -361,7 +363,9 @@ export default function AddEditToolForm({
           </div>
 
           <div className={css["form-group"]}>
-            <label htmlFor="rentalTerms" className={css["form-label"]}>
+            <label
+              htmlFor="rentalTerms"
+              className={css["form-label"]}>
               Умови оренди
             </label>
             <textarea
@@ -378,8 +382,7 @@ export default function AddEditToolForm({
               placeholder="Застава 8000 грн. Станина та бак для води надаються окремо."
             />
             <div
-              className={`${css["error-wrapper"]} ${formik.errors.rentalTerms && formik.touched.rentalTerms ? css["error-wrapper-visible"] : ""}`}
-            >
+              className={`${css["error-wrapper"]} ${formik.errors.rentalTerms && formik.touched.rentalTerms ? css["error-wrapper-visible"] : ""}`}>
               <div className={css["error-message"]}>
                 {displayErrors.rentalTerms}
               </div>
@@ -387,7 +390,9 @@ export default function AddEditToolForm({
           </div>
 
           <div className={css["form-group"]}>
-            <label htmlFor="description" className={css["form-label"]}>
+            <label
+              htmlFor="description"
+              className={css["form-label"]}>
               Опис
             </label>
             <textarea
@@ -404,8 +409,7 @@ export default function AddEditToolForm({
               placeholder="Ваш опис"
             />
             <div
-              className={`${css["error-wrapper"]} ${formik.errors.description && formik.touched.description ? css["error-wrapper-visible"] : ""}`}
-            >
+              className={`${css["error-wrapper"]} ${formik.errors.description && formik.touched.description ? css["error-wrapper-visible"] : ""}`}>
               <div className={css["error-message"]}>
                 {displayErrors.description}
               </div>
@@ -413,7 +417,9 @@ export default function AddEditToolForm({
           </div>
 
           <div className={css["form-group"]}>
-            <label htmlFor="specifications" className={css["form-label"]}>
+            <label
+              htmlFor="specifications"
+              className={css["form-label"]}>
               Характеристики
             </label>
             <textarea
@@ -437,8 +443,7 @@ export default function AddEditToolForm({
             )}
 
             <div
-              className={`${css["error-wrapper"]} ${formik.errors.specifications && formik.touched.specifications ? css["error-wrapper-visible"] : ""}`}
-            >
+              className={`${css["error-wrapper"]} ${formik.errors.specifications && formik.touched.specifications ? css["error-wrapper-visible"] : ""}`}>
               <div className={css["error-message"]}>
                 {displayErrors.specifications}
               </div>
@@ -451,16 +456,21 @@ export default function AddEditToolForm({
             type="button"
             onClick={() => formik.handleSubmit()}
             disabled={isLoading || isLoadingCategories}
-            className={css["submit-button"]}
-          >
-            {isLoading ? <BeatLoader color="#fff" size={8} /> : "Опублікувати"}
+            className={css["submit-button"]}>
+            {isLoading ? (
+              <BeatLoader
+                color="#fff"
+                size={8}
+              />
+            ) : (
+              "Опублікувати"
+            )}
           </button>
           <button
             type="button"
             onClick={handleCancel}
             disabled={isLoading}
-            className={css["cancel-button"]}
-          >
+            className={css["cancel-button"]}>
             Відмінити
           </button>
         </div>
