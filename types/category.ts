@@ -1,8 +1,8 @@
 export interface Category {
-  _id: string;
-  title: string;
-  description: string;
-  keywords: string;
-  createdAt?: string;
-  updatedAt?: string;
+	_id: string;
+	title: string;
+	description: string;
+	keywords: string;
+	createdAt?: string;
+	updatedAt?: string;
 }
