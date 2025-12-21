@@ -1,0 +1,60 @@
+.errorPage {
+  padding: 40px 0;
+  background: #fff;
+  font-family: var(--font-Inter), var(--font-NunitoSans), sans-serif;
+}
+
+.errorPage img {
+  width: 100%;
+}
+
+.errorBg {
+  background-image: url("/images/error.gif");
+  height: 400px;
+  background-position: center;
+}
+
+.errorBg h1 {
+  font-size: 35px;
+  text-align: center;
+}
+
+.errorBg h3 {
+  font-size: 80px;
+}
+
+.errorBtn {
+  color: var(--color-white);
+  border: 1px solid var(--color-electric-violet);
+  border-radius: 6px;
+  display: inline-block;
+  padding: 8px 20px;
+  height: 37px;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-electric-violet);
+  margin: 20px 0;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.5;
+
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+.errorBtn:hover,
+.errorBtn:focus,
+.errorBtn:focus-visible,
+.errorBtn.hover {
+  border: 2px solid var(--color-electric-violet);
+  background: var(--color-white);
+  color: var(--color-neutral-darkest);
+}
+
+.errorBtn:active {
+  border: 2px solid var(--color-electric-violet);
+  background: var(--color-electric-violet-lighter);
+}
+.errorContantBox {
+  margin-top: -50px;
+  text-align: center;
+}

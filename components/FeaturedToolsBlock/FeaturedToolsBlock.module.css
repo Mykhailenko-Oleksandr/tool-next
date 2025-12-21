@@ -1,135 +1,121 @@
 .featuredToolsContainer {
-  width: 100%;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  padding: 64px 20px;
+  padding-top: 64px;
+  padding-bottom: 64px;
 }
 
-.wrapper {
-  padding: 40px 0;
+.titleWrapper {
   width: 100%;
-  margin: 0 auto;
+  max-width: 335px;
+  height: 86px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32px;
 }
 
-/* Заголовок */
-.title {
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 24px;
+.titleText {
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1.2;
   text-align: center;
+  color: #000;
 }
 
-/* Список карток на флексах */
 .toolsList {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 64px 32px;
   justify-content: center;
-}
-
-/* Кожна картка (ToolCard) */
-.toolsList > * {
-  box-sizing: border-box;
-  flex: 0 0 100%; /* мобайл за замовчуванням */
+  flex: 0 0 100%;
   max-width: 100%;
+  margin-bottom: 32px;
 }
 
-/* Кнопка під картками */
+.toolsList > :nth-child(n + 7) {
+  display: none;
+}
+
 .buttonWrapper {
-  margin-top: 32px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
 }
 
 .catalogButton {
-  background-color: var(--color-scheme-1-accent); /* старт: фіолетовий фон */
+  width: 100%;
+  height: 44px;
+  margin: 0 auto;
+  background-color: var(--color-scheme-1-accent);
   color: var(--color-white);
-  border: 1px solid transparent;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  display: inline-flex;
+  border: 1px solid var(--color-electric-violet);
+  border-radius: 6px;
+  font-weight: 500;
+  display: flex;
   align-items: center;
   justify-content: center;
-  transition:
-    background-color 0.6s ease,
-    color 0.6s ease,
-    border-color 0.6s ease,
-    transform 0.3s ease;
-}
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
 
-/* Hover / Focus → білий фон, фіолетовий бордер, чорний текст */
-.catalogButton:hover,
-.catalogButton:focus {
-  background-color: #fff;
-  color: #000;
-  border-color: var(--color-scheme-1-accent);
-}
-
-/* Active → світло‑фіолетовий фон, чорний бордер, чорний текст */
-.catalogButton:active {
-  background-color: #e6dbfa;
-  color: #000;
-  border-color: #000;
-  transform: scale(0.97);
-}
-
-/* Disabled → світло‑фіолетовий фон, білий текст, приглушений бордер */
-.catalogButton:disabled {
-  background-color: #e6dbfa;
-  color: #fff;
-  border-color: #ccc;
-  cursor: not-allowed;
-  opacity: 0.7;
-  transform: none;
-}
-
-/* Mobile ≤767px */
-@media (max-width: 767px) {
-  .wrapper {
-    max-width: 335px;
+  &:hover,
+  &:focus {
+    background-color: #fff;
+    color: #000;
+    border-color: var(--color-scheme-1-accent);
   }
 
-  .catalogButton {
-    width: 100%;
-    max-width: 335px;
-    margin: 0 auto;
-  }
-
-  .toolsList > * {
-    flex: 0 0 100%; /* одна картка в ряд */
-    max-width: 100%;
+  &:active {
+    background-color: var(--color-electric-violet-lighter);
   }
 }
 
-/* Tablet ≥768px і ≤1439px */
-@media (min-width: 768px) and (max-width: 1439px) {
+@media (min-width: 768px) {
   .wrapper {
     max-width: 704px;
   }
+  .titleWrapper {
+    max-width: 768px;
+    height: 36px;
+  }
+  .titleText {
+    font-size: 30px;
+  }
 
-  .toolsList > * {
-    flex: 0 0 calc(50% - 20px); /* дві картки в ряд */
-    max-width: calc(50% - 20px);
+  .toolsList div {
+    flex-basis: calc((100% - 32px) / 2);
+  }
+
+  .catalogButton {
+    max-width: 215px;
   }
 }
 
-/* Desktop ≥1440px */
 @media (min-width: 1440px) {
   .wrapper {
     max-width: 1312px;
   }
 
+  .titleWrapper {
+    max-width: 1312px;
+    height: 50px;
+    margin-bottom: 32px;
+  }
+
+  .titleText {
+    font-size: 42px;
+  }
+
+  .toolsList div {
+    flex-basis: calc((100% - 96px) / 4);
+  }
+
+  .toolsList > :nth-child(n + 7) {
+    display: unset;
+  }
+
   .featuredToolsContainer {
-    padding: 112px 64px;
-  }
-
-  .toolsList > * {
-    flex: 0 0 calc(25% - 20px); /* чотири картки в ряд */
-    max-width: calc(25% - 20px);
-  }
-
-  .title {
-    font-size: 32px;
+    padding-top: 112px;
+    padding-bottom: 112px;
   }
 }

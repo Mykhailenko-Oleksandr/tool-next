@@ -17,7 +17,7 @@ import { cookies } from "next/headers";
 // 			logErrorResponse(error.response?.data);
 // 			return NextResponse.json(
 // 				{ error: error.message, response: error.response?.data },
-// 				{ status: error.status }
+// 				{ status: error.response?.status || 500 }
 // 			);
 // 		}
 // 		logErrorResponse({ message: (error as Error).message });
@@ -28,6 +28,34 @@ import { cookies } from "next/headers";
 // 	}
 // }
 
+export async function POST(request: NextRequest) {
+	try {
+		const cookieStore = await cookies();
+
+		const formData = await request.formData();
+
+		const res = await api.post("/tools", formData, {
+			headers: {
+				Cookie: cookieStore.toString(),
+			},
+		});
+
+		return NextResponse.json(res.data, { status: res.status });
+	} catch (error) {
+		if (isAxiosError(error)) {
+			logErrorResponse(error.response?.data);
+			return NextResponse.json(
+				{ error: error.message, response: error.response?.data },
+				{ status: error.response?.status || 500 }
+			);
+		}
+		logErrorResponse({ message: (error as Error).message });
+		return NextResponse.json(
+			{ error: "Internal Server Error" },
+			{ status: 500 }
+		);
+	}
+}
 export async function GET(request: NextRequest) {
 	try {
 		const cookieStore = await cookies();
@@ -35,15 +63,18 @@ export async function GET(request: NextRequest) {
 		const search = request.nextUrl.searchParams.get("search") ?? "";
 		const page = Number(request.nextUrl.searchParams.get("page") ?? 1);
 		const perPage = Number(request.nextUrl.searchParams.get("perPage") ?? 8);
+
 		const rawCategory = request.nextUrl.searchParams.get("category") ?? "";
 		const category = rawCategory === "All" ? "" : rawCategory;
+
+		const categoryParam = category ? category.split(",").join(",") : undefined;
 
 		const res = await api.get("/tools", {
 			params: {
 				...(search && { search }),
 				page,
 				perPage,
-				...(category && { category }),
+				...(categoryParam && { category: categoryParam }),
 			},
 			headers: {
 				Cookie: cookieStore.toString(),
@@ -66,44 +97,3 @@ export async function GET(request: NextRequest) {
 		);
 	}
 }
-// export async function GET(request: NextRequest) {
-// 	try {
-// 		const cookieStore = await cookies();
-
-// 		const search = request.nextUrl.searchParams.get("search") ?? "";
-// 		const page = Number(request.nextUrl.searchParams.get("page") ?? 1);
-// 		const perPage = Number(request.nextUrl.searchParams.get("perPage") ?? 8);
-
-// 		const rawCategory = request.nextUrl.searchParams.get("category") ?? "";
-// 		const category = rawCategory === "All" ? "" : rawCategory;
-
-// 		const categoryParam = category ? category.split(",").join(",") : undefined;
-
-// 		const res = await api.get("/tools", {
-// 			params: {
-// 				...(search && { search }),
-// 				page,
-// 				perPage,
-// 				...(categoryParam && { category: categoryParam }),
-// 			},
-// 			headers: {
-// 				Cookie: cookieStore.toString(),
-// 			},
-// 		});
-
-// 		return NextResponse.json(res.data, { status: res.status });
-// 	} catch (error) {
-// 		if (isAxiosError(error)) {
-// 			logErrorResponse(error.response?.data);
-// 			return NextResponse.json(
-// 				{ error: error.message, response: error.response?.data },
-// 				{ status: error.status ?? 500 }
-// 			);
-// 		}
-// 		logErrorResponse({ message: (error as Error).message });
-// 		return NextResponse.json(
-// 			{ error: "Internal Server Error" },
-// 			{ status: 500 }
-// 		);
-// 	}
-// }

@@ -3,51 +3,53 @@
 import css from "./LoginPage.module.css";
 import { ApiError } from "@/app/api/api";
 import { login, UserRequest } from "@/lib/api/clientApi";
+import { useAuthStore } from "@/lib/store/authStore";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import * as Yup from "yup";
 
 const LoginPageSchema = Yup.object().shape({
   email: Yup.string()
-    .email("Email format is invalid")
-    .required("Email is required"),
+    .email("Невірний формат електронної пошти")
+    .required("Електронна пошта є обов'язковою"),
   password: Yup.string()
-    .min(8, "Password must be at least 8 characters")
-    .max(128, "Password must be at most 128 characters")
-    .required("Password is required"),
+    .min(8, "Пароль повинен містити щонайменше 8 символів")
+    .max(128, "Пароль повинен містити не більше 128 символів")
+    .required("Пароль є обов'язковим"),
 });
 
 export default function LoginPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("from") || "/";
-  const [error, setError] = useState("");
+
+  const setUser = useAuthStore((state) => state.setUser);
 
   const handleSubmit = async (values: UserRequest) => {
     try {
       const res = await login(values);
-      if (res) {
-        router.push(redirectTo);
-      } else {
-        setError("Invalid email or password");
-      }
-    } catch (error) {
-      setError(
-        (error as ApiError).response?.data?.error ??
-          (error as ApiError).message ??
-          "There are some error"
+      setUser(res);
+      router.push("/profile");
+      return;
+    } catch (error: unknown) {
+      const err = error as ApiError;
+      console.log("err", err);
+
+      toast.error(
+        err.response?.data?.response?.validation?.body?.message ||
+          err.response?.data?.response?.message ||
+          err.message
       );
     }
   };
 
   return (
     <>
-      <div className={css.pageWrapper}>
-        <div className={css.contentWrapper}>
-          <Link href="/">
+      <div className={`container ${css.contentWrapper}`}>
+        <div className={css.leftContentWrapper}>
+          <Link href="/" className={css.formLogoLink}>
             <svg width="92" height="20" className={css.logo}>
               <use href="/icons.svg#icon-logo"></use>
             </svg>
@@ -117,7 +119,8 @@ export default function LoginPage() {
           <p className={css.formFooterText}>&#169; 2025 ToolNext</p>
         </div>
 
-        <div className={css.formImgWrapper}>
+        <picture className={css.formImgWrapper}>
+          <source srcSet="/images/login.jpg 1x, /images/login@2x.jpg 2x" />
           <Image
             src="/images/login.jpg"
             width={704}
@@ -125,7 +128,7 @@ export default function LoginPage() {
             alt="Tools"
             priority
           />
-        </div>
+        </picture>
       </div>
     </>
   );
