@@ -40,16 +40,7 @@ export default async function ProfilePage() {
         </div>
 
         {tools.length > 0 ? (
-          <>
-            <ToolGrid tools={tools} />
-
-            {/* кнопка для майбутньої пагінації */}
-            <div className={css.loadMoreWrapper}>
-              <button type="button" className={css.loadMoreButton}>
-                Показати більше
-              </button>
-            </div>
-          </>
+          <ToolGrid tools={tools} />
         ) : (
           <PrivateProfilePlaceholder />
         )}
