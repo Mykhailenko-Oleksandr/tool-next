@@ -10,6 +10,8 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import * as Yup from "yup";
+//* Потрібно добавити для оновлення стану глобального стору після логіну
+import { useAuthStore } from "../../../../lib/store/authStore";
 
 const LoginPageSchema = Yup.object().shape({
   email: Yup.string()
@@ -35,6 +37,7 @@ export default function LoginPage() {
       if (res) {
         setUser(res);
         router.push(redirectTo);
+        return;
       } else {
         setError("Недійсна електронна пошта або пароль");
       }
@@ -81,11 +84,7 @@ export default function LoginPage() {
                         placeholder="Ваша пошта"
                         required
                       />
-                      <ErrorMessage
-                        name="email"
-                        component="span"
-                        className={css.formError}
-                      />
+                      <ErrorMessage name="email" component="span" className={css.formError} />
                     </div>
                     <div className={css.formGroup}>
                       <label htmlFor="password">Пароль*</label>
@@ -97,17 +96,9 @@ export default function LoginPage() {
                         placeholder="*******"
                         required
                       />
-                      <ErrorMessage
-                        name="password"
-                        component="span"
-                        className={css.formError}
-                      />
+                      <ErrorMessage name="password" component="span" className={css.formError} />
                     </div>
-                    <button
-                      type="submit"
-                      className={css.formButton}
-                      disabled={isSubmitting}
-                    >
+                    <button type="submit" className={css.formButton} disabled={isSubmitting}>
                       Увійти
                     </button>
                   </fieldset>
