@@ -13,6 +13,7 @@ import {
   Category,
   Tool,
 } from "@/lib/api/toolsApi";
+import { ApiError } from "@/app/api/api";
 import css from "./AddEditToolForm.module.css";
 import CustomSelect from "@/components/CustomSelect/CustomSelect";
 
@@ -82,11 +83,14 @@ export default function AddEditToolForm({
         setIsLoadingCategories(true);
         const data = await fetchCategories();
         setCategories(data);
-      } catch (error) {
+      } catch (error: unknown) {
+        const err = error as ApiError;
+
         toast.error(
-          error instanceof Error
-            ? error.message
-            : "Не вдалося завантажити категорії"
+          err.response?.data?.response?.validation?.body?.message ||
+            err.response?.data?.response?.message ||
+            err.message ||
+            "Не вдалося завантажити категорії"
         );
       } finally {
         setIsLoadingCategories(false);
@@ -159,13 +163,16 @@ export default function AddEditToolForm({
           toolId ? "Інструмент успішно оновлено" : "Інструмент успішно створено"
         );
         router.push(`/tools/${result.id || result._id}`);
-      } catch (error) {
+      } catch (error: unknown) {
+        const err = error as ApiError;
+
         toast.error(
-          error instanceof Error
-            ? error.message
-            : toolId
+          err.response?.data?.response?.validation?.body?.message ||
+            err.response?.data?.response?.message ||
+            err.message ||
+            (toolId
               ? "Не вдалося оновити інструмент"
-              : "Не вдалося створити інструмент"
+              : "Не вдалося створити інструмент")
         );
       } finally {
         setIsLoading(false);
