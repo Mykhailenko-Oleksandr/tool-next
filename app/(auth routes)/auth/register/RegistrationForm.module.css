@@ -9,7 +9,7 @@
 .logoLink {
   display: inline-flex;
   align-items: center;
-  padding: 26px 0;
+  padding: 26px 8px;
   margin-left: 5px;
   width: fit-content;
 }
