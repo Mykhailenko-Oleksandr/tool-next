@@ -1,0 +1,42 @@
+.profilePage {
+  padding: 24px 0 64px;
+}
+
+.titleWrap {
+  margin: 24px 0 16px;
+}
+
+.profileToolsTitle {
+  font-size: 24px;
+  font-weight: 700;
+  text-align: left;
+}
+
+.errorText {
+  margin-top: 16px;
+  text-align: left;
+  color: #d32f2f;
+  font-size: 14px;
+}
+
+.loadMoreWrapper {
+  margin-top: 32px;
+  display: flex;
+  justify-content: center;
+}
+
+.loadMoreButton {
+  padding: 10px 24px;          /* Figma */
+  border-radius: 6px;          /* Figma */
+  border: none;
+  background-color: var(--color-electric-violet, #6a5cff);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;            /* обычный */
+  cursor: pointer;
+}
+
+.loadMoreButton:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

@@ -19,6 +19,31 @@
   margin-bottom: 32px;
 }
 
+/* контейнер для кнопки */
+.loadMoreWrapper {
+  margin-top: 32px;
+  display: flex;
+  justify-content: center;
+}
+
+/* стилі кнопки як у макеті */
+.loadMoreButton {
+  padding: 10px 24px;
+  border-radius: 6px;
+  border: none;
+  background-color: var(--color-electric-violet, #6a5cff);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+/* стан неактивної кнопки */
+.loadMoreButton:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
 @media only screen and (min-width: 768px) {
   .profileToolsTitle {
     font-size: 30px;
