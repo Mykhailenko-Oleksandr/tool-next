@@ -13,7 +13,7 @@ import CustomSelect from "@/components/CustomSelect/CustomSelect";
 import { Tool } from "@/types/tool";
 import { Category } from "@/types/category";
 import { getCategories } from "@/lib/api/clientApi";
-import { createTool, updateTool } from "@/lib/api/serverApi";
+import { createTool, updateTool } from "@/lib/api/clientApi";
 
 interface AddEditToolFormProps {
   toolId?: string;
@@ -130,7 +130,11 @@ export default function AddEditToolForm({
       specifications:
         typeof initialData?.specifications === "string"
           ? initialData.specifications
-          : "",
+          : initialData?.specifications
+            ? Object.entries(initialData.specifications)
+                .map(([key, value]) => `${key}: ${value}`)
+                .join("\n")
+            : "",
       images: null,
     },
     validationSchema: getValidationSchema(!!toolId),
@@ -139,30 +143,44 @@ export default function AddEditToolForm({
     onSubmit: async (values) => {
       try {
         setIsLoading(true);
-
-        /////////треба зробити щоб specifications став об"єктом по роздільнику </n> як мінімум.
-        ///////// а при створенні інструмента зображення обов"язкове
-
-        const toolData = {
+        const baseToolData = {
           name: values.name.trim(),
           pricePerDay: parseFloat(values.pricePerDay),
           category: values.category,
           rentalTerms: values.rentalTerms.trim(),
           description: values.description.trim(),
-          specifications: values.specifications.trim(),
-          images: values.images || undefined,
+          specifications: values.specifications
+            .trim()
+            .split("\n")
+            .reduce<Record<string, string>>((acc, currentString) => {
+              const [key, value] = currentString.split(":");
+              if (key && value) {
+                acc[key.trim()] = value.trim();
+              }
+              return acc;
+            }, {}),
         };
 
-        let result: Tool;
-        if (toolId) {
-          result = await updateTool({ ...toolData, id: toolId });
-        } else {
-          result = await createTool(toolData);
-        }
+        if (!toolId) {
+          if (!values.images) {
+            throw new Error("Image is required");
+          }
 
-        toast.success(
-          toolId ? "Інструмент успішно оновлено" : "Інструмент успішно створено"
-        );
+          const result = await createTool({
+            ...baseToolData,
+            images: values.images,
+          });
+          toast.success("Інструмент успішно створено");
+          router.push(`/tools/${result._id}`);
+          return;
+        }
+        const result = await updateTool({
+          ...baseToolData,
+          id: toolId,
+          images: values.images || undefined,
+        });
+
+        toast.success("Інструмент успішно оновлено");
         router.push(`/tools/${result._id}`);
       } catch (error: unknown) {
         const err = error as ApiError;
@@ -212,7 +230,9 @@ export default function AddEditToolForm({
       <div className={css["form-wrap"]}>
         <div className={css["form-fields"]}>
           <div className={css["form-group"]}>
-            <label htmlFor="images" className={css["form-label"]}>
+            <label
+              htmlFor="images"
+              className={css["form-label"]}>
               Фото інструменту
             </label>
             <div className={css["image-upload"]}>
@@ -239,8 +259,7 @@ export default function AddEditToolForm({
               ) : (
                 <label
                   htmlFor="images"
-                  className={css["image-placeholder"]}
-                ></label>
+                  className={css["image-placeholder"]}></label>
               )}
             </div>
             {formik.errors.images &&
@@ -255,13 +274,14 @@ export default function AddEditToolForm({
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className={css["upload-button"]}
-          >
+            className={css["upload-button"]}>
             Завантажити фото
           </button>
 
           <div className={css["form-group"]}>
-            <label htmlFor="name" className={css["form-label"]}>
+            <label
+              htmlFor="name"
+              className={css["form-label"]}>
               Назва
             </label>
             <input
@@ -279,14 +299,15 @@ export default function AddEditToolForm({
               placeholder="Введить назву"
             />
             <div
-              className={`${css["error-wrapper"]} ${formik.errors.name && formik.touched.name ? css["error-wrapper-visible"] : ""}`}
-            >
+              className={`${css["error-wrapper"]} ${formik.errors.name && formik.touched.name ? css["error-wrapper-visible"] : ""}`}>
               <div className={css["error-message"]}>{displayErrors.name}</div>
             </div>
           </div>
 
           <div className={css["form-group"]}>
-            <label htmlFor="pricePerDay" className={css["form-label"]}>
+            <label
+              htmlFor="pricePerDay"
+              className={css["form-label"]}>
               Ціна/день
             </label>
             <input
@@ -306,8 +327,7 @@ export default function AddEditToolForm({
               step="0.01"
             />
             <div
-              className={`${css["error-wrapper"]} ${formik.errors.pricePerDay && formik.touched.pricePerDay ? css["error-wrapper-visible"] : ""}`}
-            >
+              className={`${css["error-wrapper"]} ${formik.errors.pricePerDay && formik.touched.pricePerDay ? css["error-wrapper-visible"] : ""}`}>
               <div className={css["error-message"]}>
                 {displayErrors.pricePerDay}
               </div>
@@ -315,7 +335,9 @@ export default function AddEditToolForm({
           </div>
 
           <div className={css["form-group"]}>
-            <label htmlFor="category" className={css["form-label"]}>
+            <label
+              htmlFor="category"
+              className={css["form-label"]}>
               Категорія
             </label>
             <CustomSelect
@@ -333,8 +355,7 @@ export default function AddEditToolForm({
               hasError={!!(formik.errors.category && formik.touched.category)}
             />
             <div
-              className={`${css["error-wrapper"]} ${formik.errors.category && formik.touched.category ? css["error-wrapper-visible"] : ""}`}
-            >
+              className={`${css["error-wrapper"]} ${formik.errors.category && formik.touched.category ? css["error-wrapper-visible"] : ""}`}>
               <div className={css["error-message"]}>
                 {displayErrors.category}
               </div>
@@ -342,7 +363,9 @@ export default function AddEditToolForm({
           </div>
 
           <div className={css["form-group"]}>
-            <label htmlFor="rentalTerms" className={css["form-label"]}>
+            <label
+              htmlFor="rentalTerms"
+              className={css["form-label"]}>
               Умови оренди
             </label>
             <textarea
@@ -359,8 +382,7 @@ export default function AddEditToolForm({
               placeholder="Застава 8000 грн. Станина та бак для води надаються окремо."
             />
             <div
-              className={`${css["error-wrapper"]} ${formik.errors.rentalTerms && formik.touched.rentalTerms ? css["error-wrapper-visible"] : ""}`}
-            >
+              className={`${css["error-wrapper"]} ${formik.errors.rentalTerms && formik.touched.rentalTerms ? css["error-wrapper-visible"] : ""}`}>
               <div className={css["error-message"]}>
                 {displayErrors.rentalTerms}
               </div>
@@ -368,7 +390,9 @@ export default function AddEditToolForm({
           </div>
 
           <div className={css["form-group"]}>
-            <label htmlFor="description" className={css["form-label"]}>
+            <label
+              htmlFor="description"
+              className={css["form-label"]}>
               Опис
             </label>
             <textarea
@@ -385,8 +409,7 @@ export default function AddEditToolForm({
               placeholder="Ваш опис"
             />
             <div
-              className={`${css["error-wrapper"]} ${formik.errors.description && formik.touched.description ? css["error-wrapper-visible"] : ""}`}
-            >
+              className={`${css["error-wrapper"]} ${formik.errors.description && formik.touched.description ? css["error-wrapper-visible"] : ""}`}>
               <div className={css["error-message"]}>
                 {displayErrors.description}
               </div>
@@ -394,7 +417,9 @@ export default function AddEditToolForm({
           </div>
 
           <div className={css["form-group"]}>
-            <label htmlFor="specifications" className={css["form-label"]}>
+            <label
+              htmlFor="specifications"
+              className={css["form-label"]}>
               Характеристики
             </label>
             <textarea
@@ -408,11 +433,17 @@ export default function AddEditToolForm({
                   ? css["input-error"]
                   : ""
               }`}
-              placeholder="Характеристики інструменту"
             />
+            {!formik.values.specifications && (
+              <p className={css.hint}>
+                Потужність: 1.2 кВт
+                <br />
+                Напруга: 220 В
+              </p>
+            )}
+
             <div
-              className={`${css["error-wrapper"]} ${formik.errors.specifications && formik.touched.specifications ? css["error-wrapper-visible"] : ""}`}
-            >
+              className={`${css["error-wrapper"]} ${formik.errors.specifications && formik.touched.specifications ? css["error-wrapper-visible"] : ""}`}>
               <div className={css["error-message"]}>
                 {displayErrors.specifications}
               </div>
@@ -425,16 +456,21 @@ export default function AddEditToolForm({
             type="button"
             onClick={() => formik.handleSubmit()}
             disabled={isLoading || isLoadingCategories}
-            className={css["submit-button"]}
-          >
-            {isLoading ? <BeatLoader color="#fff" size={8} /> : "Опублікувати"}
+            className={css["submit-button"]}>
+            {isLoading ? (
+              <BeatLoader
+                color="#fff"
+                size={8}
+              />
+            ) : (
+              "Опублікувати"
+            )}
           </button>
           <button
             type="button"
             onClick={handleCancel}
             disabled={isLoading}
-            className={css["cancel-button"]}
-          >
+            className={css["cancel-button"]}>
             Відмінити
           </button>
         </div>

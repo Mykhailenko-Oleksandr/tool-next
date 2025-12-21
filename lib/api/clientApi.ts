@@ -5,20 +5,58 @@ import { Feedback } from "@/types/feedback";
 import { Booked } from "@/types/booked";
 import { Category } from "@/types/category";
 
-export interface responseTools {
-	page: number;
-	perPage: number;
-	tools: Tool[];
-	totalPages: number;
-	totalTools: number;
-}
-
 export interface OptionsAPI {
 	params: {
 		category?: string;
 		page: number;
 		perPage: number;
 	};
+  
+  interface BookingRequest {
+	firstName: string;
+	lastName: string;
+	phone: string;
+	startDate: string;
+	endDate: string;
+	deliveryCity: string;
+	deliveryBranch: string;
+}
+
+interface BookingResponse {
+	message: string;
+	booked: Booked;
+	totalPrice: number;
+	status: string;
+	createdAt: string;
+}
+
+export interface CreateToolData {
+  name: string;
+  pricePerDay: number;
+  category: string;
+  rentalTerms: string;
+  description: string;
+  specifications?: Record<string, string>;
+  images: File;
+}
+
+export interface UpdateToolData {
+  id: string;
+  name?: string;
+  pricePerDay?: number;
+  category?: string;
+  rentalTerms?: string;
+  description?: string;
+  specifications?: Record<string, string>;
+  images?: File;
+}
+
+interface responseTools {
+  page: number;
+  perPage: number;
+  tools: Tool[];
+  totalPages: number;
+  totalTools: number;
 }
 
 export interface UserRequest {
@@ -70,24 +108,6 @@ export async function fetchTools(
 export async function fetchCategories(): Promise<Category[]> {
 	const res = await nextServer.get("/categories");
 	return res.data;
-}
-
-interface BookingRequest {
-	firstName: string;
-	lastName: string;
-	phone: string;
-	startDate: string;
-	endDate: string;
-	deliveryCity: string;
-	deliveryBranch: string;
-}
-
-interface BookingResponse {
-	message: string;
-	booked: Booked;
-	totalPrice: number;
-	status: string;
-	createdAt: string;
 }
 
 export async function deleteTool(id: string) {
@@ -150,4 +170,61 @@ export async function fetchToolsUserId(id: string) {
 export async function getCategories() {
 	const { data } = await nextServer.get<Category[]>(`/categories`);
 	return data;
+}
+
+export async function updateTool(data: UpdateToolData) {
+  const { id, ...toolData } = data;
+  const formData = new FormData();
+
+  if (toolData.name) {
+    formData.append("name", toolData.name);
+  }
+  if (toolData.pricePerDay !== undefined) {
+    formData.append("pricePerDay", String(toolData.pricePerDay));
+  }
+  if (toolData.category) {
+    formData.append("category", toolData.category);
+  }
+  if (toolData.rentalTerms) {
+    formData.append("rentalTerms", toolData.rentalTerms);
+  }
+  if (toolData.description) {
+    formData.append("description", toolData.description);
+  }
+  if (data.specifications) {
+    formData.append("specifications", JSON.stringify(data.specifications));
+  }
+  if (toolData.images) {
+    formData.append("image", toolData.images);
+  }
+
+  const response = await nextServer.patch<Tool>(`/tools/${id}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return response.data;
+}
+
+export async function createTool(data: CreateToolData) {
+  const formData = new FormData();
+
+  formData.append("name", data.name);
+  formData.append("pricePerDay", String(data.pricePerDay));
+  formData.append("category", data.category);
+  formData.append("rentalTerms", data.rentalTerms);
+  formData.append("description", data.description);
+  if (data.specifications) {
+    formData.append("specifications", JSON.stringify(data.specifications));
+  }
+  formData.append("image", data.images);
+
+  const response = await nextServer.post<Tool>("/tools", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return response.data;
 }

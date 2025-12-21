@@ -3,7 +3,6 @@ import "modern-normalize";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { ReactNode } from "react";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 // Fonts
 import { Nunito_Sans } from "next/font/google";
