@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { fetchToolById, Tool } from "@/lib/api/toolsApi";
 import AddEditToolForm from "@/components/AddEditToolForm/AddEditToolForm";
 import Loading from "@/app/loading";
 import toast from "react-hot-toast";
+import { Tool } from "@/types/tool";
+import { fetchToolById } from "@/lib/api/clientApi";
 
 export default function EditToolPage() {
   const params = useParams();
