@@ -2,7 +2,6 @@
 	display: block;
 	margin: 0 auto;
 	margin-top: 32px;
-	margin-bottom: 64px;
 	width: 100%;
 	height: 44px;
 	font-weight: 500;
@@ -39,11 +38,5 @@
 @media only screen and (min-width: 768px) {
 	.loadMoreBtn {
 		width: 182px;
-	}
-}
-
-@media only screen and (min-width: 1440px) {
-	.loadMoreBtn {
-		margin-bottom: 112px;
 	}
 }

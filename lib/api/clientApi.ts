@@ -44,24 +44,14 @@ export interface FeedbacksResponse {
 	feedbacks: Feedback[];
 }
 
-// export async function fetchTools(page: number, category?: string, perPage = 8) {
-// 	if (category === "All") category = undefined;
-
-// 	const options: OptionsAPI = {
-// 		params: { category, page, perPage },
-// 	};
-// 	const res = await nextServer.get<responseTools>("/tools", options);
-// 	return res.data;
-// }
 export async function fetchTools(
 	page: number,
-	categories?: string[] | string, // масив або одиночна категорія
+	categories?: string[] | string,
 	perPage = 8
 ) {
 	let categoryParam: string | undefined;
 
 	if (Array.isArray(categories)) {
-		// Якщо масив категорій, об'єднуємо через кому
 		categoryParam = categories.length ? categories.join(",") : undefined;
 	} else if (categories === "All") {
 		categoryParam = undefined;
