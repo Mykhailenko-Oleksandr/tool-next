@@ -140,6 +140,9 @@ export default function AddEditToolForm({
       try {
         setIsLoading(true);
 
+        /////////треба зробити щоб specifications став об"єктом по роздільнику </n> як мінімум.
+        ///////// а при створенні інструмента зображення обов"язкове
+
         const toolData = {
           name: values.name.trim(),
           pricePerDay: parseFloat(values.pricePerDay),
