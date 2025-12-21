@@ -26,6 +26,7 @@ export default function PaginationTools({
 	const [totalPagesState, setTotalPagesState] = useState(totalPages);
 	const [loading, setLoading] = useState(false);
 	const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
+	const hasActiveFilters = selectedCategories.length > 0;
 
 	useEffect(() => {
 		const updatePerPage = () => {
@@ -93,16 +94,13 @@ export default function PaginationTools({
 				onChange={setSelectedCategories}
 				onReset={handleResetFilters}
 			/>
-			{/* <ToolGrid tools={tools} /> */}
-			{tools.length > 0 ? (
-				<ToolGrid tools={tools} />
-			) : (
+			{/* Список інструментів */}
+			{tools.length > 0 && <ToolGrid tools={tools} />}
+
+			{/* Empty state — ТІЛЬКИ якщо фільтри активні і не loading */}
+			{!loading && hasActiveFilters && tools.length === 0 && (
 				<EmptyToolCard
-					categoryName={
-						selectedCategories.length
-							? selectedCategories.map((c) => c.title).join(", ")
-							: "Всі категорії"
-					}
+					categoryName={selectedCategories.map((c) => c.title).join(", ")}
 				/>
 			)}
 
