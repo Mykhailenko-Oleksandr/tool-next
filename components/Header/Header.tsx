@@ -199,6 +199,7 @@ export default function Header() {
           confirmButtonColor="purple"
           onConfirm={confirmLogout}
           onCancel={() => setIsLogoutOpen(false)}
+          onClose={() => setIsLogoutOpen(false)}
         >
           Ви впевнені, що хочете вийти?
         </Modal>
