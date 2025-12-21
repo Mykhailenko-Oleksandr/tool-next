@@ -7,11 +7,11 @@
 }
 
 .logoLink {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  padding: 26px 8px;
+  padding-top: 26px;
   margin-left: 5px;
-  width: fit-content;
+  padding-bottom: 26px;
 }
 
 .logo {

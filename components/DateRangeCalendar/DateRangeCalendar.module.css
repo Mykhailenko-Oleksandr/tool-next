@@ -1,0 +1,81 @@
+.calendar {
+  border-radius: 4px;
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid #dcdcdc;
+  font-weight: 600;
+}
+
+.year {
+  font-size: 14px;
+}
+
+.monthControls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.month {
+  font-size: 14px;
+  min-width: 60px;
+  text-align: center;
+}
+
+.navBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.weekdays,
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.weekdays div {
+  font-weight: bolder;
+  padding: 6px;
+  text-align: center;
+  font-size: 14px;
+  border: 1px solid black;
+}
+
+.day {
+  padding: 8px;
+  text-align: center;
+  border: 1px solid black;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.available:hover {
+  background: #f3e8ff;
+}
+
+.selected {
+  background: #7c3aed;
+  color: #fff;
+}
+
+.inRange {
+  background: #ede9fe;
+}
+
+.disabled {
+  color: #bbb;
+  cursor: not-allowed;
+}
+
+.otherMonth {
+  color: #bbb;
+  cursor: not-allowed;
+}
