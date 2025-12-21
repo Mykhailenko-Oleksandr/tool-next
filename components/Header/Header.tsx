@@ -8,6 +8,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import styles from "./Header.module.css";
+import { logout } from "@/lib/api/clientApi";
 
 export default function Header() {
   const router = useRouter();
@@ -15,7 +16,9 @@ export default function Header() {
 
   // ⛔️ НЕ ДЕСТРУКТУРУЄМО ЦІЛИЙ STORE
   const user = useAuthStore((state) => state.user);
-  const clearIsAuthenticated = useAuthStore((state) => state.clearIsAuthenticated);
+  const clearIsAuthenticated = useAuthStore(
+    (state) => state.clearIsAuthenticated
+  );
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
@@ -37,6 +40,7 @@ export default function Header() {
   }, [isMenuOpen]);
 
   const confirmLogout = async () => {
+    await logout();
     clearIsAuthenticated();
     setIsLogoutOpen(false);
     closeMenu();
