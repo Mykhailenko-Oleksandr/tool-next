@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { useRef, useEffect, useState } from "react";
 import css from "./SearchBar.module.css";
 import heroCss from "@/components/Hero/Hero.module.css";
+import { useRouter } from "next/navigation";
 
 interface SearchFormValues {
   search: string;
@@ -13,12 +14,12 @@ interface SearchFormValues {
 
 const searchSchema = Yup.object().shape({
   search: Yup.string()
-    // .min(2, "Мінімальна довжина пошукового запиту - 2 символи")
     .max(100, "Максимальна довжина пошукового запиту - 100 символів")
     .matches(/^[^'"«»„"`''']*$/, "Пошуковий запит не може містити лапки"),
 });
 
 export default function SearchBar() {
+  const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const errorRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -35,7 +36,7 @@ export default function SearchBar() {
     onSubmit: (values) => {
       try {
         const trimmedSearch = values.search.trim();
-        window.location.href = `/tools?search=${encodeURIComponent(trimmedSearch)}`;
+        router.push(`/tools?search=${encodeURIComponent(trimmedSearch)}`);
       } catch (error) {
         toast.error("Помилка при виконанні пошуку");
         formik.setFieldError("search", "Помилка при виконанні пошуку");
@@ -43,37 +44,28 @@ export default function SearchBar() {
     },
   });
 
-  // Сбрасываем флаг при каждой попытке отправки
   useEffect(() => {
     if (formik.submitCount > 0) {
       setHasChangedAfterSubmit(false);
     }
   }, [formik.submitCount]);
 
-  // Показываем ошибку только если была попытка отправки
-  // и пользователь не изменил значение после отправки
   const showError =
     formik.errors.search && formik.submitCount > 0 && !hasChangedAfterSubmit;
 
-  // Сохраняем текст ошибки для анимации исчезновения
   useEffect(() => {
     if (formik.errors.search && showError) {
-      // Устанавливаем текст ошибки сразу при появлении
       setErrorText(formik.errors.search);
     } else if (!showError && errorText) {
-      // Удаляем текст ошибки после завершения анимации исчезновения (500ms)
-      // чтобы блок ошибки мог плавно исчезнуть
       const timeoutId = setTimeout(() => {
         setErrorText("");
       }, 500);
       return () => clearTimeout(timeoutId);
     } else if (!formik.errors.search && !showError) {
-      // Если ошибка исчезла и showError тоже false, удаляем текст сразу
       setErrorText("");
     }
   }, [formik.errors.search, showError]);
 
-  // Устанавливаем фокус на инпут только при ошибке валидации
   useEffect(() => {
     if (showError && inputRef.current) {
       setTimeout(() => {
@@ -82,7 +74,6 @@ export default function SearchBar() {
     }
   }, [showError, formik.submitCount]);
 
-  // Добавляем класс на секцию hero при ошибке для изменения паддинга
   useEffect(() => {
     const heroSection = document.getElementById("hero");
     if (heroSection) {
@@ -132,13 +123,11 @@ export default function SearchBar() {
           className={css["search-button"]}
           disabled={formik.isSubmitting}
           onTouchStart={(e) => {
-            // Эмулируем ховер на touch-устройствах
             if (buttonRef.current && !formik.isSubmitting) {
               buttonRef.current.classList.add("hover");
             }
           }}
           onTouchEnd={(e) => {
-            // Убираем ховер после тапа
             if (buttonRef.current) {
               buttonRef.current.classList.remove("hover");
             }
