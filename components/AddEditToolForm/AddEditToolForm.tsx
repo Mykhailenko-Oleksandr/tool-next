@@ -73,15 +73,28 @@ const getValidationSchema = (isEdit: boolean) =>
           ),
   });
 
-export default function AddEditToolForm({ toolId, initialData }: AddEditToolFormProps) {
+export default function AddEditToolForm({
+  toolId,
+  initialData,
+}: AddEditToolFormProps) {
   const router = useRouter();
+  const { draft, setDraft, clearDraft } = useCreatingDraftStore();
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
-  const [imagePreview, setImagePreview] = useState<string | null>(initialData?.images || null);
+  const [imagePreview, setImagePreview] = useState<string | null>(
+    initialData?.images || (toolId ? null : draft.images || null)
+  );
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [displayErrors, setDisplayErrors] = useState<Record<string, string>>({});
-  const { draft, setDraft, clearDraft } = useCreatingDraftStore();
+  const [displayErrors, setDisplayErrors] = useState<Record<string, string>>(
+    {}
+  );
+
+  useEffect(() => {
+    if (!toolId && draft.images && !imagePreview) {
+      setImagePreview(draft.images);
+    }
+  }, [toolId, draft.images, imagePreview]);
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -129,26 +142,37 @@ export default function AddEditToolForm({ toolId, initialData }: AddEditToolForm
   };
 
   const formik = useFormik<FormValues>({
-    initialValues: {
-      name: initialData?.name || "",
-      pricePerDay: initialData?.pricePerDay?.toString() || "",
-      category: initialData?.category || "",
-      rentalTerms: initialData?.rentalTerms || "",
-      description: initialData?.description || "",
-      specifications:
-        typeof initialData?.specifications === "string"
-          ? initialData.specifications
-          : initialData?.specifications &&
-              Object.keys(initialData.specifications).length > 0
-            ? Object.entries(initialData.specifications)
-                .map(([key, value]) => `${key}: ${value}`)
-                .join("\n")
-            : "",
-      images: null,
-    },
+    initialValues: toolId
+      ? {
+          name: initialData?.name || "",
+          pricePerDay: initialData?.pricePerDay?.toString() || "",
+          category: initialData?.category || "",
+          rentalTerms: initialData?.rentalTerms || "",
+          description: initialData?.description || "",
+          specifications:
+            typeof initialData?.specifications === "string"
+              ? initialData.specifications
+              : initialData?.specifications &&
+                  Object.keys(initialData.specifications).length > 0
+                ? Object.entries(initialData.specifications)
+                    .map(([key, value]) => `${key}: ${value}`)
+                    .join("\n")
+                : "",
+          images: null,
+        }
+      : {
+          name: draft.name || "",
+          pricePerDay: draft.pricePerDay || "",
+          category: draft.category || "",
+          rentalTerms: draft.rentalTerms || "",
+          description: draft.description || "",
+          specifications: draft.specifications || "",
+          images: null,
+        },
     validationSchema: getValidationSchema(!!toolId),
     validateOnChange: true,
     validateOnBlur: true,
+    enableReinitialize: !toolId,
     onSubmit: async (values) => {
       try {
         setIsLoading(true);
@@ -194,6 +218,7 @@ export default function AddEditToolForm({ toolId, initialData }: AddEditToolForm
             ...baseToolData,
             images: values.images,
           });
+          clearDraft();
           toast.success("Інструмент успішно створено");
           router.push(`/tools/${result._id}`);
           return;
@@ -213,7 +238,9 @@ export default function AddEditToolForm({ toolId, initialData }: AddEditToolForm
           err.response?.data?.response?.validation?.body?.message ||
             err.response?.data?.response?.message ||
             err.message ||
-            (toolId ? "Не вдалося оновити інструмент" : "Не вдалося створити інструмент")
+            (toolId
+              ? "Не вдалося оновити інструмент"
+              : "Не вдалося створити інструмент")
         );
       } finally {
         setIsLoading(false);
@@ -228,13 +255,55 @@ export default function AddEditToolForm({ toolId, initialData }: AddEditToolForm
     );
   }, [formik.errors, formik.touched]);
 
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (!toolId) {
+      if (isFirstRender.current) {
+        isFirstRender.current = false;
+        return;
+      }
+
+      const timeoutId = setTimeout(() => {
+        setDraft({
+          name: formik.values.name,
+          pricePerDay: formik.values.pricePerDay,
+          category: formik.values.category,
+          rentalTerms: formik.values.rentalTerms,
+          description: formik.values.description,
+          specifications: formik.values.specifications,
+          images: imagePreview || "",
+        });
+      }, 500);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [
+    formik.values.name,
+    formik.values.pricePerDay,
+    formik.values.category,
+    formik.values.rentalTerms,
+    formik.values.description,
+    formik.values.specifications,
+    imagePreview,
+    toolId,
+    setDraft,
+  ]);
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       formik.setFieldValue("images", file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result as string);
+        const base64 = reader.result as string;
+        setImagePreview(base64);
+        if (!toolId) {
+          setDraft({
+            ...draft,
+            images: base64,
+          });
+        }
       };
       reader.readAsDataURL(file);
     }
@@ -283,9 +352,22 @@ export default function AddEditToolForm({ toolId, initialData }: AddEditToolForm
                 ></label>
               )}
             </div>
-            {formik.errors.images && formik.touched.images && !imagePreview && !toolId && (
-              <div className={css["error-message"]}>{formik.errors.images}</div>
+            {imagePreview && !formik.values.images && !toolId && (
+              <div
+                className={css["error-message"]}
+                style={{ color: "#ff9800", marginTop: "8px" }}
+              >
+                Будь ласка, завантажте фото заново для продовження
+              </div>
             )}
+            {formik.errors.images &&
+              formik.touched.images &&
+              !imagePreview &&
+              !toolId && (
+                <div className={css["error-message"]}>
+                  {formik.errors.images}
+                </div>
+              )}
           </div>
           <button
             type="button"
@@ -307,7 +389,9 @@ export default function AddEditToolForm({ toolId, initialData }: AddEditToolForm
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               className={`${css.input} ${
-                formik.errors.name && formik.touched.name ? css["input-error"] : ""
+                formik.errors.name && formik.touched.name
+                  ? css["input-error"]
+                  : ""
               }`}
               placeholder="Введить назву"
             />
@@ -330,7 +414,9 @@ export default function AddEditToolForm({ toolId, initialData }: AddEditToolForm
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               className={`${css.input} ${
-                formik.errors.pricePerDay && formik.touched.pricePerDay ? css["input-error"] : ""
+                formik.errors.pricePerDay && formik.touched.pricePerDay
+                  ? css["input-error"]
+                  : ""
               }`}
               placeholder="500"
               min="0"
@@ -383,7 +469,9 @@ export default function AddEditToolForm({ toolId, initialData }: AddEditToolForm
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               className={`${css.textarea} ${css["textarea-rental-terms"]} ${
-                formik.errors.rentalTerms && formik.touched.rentalTerms ? css["input-error"] : ""
+                formik.errors.rentalTerms && formik.touched.rentalTerms
+                  ? css["input-error"]
+                  : ""
               }`}
               placeholder="Застава 8000 грн. Станина та бак для води надаються окремо."
             />
@@ -407,7 +495,9 @@ export default function AddEditToolForm({ toolId, initialData }: AddEditToolForm
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               className={`${css.textarea} ${
-                formik.errors.description && formik.touched.description ? css["input-error"] : ""
+                formik.errors.description && formik.touched.description
+                  ? css["input-error"]
+                  : ""
               }`}
               placeholder="Ваш опис"
             />
