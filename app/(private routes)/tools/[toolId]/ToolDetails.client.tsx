@@ -60,7 +60,7 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
         <div className="container">
           <div className={css.content}>
             <div className={css.imageWrapper}>
-              {tool.images && tool.images.length > 0 ? (
+              {tool.images && tool.images.trim() !== "" ? (
                 <Image
                   src={tool.images}
                   alt={tool.name}
@@ -104,8 +104,7 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
                     <p className={css.ownerName}>{tool.owner.name}</p>
                     <Link
                       href={`/profile/${tool.owner._id}`}
-                      className={css.profileLink}
-                    >
+                      className={css.profileLink}>
                       Переглянути профіль
                     </Link>
                   </div>
@@ -118,12 +117,21 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
 
               <div className={css.section}>
                 <ul className={css.specsList}>
-                  {Object.entries(tool.specifications).map(([key, value]) => (
-                    <li key={key} className={css.specsListItem}>
-                      <span className={css.specKey}>{key}: </span>
-                      <span className={css.specValue}>{value}</span>
-                    </li>
-                  ))}
+                  {tool.specifications &&
+                  Object.keys(tool.specifications).length > 0
+                    ? Object.entries(tool.specifications).map(
+                        ([key, value]) => (
+                          <li
+                            key={key}
+                            className={css.specsListItem}>
+                            <span className={css.specKey}>{key}: </span>
+                            <span className={css.specValue}>
+                              {String(value)}
+                            </span>
+                          </li>
+                        )
+                      )
+                    : null}
                   <li className={css.section}>
                     <span className={css.specKey}>Умови оренди: </span>
                     <span className={css.specValue}>{tool.rentalTerms}</span>
@@ -134,8 +142,7 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
               <button
                 type="button"
                 className={css.bookButton}
-                onClick={handleBookClick}
-              >
+                onClick={handleBookClick}>
                 Забронювати
               </button>
             </div>
@@ -156,8 +163,7 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
           onCancel={() => {
             setShowAuthModal(false);
             router.push("/auth/login");
-          }}
-        >
+          }}>
           Щоб забронювати інструмент, треба спочатку зареєструватись або
           авторизуватись на платформі
         </Modal>

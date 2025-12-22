@@ -35,7 +35,6 @@ export default function LoginPage() {
       return;
     } catch (error: unknown) {
       const err = error as ApiError;
-      console.log("err", err);
 
       toast.error(
         err.response?.data?.response?.validation?.body?.message ||

@@ -125,7 +125,8 @@ export default function AddEditToolForm({ toolId, initialData }: AddEditToolForm
       specifications:
         typeof initialData?.specifications === "string"
           ? initialData.specifications
-          : initialData?.specifications
+          : initialData?.specifications &&
+              Object.keys(initialData.specifications).length > 0
             ? Object.entries(initialData.specifications)
                 .map(([key, value]) => `${key}: ${value}`)
                 .join("\n")
@@ -144,16 +145,31 @@ export default function AddEditToolForm({ toolId, initialData }: AddEditToolForm
           category: values.category,
           rentalTerms: values.rentalTerms.trim(),
           description: values.description.trim(),
-          specifications: values.specifications
-            .trim()
-            .split("\n")
-            .reduce<Record<string, string>>((acc, currentString) => {
-              const [key, value] = currentString.split(":");
-              if (key && value) {
-                acc[key.trim()] = value.trim();
-              }
-              return acc;
-            }, {}),
+          specifications: (() => {
+            const trimmed = values.specifications.trim();
+            if (!trimmed) {
+              return {};
+            }
+            const parsed = trimmed
+              .split("\n")
+              .reduce<Record<string, string>>((acc, currentString) => {
+                const colonIndex = currentString.indexOf(":");
+                if (
+                  colonIndex === -1 ||
+                  colonIndex === 0 ||
+                  colonIndex === currentString.length - 1
+                ) {
+                  return acc;
+                }
+                const key = currentString.substring(0, colonIndex).trim();
+                const value = currentString.substring(colonIndex + 1).trim();
+                if (key && value) {
+                  acc[key.trim()] = value.trim();
+                }
+                return acc;
+              }, {});
+            return Object.keys(parsed).length > 0 ? parsed : {};
+          })(),
         };
 
         if (!toolId) {

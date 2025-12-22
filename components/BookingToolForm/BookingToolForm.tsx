@@ -33,15 +33,22 @@ interface FormData {
 
 const BookingSchema = Yup.object().shape({
   firstName: Yup.string()
-    .min(2, "Мінімум 2 символи")
+    .min(3, "Мінімум 3 символи")
+    .max(50, "Максимум 50 символів")
     .required("Імʼя обовʼязкове"),
   lastName: Yup.string()
     .min(2, "Мінімум 2 символи")
+    .max(50, "Максимум 50 символів")
     .required("Прізвище обовʼязкове"),
   phone: Yup.string()
     .matches(/^\+?[0-9]{10,15}$/, "Некоректний номер телефону")
     .required("Телефон обовʼязковий"),
-  startDate: Yup.date().required("Оберіть дату початку"),
+  startDate: Yup.date()
+    .required("Оберіть дату початку")
+    .min(
+      new Date().toISOString().split("T")[0],
+      "Дата не може бути в минулому"
+    ),
   endDate: Yup.date()
     .required("Оберіть дату завершення")
     .when("startDate", ([startDate], schema) => {
@@ -104,8 +111,7 @@ export default function BookingToolForm({ tool }: Props) {
       initialValues={draft}
       onSubmit={handleSubmit}
       validationSchema={BookingSchema}
-      enableReinitialize
-    >
+      enableReinitialize>
       {({ values }) => {
         const totalPrice =
           values.startDate && values.endDate
@@ -118,7 +124,9 @@ export default function BookingToolForm({ tool }: Props) {
         return (
           <Form className={css.form}>
             <fieldset className={css.fieldset}>
-              <label htmlFor={`${fieldId}-firstName`} className={css.label}>
+              <label
+                htmlFor={`${fieldId}-firstName`}
+                className={css.label}>
                 Ім&apos;я
               </label>
               <Field
@@ -134,7 +142,9 @@ export default function BookingToolForm({ tool }: Props) {
                 component="span"
                 className={css.error}
               />
-              <label htmlFor={`${fieldId}-lastName`} className={css.label}>
+              <label
+                htmlFor={`${fieldId}-lastName`}
+                className={css.label}>
                 Прізвище
               </label>
               <Field
@@ -152,7 +162,9 @@ export default function BookingToolForm({ tool }: Props) {
               />
             </fieldset>
             <fieldset className={css.fieldset}>
-              <label htmlFor={`${fieldId}-phone`} className={css.label}>
+              <label
+                htmlFor={`${fieldId}-phone`}
+                className={css.label}>
                 Номер телефону
               </label>
               <Field
@@ -171,7 +183,9 @@ export default function BookingToolForm({ tool }: Props) {
             </fieldset>
 
             <fieldset className={css.fieldset}>
-              <label htmlFor={`${fieldId}-startDate`} className={css.label}>
+              <label
+                htmlFor={`${fieldId}-startDate`}
+                className={css.label}>
                 Дата початку
               </label>
               <Field
@@ -186,7 +200,9 @@ export default function BookingToolForm({ tool }: Props) {
                 component="span"
                 className={css.error}
               />
-              <label htmlFor={`${fieldId}-endDate`} className={css.label}>
+              <label
+                htmlFor={`${fieldId}-endDate`}
+                className={css.label}>
                 Дата завершення
               </label>
               <Field
@@ -204,7 +220,9 @@ export default function BookingToolForm({ tool }: Props) {
             </fieldset>
 
             <fieldset className={css.fieldset}>
-              <label htmlFor={`${fieldId}-deliveryCity`} className={css.label}>
+              <label
+                htmlFor={`${fieldId}-deliveryCity`}
+                className={css.label}>
                 Місто доставки
               </label>
               <Field
@@ -222,8 +240,7 @@ export default function BookingToolForm({ tool }: Props) {
               />
               <label
                 htmlFor={`${fieldId}-deliveryBranch`}
-                className={css.label}
-              >
+                className={css.label}>
                 Відділення Нової Пошти
               </label>
               <Field
@@ -243,7 +260,9 @@ export default function BookingToolForm({ tool }: Props) {
 
             <div className={css.priceRow}>
               <p className={css.price}>Вартість: {totalPrice} грн</p>
-              <button type="submit" className={css.submitBtn}>
+              <button
+                type="submit"
+                className={css.submitBtn}>
                 Забронювати
               </button>
             </div>
