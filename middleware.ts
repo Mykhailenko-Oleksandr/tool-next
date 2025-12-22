@@ -36,6 +36,8 @@ export async function middleware(request: NextRequest) {
             cookieStore.set("accessToken", parsed.accessToken, options);
           if (parsed.refreshToken)
             cookieStore.set("refreshToken", parsed.refreshToken, options);
+          if (parsed.sessionId)
+            cookieStore.set("sessionId", parsed.sessionId, options);
         }
         if (isAuthRoute) {
           return NextResponse.redirect(new URL("/", request.url), {

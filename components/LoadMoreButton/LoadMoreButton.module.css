@@ -7,7 +7,7 @@
   font-weight: 500;
   line-height: 150%;
   color: var(--color-white);
-  border: 1px solid transparent;
+  border: 2px solid var(--color-electric-violet);
   border-radius: 6px;
   background-color: var(--color-electric-violet);
   transition:
@@ -17,19 +17,15 @@
     transform 0.3s ease;
   &:hover,
   &:focus {
-    border: 2px solid var(--color-electric-violet);
     background-color: transparent;
     color: var(--color-scheme-1-text);
   }
   &:disabled {
-    background-color: var(--color-electric-violet);
-    background-color: transparent;
     opacity: 0.4;
-    color: var(--color-scheme-1-text);
+    cursor: not-allowed;
   }
   &:active {
-    background: var(--color-electric-violet-lighter);
-    border: 2px solid var(--color-electric-violet);
+    background-color: var(--color-electric-violet-lighter);
     color: var(--color-scheme-1-text);
     transform: scale(0.97);
   }
