@@ -1,11 +1,10 @@
 import UserProfile from "@/components/UserProfile/UserProfile";
-import ToolGrid from "@/components/ToolGrid/ToolGrid";
-import { getMe } from "@/lib/api/serverApi";
+import { fetchToolsUserIdServer, getMe } from "@/lib/api/serverApi";
 import { redirect } from "next/navigation";
 import css from "./ProfilePage.module.css";
 import { Metadata } from "next";
 import PrivateProfilePlaceholder from "@/components/PrivateProfilePlaceholder/PrivateProfilePlaceholder";
-import { fetchToolsUserId } from "@/lib/api/clientApi";
+import UserToolsClient from "./UserTools.client";
 
 export async function generateMetadata(): Promise<Metadata> {
   const user = await getMe();
@@ -28,7 +27,7 @@ export default async function ProfilePage() {
     redirect("/");
   }
 
-  const tools = await fetchToolsUserId(user._id);
+  const tools = await fetchToolsUserIdServer(user._id);
 
   return (
     <section className={css.profilePage}>
@@ -40,7 +39,7 @@ export default async function ProfilePage() {
         </div>
 
         {tools.length > 0 ? (
-          <ToolGrid tools={tools} />
+          <UserToolsClient tools={tools} />
         ) : (
           <PrivateProfilePlaceholder />
         )}

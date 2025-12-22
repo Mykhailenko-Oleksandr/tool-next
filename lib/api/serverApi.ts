@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { nextServer } from "./api";
 import { User } from "@/types/user";
 import { CheckSessionRequest } from "./clientApi";
+import { Tool } from "@/types/tool";
 
 export async function getMe() {
 	const cookieStore = await cookies();
@@ -21,4 +22,15 @@ export async function checkSession() {
 		},
 	});
 	return res;
+}
+
+export async function fetchToolsUserIdServer(id: string) {
+	const cookieStore = await cookies();
+
+	const { data } = await nextServer.get<Tool[]>(`/users/${id}/tools`, {
+		headers: {
+			Cookie: cookieStore.toString(),
+		},
+	});
+	return data;
 }
