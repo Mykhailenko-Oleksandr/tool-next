@@ -1,10 +1,9 @@
 import UserProfile from "@/components/UserProfile/UserProfile";
-import ToolGrid from "@/components/ToolGrid/ToolGrid";
-import { fetchToolsUserId, getMe } from "@/lib/api/serverApi";
+import { getMe } from "@/lib/api/serverApi";
 import { redirect } from "next/navigation";
 import css from "./ProfilePage.module.css";
 import { Metadata } from "next";
-import PrivateProfilePlaceholder from "@/components/PrivateProfilePlaceholder/PrivateProfilePlaceholder";
+import ProfilePaginationTools from "@/components/ProfilePaginationsTool/ProfilePaginationsTool";
 
 export async function generateMetadata(): Promise<Metadata> {
   const user = await getMe();
@@ -15,8 +14,19 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     title: `${user.name}`,
-    description: "Ваш профіль",
-    robots: { index: false, follow: false },
+    description: `Профіль користувача ${user.name} на платформі ToolNext`,
+    openGraph: {
+      title: user.name,
+      description: `Переглянь профіль користувача ${user.name}: інструменти, рейтинги та активність на ToolNext.`,
+      url: "https://tool-next-chi.vercel.app/profile",
+      images: [
+        {
+          url: user.avatarUrl
+            ? user.avatarUrl
+            : "https://res.cloudinary.com/ddln4hnns/image/upload/v1765352917/cover_kkf3m7.jpg",
+        },
+      ],
+    },
   };
 }
 
@@ -27,8 +37,6 @@ export default async function ProfilePage() {
     redirect("/");
   }
 
-  const toolsData = await fetchToolsUserId(user._id);
-
   return (
     <section className={css.profilePage}>
       <div className="container">
@@ -38,11 +46,7 @@ export default async function ProfilePage() {
           <h2 className={css.profileToolsTitle}>Інструменти</h2>
         </div>
 
-        {toolsData.tools.length > 0 ? (
-          <ToolGrid tools={toolsData.tools} />
-        ) : (
-          <PrivateProfilePlaceholder />
-        )}
+        <ProfilePaginationTools userId={user._id} typePage="private" />
       </div>
     </section>
   );

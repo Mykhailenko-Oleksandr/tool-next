@@ -188,9 +188,19 @@ export async function bookingTool(data: BookingRequest, id: string) {
   return response.data;
 }
 
-export async function fetchToolsUserId(id: string) {
+export async function fetchToolsUserId(
+  id: string,
+  page?: number,
+  perPage?: number
+) {
   const { data } = await nextServer.get<UserToolsResponse>(
-    `/users/${id}/tools`
+    `/users/${id}/tools`,
+    {
+      params: {
+        page,
+        perPage,
+      },
+    }
   );
   return data;
 }
@@ -260,4 +270,9 @@ export async function createTool(data: CreateToolData) {
 export async function getMe() {
   const { data } = await nextServer.get<User>("/users/me");
   return data;
+}
+
+export async function fetchUserById(id: string) {
+  const response = await nextServer.get<User>(`/users/${id}`);
+  return response.data;
 }
