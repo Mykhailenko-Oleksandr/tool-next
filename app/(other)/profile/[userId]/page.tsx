@@ -1,5 +1,4 @@
 import UserProfile from "@/components/UserProfile/UserProfile";
-import { getMe } from "@/lib/api/serverApi";
 import { redirect } from "next/navigation";
 import css from "./PublicProfile.module.css";
 import { Metadata } from "next";
