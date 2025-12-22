@@ -35,7 +35,7 @@ const getValidationSchema = (isEdit: boolean) =>
   Yup.object().shape({
     name: Yup.string()
       .required("Назва обов'язкова")
-      .max(100, "Максимальна довжина назви - 100 символів"),
+      .max(96, "Максимальна довжина назви - 96 символів"),
     pricePerDay: Yup.number()
       .required("Ціна обов'язкова")
       .positive("Ціна повинна бути більше 0")
@@ -43,10 +43,12 @@ const getValidationSchema = (isEdit: boolean) =>
     category: Yup.string().required("Оберіть категорію"),
     rentalTerms: Yup.string()
       .required("Умови оренди обов'язкові")
-      .max(500, "Максимальна довжина - 500 символів"),
+      .min(20, "Мінімум 20 символів")
+      .max(1000, "Максимальна довжина - 1000 символів"),
     description: Yup.string()
       .required("Опис обов'язковий")
-      .max(1000, "Максимальна довжина опису - 1000 символів"),
+      .min(20, "Мінімум 20 символів")
+      .max(2000, "Максимальна довжина опису - 2000 символів"),
     specifications: Yup.string()
       .required("Характеристики обов'язкові")
       .max(500, "Максимальна довжина характеристик - 500 символів"),
@@ -57,7 +59,18 @@ const getValidationSchema = (isEdit: boolean) =>
           .test("file-type", "Оберіть зображення", (value) => {
             if (!value) return false;
             return value instanceof File;
-          }),
+          })
+          .test(
+            "file-size",
+            "Розмір файлу не може перевищувати 5 МБ",
+            (value) => {
+              if (!value || !(value instanceof File)) {
+                return true;
+              }
+              const maxSize = 1 * 1024 * 1024;
+              return value.size < maxSize;
+            }
+          ),
   });
 
 export default function AddEditToolForm({ toolId, initialData }: AddEditToolFormProps) {
@@ -264,7 +277,10 @@ export default function AddEditToolForm({ toolId, initialData }: AddEditToolForm
                   />
                 </div>
               ) : (
-                <label htmlFor="images" className={css["image-placeholder"]}></label>
+                <label
+                  htmlFor="images"
+                  className={css["image-placeholder"]}
+                ></label>
               )}
             </div>
             {formik.errors.images && formik.touched.images && !imagePreview && !toolId && (
@@ -323,7 +339,9 @@ export default function AddEditToolForm({ toolId, initialData }: AddEditToolForm
             <div
               className={`${css["error-wrapper"]} ${formik.errors.pricePerDay && formik.touched.pricePerDay ? css["error-wrapper-visible"] : ""}`}
             >
-              <div className={css["error-message"]}>{displayErrors.pricePerDay}</div>
+              <div className={css["error-message"]}>
+                {displayErrors.pricePerDay}
+              </div>
             </div>
           </div>
 
@@ -348,7 +366,9 @@ export default function AddEditToolForm({ toolId, initialData }: AddEditToolForm
             <div
               className={`${css["error-wrapper"]} ${formik.errors.category && formik.touched.category ? css["error-wrapper-visible"] : ""}`}
             >
-              <div className={css["error-message"]}>{displayErrors.category}</div>
+              <div className={css["error-message"]}>
+                {displayErrors.category}
+              </div>
             </div>
           </div>
 
@@ -370,7 +390,9 @@ export default function AddEditToolForm({ toolId, initialData }: AddEditToolForm
             <div
               className={`${css["error-wrapper"]} ${formik.errors.rentalTerms && formik.touched.rentalTerms ? css["error-wrapper-visible"] : ""}`}
             >
-              <div className={css["error-message"]}>{displayErrors.rentalTerms}</div>
+              <div className={css["error-message"]}>
+                {displayErrors.rentalTerms}
+              </div>
             </div>
           </div>
 
@@ -392,7 +414,9 @@ export default function AddEditToolForm({ toolId, initialData }: AddEditToolForm
             <div
               className={`${css["error-wrapper"]} ${formik.errors.description && formik.touched.description ? css["error-wrapper-visible"] : ""}`}
             >
-              <div className={css["error-message"]}>{displayErrors.description}</div>
+              <div className={css["error-message"]}>
+                {displayErrors.description}
+              </div>
             </div>
           </div>
 
@@ -423,7 +447,9 @@ export default function AddEditToolForm({ toolId, initialData }: AddEditToolForm
             <div
               className={`${css["error-wrapper"]} ${formik.errors.specifications && formik.touched.specifications ? css["error-wrapper-visible"] : ""}`}
             >
-              <div className={css["error-message"]}>{displayErrors.specifications}</div>
+              <div className={css["error-message"]}>
+                {displayErrors.specifications}
+              </div>
             </div>
           </div>
         </div>
