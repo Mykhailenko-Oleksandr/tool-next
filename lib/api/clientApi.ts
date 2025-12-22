@@ -147,7 +147,12 @@ export async function fetchToolById(id: string) {
 }
 
 export async function fetchPopularTool() {
-  const response = await nextServer.get<responseTools>(`/tools`);
+  const response = await nextServer.get<responseTools>(`/tools`, {
+    params: {
+      page: 1,
+      perPage: 8,
+    },
+  });
   return response.data;
 }
 
