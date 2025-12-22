@@ -67,7 +67,7 @@ export default function PaginationTools({ categories }: Props) {
   }, [searchQuery, selectedCategories, perPage]);
 
   const handleShowMore = async () => {
-    if (page >= totalPages) return;
+    if (page >= totalPages || loading) return;
 
     const nextPage = page + 1;
     setLoading(true);
@@ -81,9 +81,12 @@ export default function PaginationTools({ categories }: Props) {
         perPage,
         searchQuery
       );
-      setTools((prev) =>
-        prev ? [...prev, ...response.tools] : response.tools
-      );
+      setTools((prev) => {
+        if (prev && nextPage === page + 1) {
+          return [...prev, ...response.tools];
+        }
+        return prev || response.tools;
+      });
       setPage(nextPage);
     } finally {
       setLoading(false);
