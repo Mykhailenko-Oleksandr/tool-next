@@ -10,8 +10,6 @@ export async function GET() {
     const cookieStore = await cookies();
     const accessToken = cookieStore.get("accessToken")?.value;
     const refreshToken = cookieStore.get("refreshToken")?.value;
-    console.log("accessToken", accessToken);
-    console.log("refreshToken", refreshToken);
 
     if (accessToken) {
       return NextResponse.json({ success: true });

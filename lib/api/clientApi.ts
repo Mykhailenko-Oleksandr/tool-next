@@ -256,3 +256,8 @@ export async function createTool(data: CreateToolData) {
 
   return response.data;
 }
+
+export async function getMe() {
+  const { data } = await nextServer.get<User>("/users/me");
+  return data;
+}

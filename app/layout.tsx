@@ -11,6 +11,7 @@ import { Inter } from "next/font/google";
 // Components
 import TanStackProvider from "@/components/TanStackProvider/TanStackProvider";
 import { Metadata } from "next";
+import AuthProvider from "@/components/AuthProvider/AuthProvider";
 
 const inter = Inter({
   subsets: ["latin", "cyrillic"],
@@ -52,9 +53,11 @@ export default function RootLayout({
     <html lang="uk">
       <body className={`${inter.variable} ${nunitoSans.variable}`}>
         <TanStackProvider>
-          {children}
+          <AuthProvider>
+            {children}
 
-          <Toaster />
+            <Toaster />
+          </AuthProvider>
         </TanStackProvider>
       </body>
     </html>

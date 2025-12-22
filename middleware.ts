@@ -20,7 +20,6 @@ export async function middleware(request: NextRequest) {
   if (!accessToken) {
     if (refreshToken) {
       const data = await checkSession();
-      console.log("data", data.data);
 
       const setCookie = data.headers["set-cookie"];
 

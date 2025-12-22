@@ -87,7 +87,7 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
 
               <div className={css.ownerBlock}>
                 <div className={css.ownerInfo}>
-                  {tool.owner.avatarUrl ? (
+                  {typeof tool.owner !== "string" && tool.owner.avatarUrl ? (
                     <Image
                       src={tool.owner.avatarUrl}
                       alt={tool.owner.name}
@@ -97,13 +97,16 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
                     />
                   ) : (
                     <div className={css.ownerAvatarPlaceholder}>
-                      {tool.owner.name.charAt(0).toUpperCase()}
+                      {typeof tool.owner !== "string" &&
+                        tool.owner.name.charAt(0).toUpperCase()}
                     </div>
                   )}
                   <div className={css.ownerDetails}>
-                    <p className={css.ownerName}>{tool.owner.name}</p>
+                    <p className={css.ownerName}>
+                      {typeof tool.owner !== "string" && tool.owner.name}
+                    </p>
                     <Link
-                      href={`/profile/${tool.owner._id}`}
+                      href={`/profile/${typeof tool.owner !== "string" && tool.owner._id}`}
                       className={css.profileLink}>
                       Переглянути профіль
                     </Link>

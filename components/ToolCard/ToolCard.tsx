@@ -40,9 +40,7 @@ export default function ToolCard({ tool }: ToolCardProps) {
   }
 
   const imageSrc = tool.images || "/images/blank-image-desk.jpg";
-  console.log("isAuthenticated", isAuthenticated);
-  console.log("user", user);
-  console.log("tool", tool);
+
   return (
     <div className={css.toolCard}>
       <Image
@@ -56,23 +54,29 @@ export default function ToolCard({ tool }: ToolCardProps) {
       <StarsRating rating={tool.rating} />
       <h4 className={css.title}>{tool.name}</h4>
       <p className={css.price}>{tool.pricePerDay} грн/день</p>
-      {isAuthenticated && user?._id === tool.owner?._id ? (
+      {isAuthenticated && user?._id === tool.owner ? (
         <div className={css.btnBox}>
-          <Link className={css.link} href={`/tools/${tool._id}/edit`}>
+          <Link
+            className={css.link}
+            href={`/tools/${tool._id}/edit`}>
             Редагувати
           </Link>
           <button
             className={css.deleteBtn}
             onClick={() => handleDeleteTool(tool._id)}
-            type="button"
-          >
-            <svg className={css.icon} width={24} height={24}>
+            type="button">
+            <svg
+              className={css.icon}
+              width={24}
+              height={24}>
               <use href="/icons.svg#icon-delete"></use>
             </svg>
           </button>
         </div>
       ) : (
-        <Link className={css.link} href={`/tools/${tool._id}`}>
+        <Link
+          className={css.link}
+          href={`/tools/${tool._id}`}>
           Детальніше
         </Link>
       )}

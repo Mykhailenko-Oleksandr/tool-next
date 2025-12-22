@@ -6,7 +6,6 @@ import {
 } from "@tanstack/react-query";
 import ToolDetailsClient from "./ToolDetails.client";
 import { fetchToolById } from "@/lib/api/clientApi";
-// import { fetchToolById } from "@/lib/api/serverApi";
 
 interface Props {
   params: Promise<{
