@@ -2,15 +2,25 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  /* margin-top: 48px; */
 }
-
+.wrapper {
+  width: 100%;
+  margin: 0 auto;
+}
+/* базовий fieldset */
 .fieldset {
   display: flex;
   flex-direction: column;
   gap: 12px;
   border: none;
   padding: 0;
+}
+
+/* один контроль = одне поле (label + input + error) */
+.control {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .label {
@@ -29,14 +39,14 @@
 
 .input:focus {
   outline: none;
-  border-color: #7b61ff;
+  border-color: #fff;
   box-shadow: 0 0 0 2px rgba(123, 97, 255, 0.2);
 }
 
 .error {
   font-size: 12px;
   color: #d32f2f;
-  margin-top: -8px;
+  margin-top: -4px;
 }
 
 .priceRow {
@@ -44,7 +54,6 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 24px;
-  /* margin-top: 24px; */
 }
 
 .price {
@@ -59,10 +68,10 @@
   justify-content: center;
   gap: 8px;
 
-  width: 100%; /* розтягується на всю ширину контейнера */
+  width: 100%;
   height: 44px;
 
-  border: 1px solid #8808cc;
+  border: 2px solid #8808cc;
   border-radius: 6px;
   background: #8808cc;
 
@@ -72,37 +81,62 @@
   line-height: 1.5;
   color: #fff;
 
-  padding: 10px 24px; /* нормальний внутрішній відступ */
-}
+  padding: 10px 24px;
 
-.submitBtn:hover {
-  background-color: #6a52e0;
-}
-@media only screen and (min-width: 768px) {
-  .form {
-    flex-direction: row;
-    flex-wrap: wrap;
-    /* gap: 32px; */
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover,
+  &:focus {
+    background-color: #fff;
+    color: var(--color-scheme-1-text);
   }
 
+  &:active {
+    background-color: var(--color-electric-violet-lighter);
+    color: var(--color-scheme-1-text);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+  }
+}
+
+/* планшет і вище */
+@media (min-width: 768px) {
+  /* парні поля поруч */
   .fieldset {
-    flex: 1 1 45%;
+    flex-direction: row;
+    gap: 24px;
   }
+  .fieldset > .control {
+    flex: 1;
+  }
+
+  /* телефон — окремий рядок */
+  .fieldset.single {
+    flex-direction: column;
+  }
+
+  /* ціна + кнопка */
   .priceRow {
-    display: flex;
     flex-direction: row;
     align-items: center;
-    flex: 1 1 100%; /* займає весь рядок у .form */
+    justify-content: space-between;
   }
   .submitBtn {
     width: auto;
     min-width: 200px;
-    margin-top: 0;
-    margin-left: auto; /* оцей рядок штовхає кнопку вправо автоматично */
+    margin-left: auto;
   }
 }
 
-@media only screen and (min-width: 1440px) {
+/* десктоп */
+@media (min-width: 1440px) {
+  .wrapper {
+    padding: 0 224px; /* десктоп: зверху 0, зліва/справа 224px */
+    box-sizing: border-box;
+  }
+
   .label {
     font-size: 16px;
   }

@@ -20,6 +20,7 @@ export async function middleware(request: NextRequest) {
   if (!accessToken) {
     if (refreshToken) {
       const data = await checkSession();
+
       const setCookie = data.headers["set-cookie"];
 
       if (setCookie) {
@@ -35,6 +36,8 @@ export async function middleware(request: NextRequest) {
             cookieStore.set("accessToken", parsed.accessToken, options);
           if (parsed.refreshToken)
             cookieStore.set("refreshToken", parsed.refreshToken, options);
+          if (parsed.sessionId)
+            cookieStore.set("sessionId", parsed.sessionId, options);
         }
         if (isAuthRoute) {
           return NextResponse.redirect(new URL("/", request.url), {

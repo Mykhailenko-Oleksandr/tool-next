@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { api, ApiError } from "../../api";
+import { api } from "../../api";
 import { cookies } from "next/headers";
 import { parse } from "cookie";
 import { isAxiosError } from "axios";
@@ -27,6 +27,9 @@ export async function POST(req: NextRequest) {
         }
         if (parsed.refreshToken) {
           cookieStore.set("refreshToken", parsed.refreshToken, options);
+        }
+        if (parsed.sessionId) {
+          cookieStore.set("sessionId", parsed.sessionId, options);
         }
       }
       return NextResponse.json(apiRes.data);
