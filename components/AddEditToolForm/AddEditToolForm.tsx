@@ -14,6 +14,7 @@ import { Tool } from "@/types/tool";
 import { Category } from "@/types/category";
 import { getCategories } from "@/lib/api/clientApi";
 import { createTool, updateTool } from "@/lib/api/clientApi";
+import { useCreatingDraftStore } from "@/lib/store/createToolStore";
 
 interface AddEditToolFormProps {
   toolId?: string;
@@ -72,21 +73,15 @@ const getValidationSchema = (isEdit: boolean) =>
           ),
   });
 
-export default function AddEditToolForm({
-  toolId,
-  initialData,
-}: AddEditToolFormProps) {
+export default function AddEditToolForm({ toolId, initialData }: AddEditToolFormProps) {
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
-  const [imagePreview, setImagePreview] = useState<string | null>(
-    initialData?.images || null
-  );
+  const [imagePreview, setImagePreview] = useState<string | null>(initialData?.images || null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [displayErrors, setDisplayErrors] = useState<Record<string, string>>(
-    {}
-  );
+  const [displayErrors, setDisplayErrors] = useState<Record<string, string>>({});
+  const { draft, setDraft, clearDraft } = useCreatingDraftStore();
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -218,9 +213,7 @@ export default function AddEditToolForm({
           err.response?.data?.response?.validation?.body?.message ||
             err.response?.data?.response?.message ||
             err.message ||
-            (toolId
-              ? "Не вдалося оновити інструмент"
-              : "Не вдалося створити інструмент")
+            (toolId ? "Не вдалося оновити інструмент" : "Не вдалося створити інструмент")
         );
       } finally {
         setIsLoading(false);
@@ -290,14 +283,9 @@ export default function AddEditToolForm({
                 ></label>
               )}
             </div>
-            {formik.errors.images &&
-              formik.touched.images &&
-              !imagePreview &&
-              !toolId && (
-                <div className={css["error-message"]}>
-                  {formik.errors.images}
-                </div>
-              )}
+            {formik.errors.images && formik.touched.images && !imagePreview && !toolId && (
+              <div className={css["error-message"]}>{formik.errors.images}</div>
+            )}
           </div>
           <button
             type="button"
@@ -319,9 +307,7 @@ export default function AddEditToolForm({
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               className={`${css.input} ${
-                formik.errors.name && formik.touched.name
-                  ? css["input-error"]
-                  : ""
+                formik.errors.name && formik.touched.name ? css["input-error"] : ""
               }`}
               placeholder="Введить назву"
             />
@@ -344,9 +330,7 @@ export default function AddEditToolForm({
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               className={`${css.input} ${
-                formik.errors.pricePerDay && formik.touched.pricePerDay
-                  ? css["input-error"]
-                  : ""
+                formik.errors.pricePerDay && formik.touched.pricePerDay ? css["input-error"] : ""
               }`}
               placeholder="500"
               min="0"
@@ -399,9 +383,7 @@ export default function AddEditToolForm({
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               className={`${css.textarea} ${css["textarea-rental-terms"]} ${
-                formik.errors.rentalTerms && formik.touched.rentalTerms
-                  ? css["input-error"]
-                  : ""
+                formik.errors.rentalTerms && formik.touched.rentalTerms ? css["input-error"] : ""
               }`}
               placeholder="Застава 8000 грн. Станина та бак для води надаються окремо."
             />
@@ -425,9 +407,7 @@ export default function AddEditToolForm({
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               className={`${css.textarea} ${
-                formik.errors.description && formik.touched.description
-                  ? css["input-error"]
-                  : ""
+                formik.errors.description && formik.touched.description ? css["input-error"] : ""
               }`}
               placeholder="Ваш опис"
             />
