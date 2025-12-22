@@ -36,7 +36,7 @@ export default function DateRangeCalendar({
       days.push({
         date: new Date(year, month - 1, prevMonthDays - i),
         isCurrentMonth: false,
-        isPrevMonth: true
+        isPrevMonth: true,
       });
     }
 
@@ -45,7 +45,7 @@ export default function DateRangeCalendar({
       days.push({
         date: new Date(year, month, day),
         isCurrentMonth: true,
-        isPrevMonth: false
+        isPrevMonth: false,
       });
     }
 
@@ -56,7 +56,7 @@ export default function DateRangeCalendar({
       days.push({
         date: new Date(year, month + 1, day),
         isCurrentMonth: false,
-        isPrevMonth: false
+        isPrevMonth: false,
       });
     }
 
@@ -76,6 +76,34 @@ export default function DateRangeCalendar({
   };
 
   const handleDateClick = (date: Date) => {
+    // If clicking on start date, deselect it
+    if (
+      startDate &&
+      date.toDateString() === startDate.toDateString() &&
+      !endDate
+    ) {
+      onRangeChange(null, null);
+      return;
+    }
+    // If clicking on end date when range is complete, deselect it
+    if (
+      endDate &&
+      date.toDateString() === endDate.toDateString() &&
+      startDate
+    ) {
+      onRangeChange(startDate, null);
+      return;
+    }
+    // If clicking on start date when range is complete, deselect start
+    if (
+      startDate &&
+      date.toDateString() === startDate.toDateString() &&
+      endDate
+    ) {
+      onRangeChange(null, endDate);
+      return;
+    }
+
     if (!startDate || (startDate && endDate)) {
       // Start new selection
       onRangeChange(date, null);
@@ -130,9 +158,7 @@ export default function DateRangeCalendar({
   return (
     <div className={css.calendar}>
       <div className={css.header}>
-        <div className={css.year}>
-          {currentMonth.getFullYear()}
-        </div>
+        <div className={css.year}>{currentMonth.getFullYear()}</div>
         <div className={css.monthControls}>
           <button type="button" onClick={prevMonth} className={css.navBtn}>
             ‹
@@ -166,12 +192,12 @@ export default function DateRangeCalendar({
                 !isCurrentMonth
                   ? css.otherMonth
                   : date < today
-                  ? css.disabled
-                  : isDateSelected(date)
-                  ? css.selected
-                  : isDateInRange(date)
-                  ? css.inRange
-                  : css.available
+                    ? css.disabled
+                    : isDateSelected(date)
+                      ? css.selected
+                      : isDateInRange(date)
+                        ? css.inRange
+                        : css.available
               }`}
               onClick={
                 isCurrentMonth && date >= today

@@ -172,14 +172,14 @@ export default function BookingToolForm({ tool }: Props) {
                 startDate={values.startDate ? new Date(values.startDate) : null}
                 endDate={values.endDate ? new Date(values.endDate) : null}
                 onRangeChange={(start, end) => {
-                  setFieldValue(
-                    "startDate",
-                    start ? start.toISOString().split("T")[0] : ""
-                  );
-                  setFieldValue(
-                    "endDate",
-                    end ? end.toISOString().split("T")[0] : ""
-                  );
+                  const formatDate = (date: Date) => {
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, "0");
+                    const day = String(date.getDate()).padStart(2, "0");
+                    return `${year}-${month}-${day}`;
+                  };
+                  setFieldValue("startDate", start ? formatDate(start) : "");
+                  setFieldValue("endDate", end ? formatDate(end) : "");
                 }}
               />
             </div>
