@@ -52,7 +52,7 @@ export default function ToolCard({ tool }: ToolCardProps) {
       />
 
       <StarsRating rating={tool.rating} />
-      <h4 className={css.title}>{tool.name}</h4>
+      <h3 className={css.title}>{tool.name}</h3>
       <p className={css.price}>{tool.pricePerDay} грн/день</p>
       {isAuthenticated && user?._id === tool.owner ? (
         <div className={css.btnBox}>

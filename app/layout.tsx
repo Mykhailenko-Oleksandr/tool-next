@@ -51,6 +51,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="uk">
+      <head>
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              #hero {
+                background-image: url('/images/hero-mob.jpg');
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+              }
+            `,
+          }}
+        />
+      </head>
       <body className={`${inter.variable} ${nunitoSans.variable}`}>
         <TanStackProvider>
           <AuthProvider>
