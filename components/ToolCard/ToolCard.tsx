@@ -39,7 +39,7 @@ export default function ToolCard({ tool }: ToolCardProps) {
     deleteToolMutate.mutate(id);
   }
 
-  const imageSrc = tool.images || "/images/blank-image-desk.jpg";
+  const imageSrc = tool.images || "/images/blank-image-desk.webp";
 
   return (
     <div className={css.toolCard}>
@@ -57,27 +57,21 @@ export default function ToolCard({ tool }: ToolCardProps) {
       <p className={css.price}>{tool.pricePerDay} грн/день</p>
       {isAuthenticated && user?._id === tool.owner ? (
         <div className={css.btnBox}>
-          <Link
-            className={css.link}
-            href={`/tools/${tool._id}/edit`}>
+          <Link className={css.link} href={`/tools/${tool._id}/edit`}>
             Редагувати
           </Link>
           <button
             className={css.deleteBtn}
             onClick={() => handleDeleteTool(tool._id)}
-            type="button">
-            <svg
-              className={css.icon}
-              width={24}
-              height={24}>
+            type="button"
+          >
+            <svg className={css.icon} width={24} height={24}>
               <use href="/icons.svg#icon-delete"></use>
             </svg>
           </button>
         </div>
       ) : (
-        <Link
-          className={css.link}
-          href={`/tools/${tool._id}`}>
+        <Link className={css.link} href={`/tools/${tool._id}`}>
           Детальніше
         </Link>
       )}

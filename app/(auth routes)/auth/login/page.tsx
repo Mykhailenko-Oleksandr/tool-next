@@ -123,9 +123,9 @@ export default function LoginPage() {
           </div>
 
           <picture className={css.formImg}>
-            <source srcSet="/images/login.jpg 1x, /images/login@2x.jpg 2x" />
+            <source srcSet="/images/login.webp 1x, /images/login@2x.webp 2x" />
             <Image
-              src="/images/login.jpg"
+              src="/images/login.webp"
               width={704}
               height={900}
               alt="Tools"

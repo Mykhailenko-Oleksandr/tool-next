@@ -71,7 +71,7 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
                 />
               ) : (
                 <Image
-                  src="/images/blank-image-mob.jpg"
+                  src="/images/blank-image-mob.webp"
                   alt={tool.name}
                   width={600}
                   height={400}
@@ -107,7 +107,8 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
                     </p>
                     <Link
                       href={`/profile/${typeof tool.owner !== "string" && tool.owner._id}`}
-                      className={css.profileLink}>
+                      className={css.profileLink}
+                    >
                       Переглянути профіль
                     </Link>
                   </div>
@@ -124,9 +125,7 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
                   Object.keys(tool.specifications).length > 0
                     ? Object.entries(tool.specifications).map(
                         ([key, value]) => (
-                          <li
-                            key={key}
-                            className={css.specsListItem}>
+                          <li key={key} className={css.specsListItem}>
                             <span className={css.specKey}>{key}: </span>
                             <span className={css.specValue}>
                               {String(value)}
@@ -145,7 +144,8 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
               <button
                 type="button"
                 className={css.bookButton}
-                onClick={handleBookClick}>
+                onClick={handleBookClick}
+              >
                 Забронювати
               </button>
             </div>
@@ -166,7 +166,8 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
           onCancel={() => {
             setShowAuthModal(false);
             router.push("/auth/login");
-          }}>
+          }}
+        >
           Щоб забронювати інструмент, треба спочатку зареєструватись або
           авторизуватись на платформі
         </Modal>
