@@ -49,6 +49,7 @@ export default function ToolCard({ tool }: ToolCardProps) {
         width={335}
         height={413}
         className={css.image}
+        loading="lazy"
       />
 
       <StarsRating rating={tool.rating} />
