@@ -1,6 +1,3 @@
-//components/FeaturedToolsBlock/FeaturedToolsBlock.tsx
-
-import React from "react";
 import styles from "./FeaturedToolsBlock.module.css";
 import ToolCard from "../ToolCard/ToolCard";
 import Link from "next/link";

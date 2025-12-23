@@ -71,7 +71,11 @@ export default function ToolCard({ tool }: ToolCardProps) {
           </button>
         </div>
       ) : (
-        <Link className={css.link} href={`/tools/${tool._id}`}>
+        <Link
+          className={css.link}
+          aria-label="Детальніше про інструмент"
+          href={`/tools/${tool._id}`}
+        >
           Детальніше
         </Link>
       )}
