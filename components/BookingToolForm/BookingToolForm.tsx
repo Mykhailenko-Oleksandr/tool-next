@@ -111,7 +111,8 @@ export default function BookingToolForm({ tool }: Props) {
       initialValues={draft}
       onSubmit={handleSubmit}
       validationSchema={BookingSchema}
-      enableReinitialize>
+      enableReinitialize
+    >
       {({ values }) => {
         const totalPrice =
           values.startDate && values.endDate
@@ -127,9 +128,7 @@ export default function BookingToolForm({ tool }: Props) {
               {/* Ім’я + Прізвище */}
               <fieldset className={css.fieldset}>
                 <div className={css.control}>
-                  <label
-                    htmlFor={`${fieldId}-firstName`}
-                    className={css.label}>
+                  <label htmlFor={`${fieldId}-firstName`} className={css.label}>
                     Ім&apos;я
                   </label>
                   <Field
@@ -147,9 +146,7 @@ export default function BookingToolForm({ tool }: Props) {
                   />
                 </div>
                 <div className={css.control}>
-                  <label
-                    htmlFor={`${fieldId}-lastName`}
-                    className={css.label}>
+                  <label htmlFor={`${fieldId}-lastName`} className={css.label}>
                     Прізвище
                   </label>
                   <Field
@@ -171,9 +168,7 @@ export default function BookingToolForm({ tool }: Props) {
               {/* Телефон */}
               <fieldset className={`${css.fieldset} ${css.single}`}>
                 <div className={css.control}>
-                  <label
-                    htmlFor={`${fieldId}-phone`}
-                    className={css.label}>
+                  <label htmlFor={`${fieldId}-phone`} className={css.label}>
                     Номер телефону
                   </label>
                   <Field
@@ -195,9 +190,7 @@ export default function BookingToolForm({ tool }: Props) {
               {/* Дати */}
               <fieldset className={css.fieldset}>
                 <div className={css.control}>
-                  <label
-                    htmlFor={`${fieldId}-startDate`}
-                    className={css.label}>
+                  <label htmlFor={`${fieldId}-startDate`} className={css.label}>
                     Дата початку
                   </label>
                   <Field
@@ -214,9 +207,7 @@ export default function BookingToolForm({ tool }: Props) {
                   />
                 </div>
                 <div className={css.control}>
-                  <label
-                    htmlFor={`${fieldId}-endDate`}
-                    className={css.label}>
+                  <label htmlFor={`${fieldId}-endDate`} className={css.label}>
                     Дата завершення
                   </label>
                   <Field
@@ -239,7 +230,8 @@ export default function BookingToolForm({ tool }: Props) {
                 <div className={css.control}>
                   <label
                     htmlFor={`${fieldId}-deliveryCity`}
-                    className={css.label}>
+                    className={css.label}
+                  >
                     Місто доставки
                   </label>
                   <Field
@@ -259,7 +251,8 @@ export default function BookingToolForm({ tool }: Props) {
                 <div className={css.control}>
                   <label
                     htmlFor={`${fieldId}-deliveryBranch`}
-                    className={css.label}>
+                    className={css.label}
+                  >
                     Відділення Нової Пошти
                   </label>
                   <Field
@@ -281,9 +274,7 @@ export default function BookingToolForm({ tool }: Props) {
               {/* Ціна + кнопка */}
               <div className={css.priceRow}>
                 <p className={css.price}>Вартість: {totalPrice} грн</p>
-                <button
-                  type="submit"
-                  className={css.submitBtn}>
+                <button type="submit" className={css.submitBtn}>
                   Забронювати
                 </button>
               </div>
