@@ -32,7 +32,7 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
 
   const handleBookClick = () => {
     if (isAuthenticated) {
-      router.push(`/tools/${toolId}/booking`);
+      router.push(`/tools/booking/${toolId}`);
     } else {
       setShowAuthModal(true);
     }

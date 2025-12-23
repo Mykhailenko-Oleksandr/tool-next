@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `Бронювання ${tool.name}`,
       description: tool.description.slice(0, 100),
-      url: `https://tool-next-chi.vercel.app/tools/${toolId}/booking`,
+      url: `https://tool-next-chi.vercel.app/tools/booking/${toolId}`,
       images: [{ url: tool.images }],
     },
   };
