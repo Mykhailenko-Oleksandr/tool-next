@@ -234,9 +234,8 @@ export async function updateTool(data: UpdateToolData) {
   if (toolData.description) {
     formData.append("description", toolData.description);
   }
-  if (data.specifications) {
-    formData.append("specifications", JSON.stringify(data.specifications));
-  }
+  // specifications всегда отправляем (даже если пустой объект)
+  formData.append("specifications", JSON.stringify(data.specifications || {}));
   if (toolData.images) {
     formData.append("image", toolData.images);
   }
