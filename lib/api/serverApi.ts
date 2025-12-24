@@ -23,12 +23,20 @@ export async function checkSession() {
   return res;
 }
 
-export async function fetchToolsUserId(id: string) {
+export async function fetchToolsUserId(
+  id: string,
+  page?: number,
+  perPage?: number
+) {
   const cookieStore = await cookies();
 
   const { data } = await nextServer.get<UserToolsResponse>(
     `/users/${id}/tools`,
     {
+      params: {
+        page,
+        perPage,
+      },
       headers: {
         Cookie: cookieStore.toString(),
       },
