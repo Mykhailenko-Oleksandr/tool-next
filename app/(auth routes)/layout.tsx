@@ -1,5 +1,6 @@
 "use client";
 
+import Loader from "@/components/Loader/Loader";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
 
@@ -17,7 +18,5 @@ export default function AuthLayout({
     setLoading(false);
   }, [router]);
 
-  return (
-    <>{loading ? <p>Зачекайте будь ласка...</p> : <main>{children}</main>}</>
-  );
+  return <>{loading ? <Loader /> : <main>{children}</main>}</>;
 }

@@ -23,16 +23,34 @@ export async function checkSession() {
   return res;
 }
 
-export async function fetchToolsUserId(id: string) {
+export async function fetchToolsUserId(
+  id: string,
+  page?: number,
+  perPage?: number
+) {
   const cookieStore = await cookies();
 
   const { data } = await nextServer.get<UserToolsResponse>(
     `/users/${id}/tools`,
     {
+      params: {
+        page,
+        perPage,
+      },
       headers: {
         Cookie: cookieStore.toString(),
       },
     }
   );
   return data;
+}
+
+export async function fetchUserById(id: string) {
+  const cookieStore = await cookies();
+  const response = await nextServer.get<User>(`/users/${id}`, {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
+  return response.data;
 }

@@ -7,11 +7,22 @@ import { Category } from "@/types/category";
 
 export interface OptionsAPI {
   params: {
-    category?: string;
     page: number;
     perPage: number;
+    category?: string;
     search?: string;
+    sortBy?: "_id" | "rating" | "createdAt" | "pricePerDay";
+    sortOrder?: "asc" | "desc";
   };
+}
+
+export interface FetchToolsParams {
+  page?: number;
+  perPage?: number;
+  categories?: string[] | string;
+  search?: string;
+  sortBy?: "_id" | "rating" | "createdAt" | "pricePerDay";
+  sortOrder?: "asc" | "desc";
 }
 
 interface BookingRequest {
@@ -102,12 +113,14 @@ export interface UserToolsResponse {
   tools: Tool[];
 }
 
-export async function fetchTools(
-  page: number,
-  categories?: string[] | string,
+export async function fetchTools({
+  page = 1,
   perPage = 8,
-  search?: string
-) {
+  categories,
+  search,
+  sortBy,
+  sortOrder,
+}: FetchToolsParams) {
   let categoryParam: string | undefined;
 
   if (Array.isArray(categories)) {
@@ -120,19 +133,16 @@ export async function fetchTools(
 
   const options: OptionsAPI = {
     params: {
-      category: categoryParam,
       page,
       perPage,
-      ...(search ? { search } : {}),
+      ...(categoryParam && { category: categoryParam }),
+      ...(search && { search }),
+      ...(sortBy && { sortBy }),
+      ...(sortOrder && { sortOrder }),
     },
   };
 
   const res = await nextServer.get<responseTools>("/tools", options);
-  return res.data;
-}
-
-export async function fetchCategories(): Promise<Category[]> {
-  const res = await nextServer.get("/categories");
   return res.data;
 }
 
@@ -146,14 +156,33 @@ export async function fetchToolById(id: string) {
   return response.data;
 }
 
-export async function fetchPopularTool() {
-  const response = await nextServer.get<responseTools>(`/tools`, {
-    params: {
-      page: 1,
-      perPage: 8,
-      sortBy: "rating",
-    },
-  });
+export async function fetchCategories(): Promise<Category[]> {
+  const res = await nextServer.get("/categories");
+  return res.data;
+}
+
+export async function fetchToolsUserId(
+  id: string,
+  page?: number,
+  perPage?: number
+) {
+  const { data } = await nextServer.get<UserToolsResponse>(
+    `/users/${id}/tools`,
+    {
+      params: {
+        page,
+        perPage,
+      },
+    }
+  );
+  return data;
+}
+
+export async function bookingTool(data: BookingRequest, id: string) {
+  const response = await nextServer.post<BookingResponse>(
+    `/bookings/${id}`,
+    data
+  );
   return response.data;
 }
 
@@ -161,11 +190,6 @@ export const login = async (data: UserRequest) => {
   const res = await nextServer.post<User>("/auth/login", data);
   return res.data;
 };
-
-export async function checkSession() {
-  const res = await nextServer.get<CheckSessionRequest>("/auth/refresh");
-  return res.data;
-}
 
 export async function register(data: RegisterRequest) {
   const res = await nextServer.post<User>("/auth/register", data);
@@ -184,31 +208,6 @@ export async function fetchFeedbacks(page?: number, perPage?: number) {
     },
   });
   return response.data.feedbacks;
-}
-
-export async function bookingTool(data: BookingRequest, id: string) {
-  const response = await nextServer.post<BookingResponse>(
-    `/bookings/${id}`,
-    data
-  );
-  return response.data;
-}
-
-export async function fetchToolsUserId(
-  id: string,
-  page?: number,
-  perPage?: number
-) {
-  const { data } = await nextServer.get<UserToolsResponse>(
-    `/users/${id}/tools`,
-    {
-      params: {
-        page,
-        perPage,
-      },
-    }
-  );
-  return data;
 }
 
 export async function getCategories() {
@@ -277,7 +276,7 @@ export async function getMe() {
   return data;
 }
 
-export async function fetchUserById(id: string) {
-  const response = await nextServer.get<User>(`/users/${id}`);
-  return response.data;
+export async function checkSession() {
+  const res = await nextServer.get<CheckSessionRequest>("/auth/refresh");
+  return res.data;
 }

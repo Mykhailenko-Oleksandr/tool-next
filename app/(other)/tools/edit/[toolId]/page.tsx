@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: "Редагування інструмента — ToolNext",
       description:
         "Редагуйте інформацію про свій інструмент на ToolNext: опис, характеристики, фото та умови оренди.",
-      url: `https://tool-next-chi.vercel.app/tools/${toolId}/edit`,
+      url: `https://tool-next-chi.vercel.app/tools/edit/${toolId}`,
       images: [
         {
           url: "https://res.cloudinary.com/ddln4hnns/image/upload/v1765352917/cover_kkf3m7.jpg",

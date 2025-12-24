@@ -3,7 +3,13 @@ import { cookies } from "next/headers";
 import { parse } from "cookie";
 import { checkSession } from "./lib/api/serverApi";
 
-const privateRoutes = ["/profile"];
+const privateRoutes = [
+  "/profile",
+  "/tools/new",
+  "/tools/edit",
+  "/tools/booking",
+  "/confirm",
+];
 const authRoutes = ["/auth/login", "/auth/register"];
 
 export async function middleware(request: NextRequest) {
@@ -73,5 +79,13 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/profile", "/auth/login", "/auth/register"],
+  matcher: [
+    "/profile",
+    "/tools/new/:path*",
+    "/tools/edit/:path*",
+    "/tools/booking/:path*",
+    "/confirm/:path*",
+    "/auth/login",
+    "/auth/register",
+  ],
 };

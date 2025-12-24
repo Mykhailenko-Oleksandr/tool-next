@@ -1,9 +1,12 @@
-import UserProfile from "@/components/UserProfile/UserProfile";
-import { getMe } from "@/lib/api/serverApi";
+import { fetchToolsUserId, getMe } from "@/lib/api/serverApi";
 import { redirect } from "next/navigation";
-import css from "./ProfilePage.module.css";
 import { Metadata } from "next";
-import ProfilePaginationTools from "@/components/ProfilePaginationsTool/ProfilePaginationsTool";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import ProfileClient from "./Profile.client";
 
 export async function generateMetadata(): Promise<Metadata> {
   const user = await getMe();
@@ -31,23 +34,22 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ProfilePage() {
+  const queryClient = new QueryClient();
   const user = await getMe();
 
   if (!user) {
     redirect("/");
   }
 
+  await queryClient.prefetchInfiniteQuery({
+    queryKey: ["tools", user._id],
+    queryFn: ({ pageParam = 1 }) => fetchToolsUserId(user._id, pageParam),
+    initialPageParam: 1,
+  });
+
   return (
-    <section className={css.profilePage}>
-      <div className="container">
-        <UserProfile user={user} />
-
-        <div className={css.titleWrap}>
-          <h2 className={css.profileToolsTitle}>Інструменти</h2>
-        </div>
-
-        <ProfilePaginationTools userId={user._id} typePage="private" />
-      </div>
-    </section>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <ProfileClient user={user} />
+    </HydrationBoundary>
   );
 }

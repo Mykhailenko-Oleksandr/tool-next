@@ -3,7 +3,7 @@ import FeaturedToolsBlock from "@/components/FeaturedToolsBlock/FeaturedToolsBlo
 import FeedbacksBlock from "@/components/FeedbacksBlock/FeedbacksBlock";
 import Hero from "@/components/Hero/Hero";
 import RegistrationBlock from "@/components/RegistrationBlock/RegistrationBlock";
-import { fetchPopularTool } from "@/lib/api/clientApi";
+import { fetchTools } from "@/lib/api/clientApi";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const res = await fetchPopularTool();
+  const res = await fetchTools({ sortBy: "rating", sortOrder: "desc" });
   const tools = res.tools;
 
   return (

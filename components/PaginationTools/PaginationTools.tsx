@@ -48,7 +48,12 @@ export default function PaginationTools({ categories }: Props) {
       const categoryIds = selectedCategories.map((c) => c._id);
 
       try {
-        const response = await fetchTools(1, categoryIds, perPage, searchQuery);
+        const response = await fetchTools({
+          page: 1,
+          perPage,
+          categories: categoryIds,
+          search: searchQuery,
+        });
         if (!cancelled) {
           setTools(response.tools);
           setTotalPages(response.totalPages);
@@ -75,12 +80,12 @@ export default function PaginationTools({ categories }: Props) {
     const categoryIds = selectedCategories.map((c) => c._id);
 
     try {
-      const response = await fetchTools(
-        nextPage,
-        categoryIds,
+      const response = await fetchTools({
+        page: nextPage,
         perPage,
-        searchQuery
-      );
+        categories: categoryIds,
+        search: searchQuery,
+      });
       setTools((prev) => {
         if (prev && nextPage === page + 1) {
           return [...prev, ...response.tools];

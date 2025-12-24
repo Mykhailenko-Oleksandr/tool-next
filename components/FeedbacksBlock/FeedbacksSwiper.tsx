@@ -16,8 +16,6 @@ type Props = {
   feedbacks: Feedback[];
 };
 
-const MAX_STARS = 5;
-
 export default function FeedbacksSwiper({ feedbacks }: Props) {
   return (
     <>
@@ -41,7 +39,7 @@ export default function FeedbacksSwiper({ feedbacks }: Props) {
         className={styles.swiper}
       >
         {feedbacks.map((fb) => {
-          const normalizedRate = Math.max(0, Math.min(MAX_STARS));
+          const normalizedRate = Math.max(0, Math.min(5, fb.rate));
 
           return (
             <SwiperSlide key={fb._id}>

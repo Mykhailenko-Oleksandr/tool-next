@@ -339,6 +339,41 @@ export default function AddEditToolForm({
     setDraft,
   ]);
 
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (!toolId) {
+      if (isFirstRender.current) {
+        isFirstRender.current = false;
+        return;
+      }
+
+      const timeoutId = setTimeout(() => {
+        setDraft({
+          name: formik.values.name,
+          pricePerDay: formik.values.pricePerDay,
+          category: formik.values.category,
+          rentalTerms: formik.values.rentalTerms,
+          description: formik.values.description,
+          specifications: formik.values.specifications,
+          images: imagePreview || "",
+        });
+      }, 500);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [
+    formik.values.name,
+    formik.values.pricePerDay,
+    formik.values.category,
+    formik.values.rentalTerms,
+    formik.values.description,
+    formik.values.specifications,
+    imagePreview,
+    toolId,
+    setDraft,
+  ]);
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -401,6 +436,14 @@ export default function AddEditToolForm({
                 {formik.errors.images}
               </div>
             )}
+            {formik.errors.images &&
+              formik.touched.images &&
+              !imagePreview &&
+              !toolId && (
+                <div className={css["error-message"]}>
+                  {formik.errors.images}
+                </div>
+              )}
           </div>
           <button
             type="button"
