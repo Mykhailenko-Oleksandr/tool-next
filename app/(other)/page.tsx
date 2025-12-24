@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const res = await fetchTools();
+  const res = await fetchTools({ page: 1 });
   const tools = res.tools;
 
   return (

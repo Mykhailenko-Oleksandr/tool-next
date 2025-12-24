@@ -7,11 +7,22 @@ import { Category } from "@/types/category";
 
 export interface OptionsAPI {
   params: {
-    category?: string;
     page: number;
     perPage: number;
+    category?: string;
     search?: string;
+    sortBy?: "_id" | "rating" | "createdAt" | "pricePerDay";
+    sortOrder?: "asc" | "desc";
   };
+}
+
+export interface FetchToolsParams {
+  page?: number;
+  perPage?: number;
+  categories?: string[] | string;
+  search?: string;
+  sortBy?: "_id" | "rating" | "createdAt" | "pricePerDay";
+  sortOrder?: "asc" | "desc";
 }
 
 interface BookingRequest {
@@ -102,12 +113,14 @@ export interface UserToolsResponse {
   tools: Tool[];
 }
 
-export async function fetchTools(
-  page: number = 1,
-  categories?: string[] | string,
-  perPage: number = 8,
-  search?: string
-) {
+export async function fetchTools({
+  page = 1,
+  perPage = 8,
+  categories,
+  search,
+  sortBy,
+  sortOrder,
+}: FetchToolsParams) {
   let categoryParam: string | undefined;
 
   if (Array.isArray(categories)) {
@@ -120,10 +133,12 @@ export async function fetchTools(
 
   const options: OptionsAPI = {
     params: {
-      category: categoryParam,
       page,
       perPage,
-      ...(search ? { search } : {}),
+      ...(categoryParam && { category: categoryParam }),
+      ...(search && { search }),
+      ...(sortBy && { sortBy }),
+      ...(sortOrder && { sortOrder }),
     },
   };
 

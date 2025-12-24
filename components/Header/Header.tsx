@@ -14,7 +14,6 @@ export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
 
-  // ⛔️ НЕ ДЕСТРУКТУРУЄМО ЦІЛИЙ STORE
   const user = useAuthStore((state) => state.user);
   const clearIsAuthenticated = useAuthStore(
     (state) => state.clearIsAuthenticated
