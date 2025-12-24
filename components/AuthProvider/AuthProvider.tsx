@@ -17,8 +17,9 @@ export default function AuthProvider({ children }: Props) {
   useEffect(() => {
     const fetchUser = async () => {
       const isAuthenticated = await checkSession();
+      console.log("isAuthenticated", isAuthenticated);
 
-      if (isAuthenticated) {
+      if (isAuthenticated.success) {
         const user = await getMe();
         if (user) setUser(user);
       } else {
