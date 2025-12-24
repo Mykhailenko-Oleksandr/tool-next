@@ -156,11 +156,6 @@ export async function fetchToolById(id: string) {
   return response.data;
 }
 
-export async function fetchCategories(): Promise<Category[]> {
-  const res = await nextServer.get("/categories");
-  return res.data;
-}
-
 export async function fetchToolsUserId(
   id: string,
   page?: number,

@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { nextServer } from "./api";
 import { User } from "@/types/user";
 import { CheckSessionRequest, UserToolsResponse } from "./clientApi";
+import { Category } from "@/types/category";
 
 export async function getMe() {
   const cookieStore = await cookies();
@@ -53,4 +54,14 @@ export async function fetchUserById(id: string) {
     },
   });
   return response.data;
+}
+
+export async function fetchCategories() {
+  const cookieStore = await cookies();
+  const res = await nextServer.get<Category[]>("/categories", {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
+  return res.data;
 }
