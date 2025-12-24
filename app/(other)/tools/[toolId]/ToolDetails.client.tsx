@@ -10,6 +10,7 @@ import css from "./ToolDetailsPage.module.css";
 import { fetchToolById } from "@/lib/api/clientApi";
 import Loading from "@/app/loading";
 import Modal from "@/components/Modal/Modal";
+import ToolFeedbacksBlock from "../../../../components/FeedbacksBlock/ToolFeedbacksBlock";
 
 interface ToolDetailsClientProps {
   toolId: string;
@@ -46,9 +47,7 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
     return (
       <section className={css.main}>
         <div className={"container"}>
-          <div className={css.error}>
-            Помилка завантаження інструменту. Спробуйте пізніше.
-          </div>
+          <div className={css.error}>Помилка завантаження інструменту. Спробуйте пізніше.</div>
         </div>
       </section>
     );
@@ -97,8 +96,7 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
                     />
                   ) : (
                     <div className={css.ownerAvatarPlaceholder}>
-                      {typeof tool.owner !== "string" &&
-                        tool.owner.name.charAt(0).toUpperCase()}
+                      {typeof tool.owner !== "string" && tool.owner.name.charAt(0).toUpperCase()}
                     </div>
                   )}
                   <div className={css.ownerDetails}>
@@ -121,18 +119,13 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
 
               <div className={css.section}>
                 <ul className={css.specsList}>
-                  {tool.specifications &&
-                  Object.keys(tool.specifications).length > 0
-                    ? Object.entries(tool.specifications).map(
-                        ([key, value]) => (
-                          <li key={key} className={css.specsListItem}>
-                            <span className={css.specKey}>{key}: </span>
-                            <span className={css.specValue}>
-                              {String(value)}
-                            </span>
-                          </li>
-                        )
-                      )
+                  {tool.specifications && Object.keys(tool.specifications).length > 0
+                    ? Object.entries(tool.specifications).map(([key, value]) => (
+                        <li key={key} className={css.specsListItem}>
+                          <span className={css.specKey}>{key}: </span>
+                          <span className={css.specValue}>{String(value)}</span>
+                        </li>
+                      ))
                     : null}
                   <li className={css.section}>
                     <span className={css.specKey}>Умови оренди: </span>
@@ -141,13 +134,11 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
                 </ul>
               </div>
 
-              <button
-                type="button"
-                className={css.bookButton}
-                onClick={handleBookClick}
-              >
+              <button type="button" className={css.bookButton} onClick={handleBookClick}>
                 Забронювати
               </button>
+
+              <ToolFeedbacksBlock toolId={tool._id} />
             </div>
           </div>
         </div>
@@ -168,8 +159,7 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
             router.push("/auth/login");
           }}
         >
-          Щоб забронювати інструмент, треба спочатку зареєструватись або
-          авторизуватись на платформі
+          Щоб забронювати інструмент, треба спочатку зареєструватись або авторизуватись на платформі
         </Modal>
       )}
     </>

@@ -75,7 +75,6 @@ export interface RegisterRequest {
 export interface CheckSessionRequest {
   success: boolean;
 }
-
 export interface FeedbacksResponse {
   page: number;
   perPage: number;
@@ -83,7 +82,19 @@ export interface FeedbacksResponse {
   totalPages: number;
   feedbacks: Feedback[];
 }
-
+export interface FeedbackListResponse {
+  page: number;
+  perPage: number;
+  totalItems: number;
+  totalPages: number;
+  feedbacks: Feedback[];
+}
+export interface CreateFeedbackDto {
+  toolId: string;
+  name: string;
+  description: string;
+  rate: number;
+}
 export interface UserToolsResponse {
   user: {
     name: string;
@@ -106,7 +117,7 @@ export async function fetchTools(
   page: number = 1,
   categories?: string[] | string,
   perPage: number = 8,
-  search?: string
+  search?: string,
 ) {
   let categoryParam: string | undefined;
 
@@ -146,20 +157,13 @@ export async function fetchCategories(): Promise<Category[]> {
   return res.data;
 }
 
-export async function fetchToolsUserId(
-  id: string,
-  page?: number,
-  perPage?: number
-) {
-  const { data } = await nextServer.get<UserToolsResponse>(
-    `/users/${id}/tools`,
-    {
-      params: {
-        page,
-        perPage,
-      },
-    }
-  );
+export async function fetchToolsUserId(id: string, page?: number, perPage?: number) {
+  const { data } = await nextServer.get<UserToolsResponse>(`/users/${id}/tools`, {
+    params: {
+      page,
+      perPage,
+    },
+  });
   return data;
 }
 
@@ -169,10 +173,7 @@ export async function fetchUserById(id: string) {
 }
 
 export async function bookingTool(data: BookingRequest, id: string) {
-  const response = await nextServer.post<BookingResponse>(
-    `/bookings/${id}`,
-    data
-  );
+  const response = await nextServer.post<BookingResponse>(`/bookings/${id}`, data);
   return response.data;
 }
 
@@ -199,6 +200,20 @@ export async function fetchFeedbacks(page?: number, perPage?: number) {
   });
   return response.data.feedbacks;
 }
+
+export const getToolFeedbacks = async (
+  toolId: string,
+  page = 1,
+  perPage = 10,
+): Promise<FeedbackListResponse> => {
+  const { data } = await nextServer.get(`/feedbacks/tool/${toolId}`, { params: { page, perPage } });
+  return data;
+};
+
+export const createFeedback = async (dto: CreateFeedbackDto) => {
+  const { data } = await nextServer.post("/feedbacks", dto);
+  return data;
+};
 
 export async function getCategories() {
   const { data } = await nextServer.get<Category[]>(`/categories`);
