@@ -152,7 +152,11 @@ export default function AddEditToolForm({
     fields.forEach((field) => {
       // Для категории не показываем ошибку, если категории еще загружаются, пользователь не взаимодействовал с полем, или категория уже выбрана
       if (field === "category") {
-        if (isLoadingCategories || !categoryInteractedRef.current || values.category) {
+        if (
+          isLoadingCategories ||
+          !categoryInteractedRef.current ||
+          values.category
+        ) {
           return;
         }
       }
@@ -197,7 +201,16 @@ export default function AddEditToolForm({
             specifications: draft.specifications || "",
             images: selectedFileRef.current, // Сохраняем выбранный файл при реинициализации
           },
-    [toolId, initialData, draft.name, draft.pricePerDay, draft.category, draft.rentalTerms, draft.description, draft.specifications] // Исключаем draft целиком, используем отдельные поля
+    [
+      toolId,
+      initialData,
+      draft.name,
+      draft.pricePerDay,
+      draft.category,
+      draft.rentalTerms,
+      draft.description,
+      draft.specifications,
+    ] // Исключаем draft целиком, используем отдельные поля
   );
 
   const formik = useFormik<FormValues>({
@@ -211,18 +224,21 @@ export default function AddEditToolForm({
       categoryInteractedRef.current = true;
       try {
         setIsLoading(true);
-        
+
         // Проверка размера файла перед отправкой (дополнительная проверка)
         if (!toolId && values.images) {
           const maxSize = 1 * 1024 * 1024; // 1 МБ (соответствует бэкенду)
           if (values.images.size > maxSize) {
-            formik.setFieldError("images", "Розмір файлу не може перевищувати 1 МБ");
+            formik.setFieldError(
+              "images",
+              "Розмір файлу не може перевищувати 1 МБ"
+            );
             formik.setFieldTouched("images", true);
             setIsLoading(false);
             return;
           }
         }
-        
+
         const specificationsObj = (() => {
           const trimmed = values.specifications.trim();
           if (!trimmed) {
@@ -339,7 +355,7 @@ export default function AddEditToolForm({
     setDraft,
   ]);
 
-  const isFirstRender = useRef(true);
+  // const isFirstRender = useRef(true);
 
   useEffect(() => {
     if (!toolId) {
@@ -432,9 +448,7 @@ export default function AddEditToolForm({
               )}
             </div>
             {formik.errors.images && formik.touched.images && !toolId && (
-              <div className={css["error-message"]}>
-                {formik.errors.images}
-              </div>
+              <div className={css["error-message"]}>{formik.errors.images}</div>
             )}
             {formik.errors.images &&
               formik.touched.images &&
@@ -531,7 +545,15 @@ export default function AddEditToolForm({
               }))}
               placeholder="Категорія"
               disabled={isLoadingCategories}
-              hasError={!!(formik.errors.category && formik.touched.category && categoryInteractedRef.current && !isLoadingCategories && !formik.values.category)}
+              hasError={
+                !!(
+                  formik.errors.category &&
+                  formik.touched.category &&
+                  categoryInteractedRef.current &&
+                  !isLoadingCategories &&
+                  !formik.values.category
+                )
+              }
             />
             <div
               className={`${css["error-wrapper"]} ${formik.errors.category && formik.touched.category && categoryInteractedRef.current && !isLoadingCategories && !formik.values.category ? css["error-wrapper-visible"] : ""}`}
