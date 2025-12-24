@@ -323,37 +323,37 @@ export default function AddEditToolForm({
 
   const isFirstRender = useRef(true);
 
-  useEffect(() => {
-    if (!toolId) {
-      if (isFirstRender.current) {
-        isFirstRender.current = false;
-        return;
-      }
+  // useEffect(() => {
+  //   if (!toolId) {
+  //     if (isFirstRender.current) {
+  //       isFirstRender.current = false;
+  //       return;
+  //     }
 
-      const timeoutId = setTimeout(() => {
-        setDraft({
-          name: formik.values.name,
-          pricePerDay: formik.values.pricePerDay,
-          category: formik.values.category,
-          rentalTerms: formik.values.rentalTerms,
-          description: formik.values.description,
-          specifications: formik.values.specifications,
-          images: "",
-        });
-      }, 500);
+  //     const timeoutId = setTimeout(() => {
+  //       setDraft({
+  //         name: formik.values.name,
+  //         pricePerDay: formik.values.pricePerDay,
+  //         category: formik.values.category,
+  //         rentalTerms: formik.values.rentalTerms,
+  //         description: formik.values.description,
+  //         specifications: formik.values.specifications,
+  //         images: "",
+  //       });
+  //     }, 500);
 
-      return () => clearTimeout(timeoutId);
-    }
-  }, [
-    formik.values.name,
-    formik.values.pricePerDay,
-    formik.values.category,
-    formik.values.rentalTerms,
-    formik.values.description,
-    formik.values.specifications,
-    toolId,
-    setDraft,
-  ]);
+  //     return () => clearTimeout(timeoutId);
+  //   }
+  // }, [
+  //   formik.values.name,
+  //   formik.values.pricePerDay,
+  //   formik.values.category,
+  //   formik.values.rentalTerms,
+  //   formik.values.description,
+  //   formik.values.specifications,
+  //   toolId,
+  //   setDraft,
+  // ]);
 
   // const isFirstRender = useRef(true);
 
