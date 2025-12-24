@@ -78,8 +78,8 @@ export async function GET(request: NextRequest) {
         page,
         perPage,
         ...(categoryParam && { category: categoryParam }),
-        // sortBy,
-        // sortOrder,
+        sortBy,
+        sortOrder,
       },
       headers: {
         Cookie: cookieStore.toString(),
