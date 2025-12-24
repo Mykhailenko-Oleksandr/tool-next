@@ -3,64 +3,38 @@
 import UserProfile from "@/components/UserProfile/UserProfile";
 import css from "./ProfilePage.module.css";
 import { User } from "@/types/user";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { fetchToolsUserId } from "@/lib/api/clientApi";
-import { useEffect, useState } from "react";
 import PrivateProfilePlaceholder from "@/components/PrivateProfilePlaceholder/PrivateProfilePlaceholder";
 import ToolGrid from "@/components/ToolGrid/ToolGrid";
 import LoadMoreButton from "@/components/LoadMoreButton/LoadMoreButton";
 import { Tool } from "@/types/tool";
+import Loader from "@/components/Loader/Loader";
 
 interface ProfileClientProps {
   user: User;
 }
 
 export default function ProfileClient({ user }: ProfileClientProps) {
-  const [page, setPage] = useState(1);
-  const [tools, setTools] = useState<Tool[] | []>([]);
-
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["tools", page, user._id],
-    queryFn: () => fetchToolsUserId(user._id, page),
-    placeholderData: keepPreviousData,
-    refetchOnMount: false,
+  const {
+    data,
+    isLoading,
+    isFetchingNextPage,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["tools", user._id],
+    queryFn: ({ pageParam = 1 }) => fetchToolsUserId(user._id, pageParam),
+    getNextPageParam: (lastPage) => {
+      return lastPage.page < lastPage.totalPages
+        ? lastPage.page + 1
+        : undefined;
+    },
+    initialPageParam: 1,
   });
 
-  useEffect(() => {
-    if (data?.tools) {
-      setTools((prev) => [...prev, ...data.tools]);
-    }
-  }, [data]);
-
-  console.log(data);
-
-  const totalPages = data?.totalPages ?? 0;
-
-  if (isLoading) return <p>Завантаження...</p>;
-
-  const handleShowMore = () => {
-    setPage(page + 1);
-  };
-
-  // const handleShowMore = async () => {
-  //   if (page >= totalPages || loading) return;
-
-  //   const nextPage = page + 1;
-  //   setLoading(true);
-
-  //   try {
-  //     const response = await fetchToolsUserId(userId, nextPage, perPage);
-  //     setTools((prev) => {
-  //       if (prev && nextPage === page + 1) {
-  //         return [...prev, ...response.tools];
-  //       }
-  //       return prev || response.tools;
-  //     });
-  //     setPage(nextPage);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  const tools: Tool[] = data?.pages.flatMap((page) => page.tools) ?? [];
 
   return (
     <section className={css.profilePage}>
@@ -70,21 +44,23 @@ export default function ProfileClient({ user }: ProfileClientProps) {
           <h2 className={css.profileToolsTitle}>Інструменти</h2>
         </div>
 
-        {data !== undefined && data?.tools.length === 0 && (
-          <PrivateProfilePlaceholder />
-        )}
-        {isError && <p>Щось пішло не так... Спробуйте ще.</p>}
+        {!isLoading && tools.length === 0 && <PrivateProfilePlaceholder />}
 
-        {data !== undefined && data?.tools.length > 0 && (
+        {isLoading && <Loader />}
+        {isError && !data && <p>Щось пішло не так... Спробуйте ще.</p>}
+        {isFetchingNextPage && !isLoading && <Loader />}
+
+        {tools.length > 0 && (
           <>
-            <ToolGrid tools={data.tools} />
-            {page < totalPages && (
+            <ToolGrid tools={tools} />
+
+            {hasNextPage && (
               <LoadMoreButton
-                onClick={handleShowMore}
-                disabled={isLoading}
-                loading={isLoading}
+                onClick={() => fetchNextPage()}
+                disabled={isFetchingNextPage}
+                loading={isFetchingNextPage}
               />
-            )}{" "}
+            )}
           </>
         )}
       </div>

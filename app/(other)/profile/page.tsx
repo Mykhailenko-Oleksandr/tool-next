@@ -33,8 +33,6 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const page = 1;
-
 export default async function ProfilePage() {
   const queryClient = new QueryClient();
   const user = await getMe();
@@ -43,9 +41,10 @@ export default async function ProfilePage() {
     redirect("/");
   }
 
-  await queryClient.prefetchQuery({
-    queryKey: ["tools", page, user._id],
-    queryFn: () => fetchToolsUserId(user._id, page),
+  await queryClient.prefetchInfiniteQuery({
+    queryKey: ["tools", user._id],
+    queryFn: ({ pageParam = 1 }) => fetchToolsUserId(user._id, pageParam),
+    initialPageParam: 1,
   });
 
   return (
