@@ -43,6 +43,21 @@
   border-color: #fff;
   box-shadow: 0 0 0 2px rgba(123, 97, 255, 0.2);
 }
+.inputError {
+  border-color: #d32f2f;
+  /* box-shadow: 0 0 0 1px #d32f2f; */
+}
+/* якщо всередині .control з’явився .error — фарбуємо інпут червоним */
+.control:has(.error) .input {
+  border-color: #d32f2f;
+  /* box-shadow: 0 0 0 1px #d32f2f; */
+}
+
+/* щоб фокус не "збивав" червоне підсвічування */
+.control:has(.error) .input:focus {
+  border-color: #d32f2f;
+  box-shadow: 0 0 0 2px rgba(211, 47, 47, 0.25);
+}
 
 .error {
   position: absolute;
@@ -52,6 +67,7 @@
   color: #d32f2f;
   margin-top: 0;
 }
+
 .priceRow {
   display: flex;
   flex-direction: column;
