@@ -165,7 +165,7 @@
   font-weight: 500;
   font-size: 14px;
   background-color: var(--color-border);
-  color: #fff;
+  color: var(--color-white);
 }
 
 .avatarFallback {
