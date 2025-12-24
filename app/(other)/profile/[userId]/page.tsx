@@ -5,9 +5,8 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { fetchToolsUserId } from "@/lib/api/serverApi";
+import { fetchToolsUserId, fetchUserById } from "@/lib/api/serverApi";
 import PublicProfileClient from "./PublicProfile.client";
-import { fetchUserById } from "@/lib/api/clientApi";
 
 interface Props {
   params: Promise<{

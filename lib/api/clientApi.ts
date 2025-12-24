@@ -178,11 +178,6 @@ export async function fetchToolsUserId(
   return data;
 }
 
-export async function fetchUserById(id: string) {
-  const response = await nextServer.get<User>(`/users/${id}`);
-  return response.data;
-}
-
 export async function bookingTool(data: BookingRequest, id: string) {
   const response = await nextServer.post<BookingResponse>(
     `/bookings/${id}`,

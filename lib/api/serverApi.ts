@@ -44,3 +44,13 @@ export async function fetchToolsUserId(
   );
   return data;
 }
+
+export async function fetchUserById(id: string) {
+  const cookieStore = await cookies();
+  const response = await nextServer.get<User>(`/users/${id}`, {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
+  return response.data;
+}
