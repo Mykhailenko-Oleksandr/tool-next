@@ -34,7 +34,6 @@
   font-size: 14px;
   border: 1px solid var(--color-scheme-1-border);
   border-radius: 8px;
-  background-color: var(--color-scheme-1-border);
 }
 
 .input:focus {
@@ -44,12 +43,11 @@
 .inputError {
   border-color: var(--color-red-dark);
 }
-/* якщо всередині .control з’явився .error — фарбуємо інпут червоним */
+
 .control:has(.error) .input {
   border-color: var(--color-red-dark);
 }
 
-/* щоб фокус не "збивав" червоне підсвічування */
 .control:has(.error) .input:focus {
   border-color: var(--color-red-dark);
   box-shadow: 0 0 0 2px rgba(211, 47, 47, 0.25);
@@ -57,7 +55,7 @@
 
 .error {
   position: absolute;
-  top: 100%; /* одразу під інпутом */
+  top: 100%;
   left: 0;
   font-size: 12px;
   color: var(--color-red-dark);
@@ -74,7 +72,7 @@
 .price {
   font-size: 16px;
   font-weight: 600;
-  color: #000;
+  color: var(--color-scheme-1-text);
 }
 
 .submitBtn {
@@ -86,15 +84,15 @@
   width: 100%;
   height: 44px;
 
-  border: 2px solid #8808cc;
+  border: 2px solid var(--color-scheme-1-accent);
   border-radius: 6px;
-  background: #8808cc;
+  background: var(--color-scheme-1-accent);
 
   font-family: "Inter", sans-serif;
   font-weight: 500;
   font-size: 16px;
   line-height: 1.5;
-  color: #fff;
+  color: var(--color-white);
 
   padding: 10px 24px;
 
@@ -102,7 +100,7 @@
 
   &:hover,
   &:focus {
-    background-color: #fff;
+    background-color: var(--color-scheme-1-background);
     color: var(--color-scheme-1-text);
   }
 
@@ -116,9 +114,7 @@
   }
 }
 
-/* планшет і вище */
 @media (min-width: 768px) {
-  /* парні поля поруч */
   .fieldset {
     flex-direction: row;
     gap: 24px;
@@ -127,12 +123,10 @@
     flex: 1;
   }
 
-  /* телефон — окремий рядок */
   .fieldset.single {
     flex-direction: column;
   }
 
-  /* ціна + кнопка */
   .priceRow {
     flex-direction: row;
     align-items: center;

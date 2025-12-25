@@ -52,20 +52,24 @@ export default function ToolCard({ tool }: ToolCardProps) {
         loading="lazy"
       />
 
-      <StarsRating rating={tool.rating} />
+      <StarsRating rating={tool.rating || 0} />
       <h3 className={css.title}>{tool.name}</h3>
       <p className={css.price}>{tool.pricePerDay} грн/день</p>
       {isAuthenticated && user?._id === tool.owner ? (
         <div className={css.btnBox}>
-          <Link className={css.link} href={`/tools/edit/${tool._id}`}>
+          <Link
+            className={css.link}
+            href={`/tools/edit/${tool._id}`}>
             Редагувати
           </Link>
           <button
             className={css.deleteBtn}
             onClick={() => handleDeleteTool(tool._id)}
-            type="button"
-          >
-            <svg className={css.icon} width={24} height={24}>
+            type="button">
+            <svg
+              className={css.icon}
+              width={24}
+              height={24}>
               <use href="/icons.svg#icon-delete"></use>
             </svg>
           </button>
@@ -74,8 +78,7 @@ export default function ToolCard({ tool }: ToolCardProps) {
         <Link
           className={css.link}
           aria-label="Детальніше про інструмент"
-          href={`/tools/${tool._id}`}
-        >
+          href={`/tools/${tool._id}`}>
           Детальніше
         </Link>
       )}

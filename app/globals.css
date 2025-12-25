@@ -9,7 +9,7 @@
   --color-neutral-lightest: #f2f2f2;
   --color-neutral-dark: #4c4c4c;
   --color-neutral-light: #b2b2b2;
-  --color-scheme-1-border: var(--color-white);
+  --color-scheme-1-background: var(--color-white);
   --color-scheme-1-border: var(--color-neutral-darkest);
   --color-scheme-1-text: var(--color-neutral-darkest);
   --opacity-transparent: rgba(255, 255, 255, 0);
@@ -29,8 +29,6 @@
   --color-electric-violet-light: #ab52db;
   --color-electric-violet: #8808cc;
   --color-electric-violet-dark: #6c06a3;
-  --color-electric-violet-darker: #360351;
-  --color-electric-violet-darkest: #28023d;
   --color-scheme-2-background: var(--color-electric-violet-lightest);
   --color-scheme-3-background: var(--color-neutral-lightest);
   --color-red-dark: #c40202;
