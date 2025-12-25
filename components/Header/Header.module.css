@@ -164,16 +164,12 @@
   justify-content: center;
   font-weight: 500;
   font-size: 14px;
-  background-color: var(--color-border);
+  background-color: var(--color-scheme-1-accent);
   color: var(--color-white);
 }
 
-.avatarFallback {
-  background-color: var(--color-accent);
-}
-
 .username {
-  font-family: var(--font-main);
+  font-family: var(--font-Inter);
   font-weight: 500;
   font-size: 14px;
 }

@@ -156,11 +156,7 @@ export default function Header() {
                             height={40}
                           />
                         ) : (
-                          <span
-                            className={clsx(
-                              styles.avatar,
-                              styles.avatarFallback
-                            )}>
+                          <span className={clsx(styles.avatar)}>
                             {firstLetter}
                           </span>
                         )}
