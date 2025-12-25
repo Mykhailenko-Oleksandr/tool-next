@@ -1,9 +1,0 @@
-.activeFiltersInfo {
-  background-color: var(--color-white-pagination);
-  padding: 12px 16px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  color: var(--color-blue-light-pagination);
-  font-size: 14px;
-  border-left: 4px solid var(--color-blue-pagination);
-}
