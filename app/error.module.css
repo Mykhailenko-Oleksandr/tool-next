@@ -1,6 +1,6 @@
 .errorPage {
   padding: 40px 0;
-  background: #fff;
+  background: var(--color-white);
   font-family: var(--font-Inter), var(--font-NunitoSans), sans-serif;
 }
 

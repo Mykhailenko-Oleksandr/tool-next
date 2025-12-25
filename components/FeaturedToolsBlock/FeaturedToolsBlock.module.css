@@ -22,7 +22,7 @@
   font-size: 32px;
   line-height: 1.2;
   text-align: center;
-  color: #000;
+  color: var(--color-neutral-darkest);
 }
 
 .toolsList {
@@ -60,8 +60,8 @@
 
   &:hover,
   &:focus {
-    background-color: #fff;
-    color: #000;
+    background-color: var(--color-white);
+    color: var(--color-neutral-darkest);
     border-color: var(--color-scheme-1-accent);
   }
 

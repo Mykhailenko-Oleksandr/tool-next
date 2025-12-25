@@ -14,7 +14,7 @@
   font-size: 36px;
   line-height: 1.2;
   letter-spacing: -0.01em;
-  color: #000;
+  color: var(--color-neutral-darkest);
   margin: 0;
   padding: 0;
 }
@@ -36,7 +36,7 @@
   font-weight: 400;
   font-size: 18px;
   line-height: 1.5;
-  color: #000;
+  color: var(--color-neutral-darkest);
   width: 100%;
 }
 
@@ -45,7 +45,7 @@
   font-weight: 600;
   font-size: 16px;
   line-height: 1.5;
-  color: #000;
+  color: var(--color-neutral-darkest);
 }
 
 .swiperNav {
@@ -78,11 +78,11 @@
   width: 48px;
   height: 48px;
   padding: 12px;
-  border: 2px solid #000;
+  border: 2px solid var(--color-neutral-darkest);
   border-radius: 4px;
-  background: #fff;
+  background: var(--color-white);
   cursor: pointer;
-  color: #000;
+  color: var(--color-neutral-darkest);
   transition:
     background-color 0.2s ease,
     border-color 0.2s ease,
@@ -92,14 +92,14 @@
 
 .navBtn:hover,
 .navBtn:focus-visible {
-  background: #e7cdf4;
+  background: var(--color-electric-violet-lighter);
   border-radius: 6px;
 }
 
 .navBtn:active {
-  background: #8808cc;
-  border-color: #fff;
-  color: #fff;
+  background: var(--color-electric-violet);
+  border-color: var(--color-white);
+  color: var(--color-white);
   border-radius: 6px;
 }
 
@@ -109,7 +109,7 @@
 }
 
 .pagination :global(.swiper-pagination-bullet-active) {
-  background: #000;
+  background: var(--color-neutral-darkest);
   transform: scale(1.1);
 }
 

@@ -25,6 +25,8 @@
   --opacity-white-40: rgba(255, 255, 255, 0.4);
   --opacity-white-50: rgba(255, 255, 255, 0.5);
   --opacity-white-60: rgba(255, 255, 255, 0.6);
+  --opacity-white-80: rgba(255, 255, 255, 0.8);
+  --opacity-white-90: rgba(255, 255, 255, 0.9);
   --opacity-neutral-darkest-5: rgba(0, 0, 0, 0.05);
   --opacity-neutral-darkest-10: rgba(0, 0, 0, 0.1);
   --opacity-neutral-darkest-15: rgba(0, 0, 0, 0.15);
@@ -33,6 +35,7 @@
   --opacity-neutral-darkest-40: rgba(0, 0, 0, 0.4);
   --opacity-neutral-darkest-50: rgba(0, 0, 0, 0.5);
   --opacity-neutral-darkest-60: rgba(0, 0, 0, 0.6);
+  --opacity-neutral-darkest-85: rgba(0, 0, 0, 0.85);
   --color-electric-violet-lightest: #f3e6f9;
   --color-electric-violet-lighter: #e7cdf4;
   --color-electric-violet-light: #ab52db;
@@ -52,6 +55,20 @@
   --color-scheme-3-foreground: var(--color-neutral-lightest);
   --color-red-dark: #c40202;
   --color-red-light: #ea3131;
+  --color-violet-lighter: rgba(136, 8, 204, 0.3);
+  --color-violet-light: rgba(136, 8, 204, 0.4);
+  --color-blue: rgba(30, 144, 255, 0.4);
+  --color-blue-dark: #000080;
+  --color-blue-light: #1e90ff;
+  --color-blue-lighter: #4682b4;
+  --color-blue-lightest: #87ceeb;
+  --color-blue-light-pagination: #475569;
+  --color-blue-pagination: #4f46e5;
+  --color-medium-orchid-04: rgba(171, 82, 219, 0.4);
+  --color-medium-orchid-035: rgba(171, 82, 219, 0.35);
+  --color-medium-orchid-03: rgba(171, 82, 219, 0.3);
+  --color-gray: rgba(33, 37, 41, 0.6);
+  --color-white-pagination: #f1f5f9;
 }
 
 /* =====================================
