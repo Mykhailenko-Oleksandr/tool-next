@@ -9,7 +9,7 @@
   --color-neutral-lightest: #f2f2f2;
   --color-neutral-dark: #4c4c4c;
   --color-neutral-light: #b2b2b2;
-  --color-scheme-1-background: var(--color-white);
+  --color-scheme-1-border: var(--color-white);
   --color-scheme-1-border: var(--color-neutral-darkest);
   --color-scheme-1-text: var(--color-neutral-darkest);
   --opacity-transparent: rgba(255, 255, 255, 0);
