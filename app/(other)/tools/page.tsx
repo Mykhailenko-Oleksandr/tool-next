@@ -1,28 +1,50 @@
-import PaginationTools from "@/components/PaginationTools/PaginationTools";
+import ToolsClient from "./Tools.client";
 import { fetchCategories } from "@/lib/api/clientApi";
-import css from "./Tools.module.css";
+import { fetchTools } from "@/lib/api/clientApi";
+import {
+	QueryClient,
+	HydrationBoundary,
+	dehydrate,
+} from "@tanstack/react-query";
 import { Metadata } from "next";
+import css from "./Tools.module.css";
 
 export const metadata: Metadata = {
 	title: "Каталог інструментів",
 	description: "Всі інструменти доступні для перегляду та оренди",
-	openGraph: {
-		title: "Каталог інструментів",
-		description: "Всі інструменти доступні для перегляду та оренди",
-		siteName: "ToolNext",
-	},
 };
 
-const Tools = async () => {
+type Props = {
+	searchParams: Promise<{ search?: string }>;
+};
+
+const Tools = async ({ searchParams }: Props) => {
+	const { search = "" } = await searchParams;
+
+	const queryClient = new QueryClient();
 	const categoriesResponse = await fetchCategories();
 
+	await queryClient.prefetchInfiniteQuery({
+		queryKey: ["tools", search, []],
+		queryFn: ({ pageParam = 1 }) =>
+			fetchTools({
+				page: pageParam,
+				perPage: 16,
+				search,
+				categories: [],
+			}),
+		initialPageParam: 1,
+	});
+
 	return (
-		<section className={css.toolSection}>
-			<div className="container">
-				<h2 className={css.toolTitle}>Всі інструменти</h2>
-				<PaginationTools categories={categoriesResponse} />
-			</div>
-		</section>
+		<HydrationBoundary state={dehydrate(queryClient)}>
+			<section className={css.toolSection}>
+				<div className="container">
+					<h2 className={css.toolTitle}>Всі інструменти</h2>
+					<ToolsClient categories={categoriesResponse} initialSearch={search} />
+				</div>
+			</section>
+		</HydrationBoundary>
 	);
 };
 
