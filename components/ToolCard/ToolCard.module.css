@@ -1,6 +1,26 @@
 .toolCard {
   margin: 0 auto;
   max-width: 335px;
+  background-image: linear-gradient(
+    360deg,
+    var(--color-gradient-1),
+    var(--color-gradient-2),
+    var(--color-gradient-3)
+  );
+
+  border-radius: 16px 16px 6px 6px;
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover,
+  &:focus {
+    transform: scale(1.02);
+    .image {
+      box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 1);
+      -webkit-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 1);
+      -moz-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 1);
+      outline: 1px solid black;
+    }
+  }
 }
 
 .image {

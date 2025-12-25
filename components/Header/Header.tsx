@@ -53,13 +53,8 @@ export default function Header() {
       <header className={styles.header}>
         <div className={`container ${styles.fullWidth}`}>
           <div className={styles.headerInner}>
-            <Link
-              href="/"
-              className={styles.logo}
-              aria-label="На головну">
-              <svg
-                className={styles.logoIcon}
-                aria-hidden>
+            <Link href="/" className={styles.logo} aria-label="На головну">
+              <svg className={styles.logoIcon} aria-hidden>
                 <use href="/icons.svg#icon-logo" />
               </svg>
             </Link>
@@ -72,7 +67,8 @@ export default function Header() {
                     styles.tabletOnly,
                     styles.purpleButton
                   )}
-                  onClick={() => router.push("/tools/new")}>
+                  onClick={() => router.push("/tools/new")}
+                >
                   Опублікувати оголошення
                 </button>
               )}
@@ -85,11 +81,14 @@ export default function Header() {
                 aria-expanded={isMenuOpen}
                 aria-controls="mobile-menu"
                 aria-label="Меню"
-                onClick={() => setIsMenuOpen((prev) => !prev)}>
+                onClick={() => setIsMenuOpen((prev) => !prev)}
+              >
                 <svg
+                  className={styles.iconMenu}
                   width="24"
                   height="24"
-                  aria-hidden>
+                  aria-hidden
+                >
                   <use
                     href={
                       isMenuOpen
@@ -103,13 +102,15 @@ export default function Header() {
 
             <nav
               id="mobile-menu"
-              className={clsx(styles.nav, { [styles.navOpen]: isMenuOpen })}>
+              className={clsx(styles.nav, { [styles.navOpen]: isMenuOpen })}
+            >
               <Link
                 href="/"
                 onClick={closeMenu}
                 className={clsx(styles.navLink, {
                   [styles.activeLink]: isActive("/"),
-                })}>
+                })}
+              >
                 Головна
               </Link>
 
@@ -118,7 +119,8 @@ export default function Header() {
                 onClick={closeMenu}
                 className={clsx(styles.navLink, {
                   [styles.activeLink]: isActive("/tools"),
-                })}>
+                })}
+              >
                 Інструменти
               </Link>
 
@@ -129,7 +131,8 @@ export default function Header() {
                     onClick={closeMenu}
                     className={clsx(styles.navLink, {
                       [styles.activeLink]: isActive("/profile"),
-                    })}>
+                    })}
+                  >
                     Мій профіль
                   </Link>
 
@@ -139,7 +142,8 @@ export default function Header() {
                       styles.desktopOnly,
                       styles.purpleButton
                     )}
-                    onClick={() => router.push("/tools/new")}>
+                    onClick={() => router.push("/tools/new")}
+                  >
                     Опублікувати оголошення
                   </button>
 
@@ -169,10 +173,9 @@ export default function Header() {
                     <button
                       className={styles.logoutButton}
                       onClick={() => setIsLogoutOpen(true)}
-                      aria-label="Вийти">
-                      <svg
-                        width="18"
-                        height="18">
+                      aria-label="Вийти"
+                    >
+                      <svg width="18" height="18">
                         <use href="/icons.svg#icon-logout" />
                       </svg>
                     </button>
@@ -185,13 +188,15 @@ export default function Header() {
                     onClick={closeMenu}
                     className={clsx(styles.navLink, {
                       [styles.activeLink]: isActive("/auth/login"),
-                    })}>
+                    })}
+                  >
                     Увійти
                   </Link>
 
                   <button
                     className={clsx(styles.register, styles.purpleButton)}
-                    onClick={() => router.push("/auth/register")}>
+                    onClick={() => router.push("/auth/register")}
+                  >
                     Зареєструватися
                   </button>
                 </>
@@ -209,7 +214,8 @@ export default function Header() {
           confirmButtonColor="purple"
           onConfirm={confirmLogout}
           onCancel={() => setIsLogoutOpen(false)}
-          onClose={() => setIsLogoutOpen(false)}>
+          onClose={() => setIsLogoutOpen(false)}
+        >
           Ви впевнені, що хочете вийти?
         </Modal>
       )}
