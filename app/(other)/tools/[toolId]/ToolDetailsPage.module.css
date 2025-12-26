@@ -14,20 +14,20 @@
     flex-direction: row;
   }
   .imageWrapper {
-      width: 640px;
-      height: 480px;
-      flex: none;
-      overflow: hidden;
-      border-radius: 16px;
-    }
-  
-    .image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      border-radius: inherit;
-    }
+    width: 640px;
+    height: 480px;
+    flex: none;
+    overflow: hidden;
+    border-radius: 16px;
+  }
+
+  .image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: inherit;
+  }
 }
 
 .imageWrapper {
@@ -39,7 +39,8 @@
 }
 
 .image {
-  width: 100%;
+  margin: 0 auto;
+  width: auto;
   height: 100%;
   object-fit: cover;
   display: block;
@@ -84,7 +85,6 @@
   margin: 0;
   margin-bottom: 24px;
 }
-
 
 .ownerBlock {
   margin-bottom: 24px;

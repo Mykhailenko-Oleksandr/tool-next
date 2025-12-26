@@ -17,7 +17,7 @@ interface ToolDetailsClientProps {
 
 export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
   const router = useRouter();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   const {
@@ -141,13 +141,16 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
                 </ul>
               </div>
 
-              <button
-                type="button"
-                className={css.bookButton}
-                onClick={handleBookClick}
-              >
-                Забронювати
-              </button>
+              {typeof tool.owner !== "string" &&
+                user?._id !== tool.owner._id && (
+                  <button
+                    type="button"
+                    className={css.bookButton}
+                    onClick={handleBookClick}
+                  >
+                    Забронювати
+                  </button>
+                )}
             </div>
           </div>
         </div>
