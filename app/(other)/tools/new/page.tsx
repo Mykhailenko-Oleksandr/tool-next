@@ -1,6 +1,13 @@
 import AddEditToolForm from "@/components/AddEditToolForm/AddEditToolForm";
 import css from "./AddToolPage.module.css";
 import { Metadata } from "next";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import { fetchCategories } from "@/lib/api/clientApi";
+import AddToolPageClient from "./AddToolPage.client";
 
 export const metadata: Metadata = {
   title: "Створення нового інструмента",
@@ -19,12 +26,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AddToolPage() {
+export default async function AddToolPage() {
+  const queryClient = new QueryClient();
+  const categoriesResponse = await fetchCategories();
+  const sortCategories = categoriesResponse.toSorted((a, b) =>
+    a.title.localeCompare(b.title)
+  );
+
   return (
-    <section className={css.pageSection}>
-      <div className="container">
-        <AddEditToolForm />
-      </div>
-    </section>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <AddToolPageClient categories={sortCategories} />
+    </HydrationBoundary>
   );
 }
