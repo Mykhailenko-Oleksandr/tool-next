@@ -34,6 +34,9 @@ const Tools = async ({ searchParams }: Props) => {
 
   const queryClient = new QueryClient();
   const categoriesResponse = await fetchCategories();
+  const sortCategories = categoriesResponse.toSorted((a, b) =>
+    a.title.localeCompare(b.title)
+  );
 
   await queryClient.prefetchInfiniteQuery({
     queryKey: ["tools", search, []],
@@ -52,7 +55,7 @@ const Tools = async ({ searchParams }: Props) => {
       <section className={css.toolSection}>
         <div className="container">
           <h2 className={css.toolTitle}>Всі інструменти</h2>
-          <ToolsClient categories={categoriesResponse} initialSearch={search} />
+          <ToolsClient categories={sortCategories} initialSearch={search} />
         </div>
       </section>
     </HydrationBoundary>
