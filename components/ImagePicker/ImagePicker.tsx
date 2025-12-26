@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ChangeEvent, useState, useEffect } from "react";
+import { ChangeEvent, useState, useEffect, useRef } from "react";
 import css from "./ImagePicker.module.css";
 
 type Props = {
@@ -10,6 +10,7 @@ type Props = {
 export default function ImagePicker({ imageUrl, onChangeImage }: Props) {
   const [previewUrl, setPreviewUrl] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (imageUrl) {
@@ -17,7 +18,11 @@ export default function ImagePicker({ imageUrl, onChangeImage }: Props) {
     }
   }, [imageUrl]);
 
-  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
+  function handleClickBtn() {
+    fileInputRef.current?.click();
+  }
+
+  async function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     setError("");
 
@@ -44,17 +49,16 @@ export default function ImagePicker({ imageUrl, onChangeImage }: Props) {
       };
       reader.readAsDataURL(file);
     }
-  };
+  }
 
   return (
     <div className={css.formGroup}>
-      <label
-        htmlFor="images"
-        className={css.formLabel}>
+      <label htmlFor="images" className={css.formLabel}>
         Фото інструменту
       </label>
       <div className={css.imageUpload}>
         <input
+          ref={fileInputRef}
           type="file"
           id="images"
           name="images"
@@ -64,22 +68,30 @@ export default function ImagePicker({ imageUrl, onChangeImage }: Props) {
         />
         {previewUrl ? (
           <div className={css.imagePreview}>
-            <Image
-              src={previewUrl}
-              alt="Превью"
-              width={400}
-              height={400}
-              style={{ objectFit: "contain" }}
-              unoptimized
-            />
+            <label htmlFor="images">
+              <Image
+                src={previewUrl}
+                alt="Прев'ю"
+                width={400}
+                height={400}
+                unoptimized
+              />
+            </label>
           </div>
         ) : (
-          <label
-            htmlFor="images"
-            className={css.imagePlaceholder}></label>
+          <>
+            <label htmlFor="images" className={css.imagePlaceholder}></label>
+          </>
         )}
         {error && <p className={css.errorMessage}>{error}</p>}
       </div>
+      <button
+        type="button"
+        onClick={handleClickBtn}
+        className={css.uploadButton}
+      >
+        Завантажити фото
+      </button>
     </div>
   );
 }

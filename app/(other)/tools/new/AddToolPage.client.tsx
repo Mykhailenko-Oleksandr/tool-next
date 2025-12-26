@@ -73,18 +73,16 @@ export default function AddToolPageClient({ categories }: Props) {
   const fieldId = useId();
   const router = useRouter();
 
-  console.log("img", imageFile);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const key = e.target.name;
+    const value = e.target.value;
 
-  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const key = e.target.name;
-  //   const value = e.target.value;
-
-  //   const changeEl = {
-  //     ...draft,
-  //     [key]: value,
-  //   };
-  //   setDraft(changeEl);
-  // };
+    const changeEl = {
+      ...draft,
+      [key]: value,
+    };
+    setDraft(changeEl);
+  };
 
   const handleSubmit = async (
     values: FormData,
@@ -114,52 +112,41 @@ export default function AddToolPageClient({ categories }: Props) {
       <div className="container">
         <h2 className={css.formTitle}>Публікація інструменту</h2>
         <ImagePicker onChangeImage={setImageFile} />
-        {/* 
+
         <Formik
-          initialValues={{ }}
+          initialValues={{
+            name: "",
+            pricePerDay: "",
+            category: "",
+            rentalTerms: "",
+            description: "",
+            specifications: "",
+          }}
           onSubmit={handleSubmit}
           validationSchema={ValidationSchema}
           enableReinitialize
-        > */}
-        {/* <Form className={css.form}>
-            <label htmlFor="images" className={css["form-label"]}>
-              Фото інструменту
-            </label>
-            <div className={css["image-upload"]}>
+        >
+          <Form className={css.form}>
+            <fieldset className={css.formGroup}>
+              <label htmlFor="name" className={css.formLabel}>
+                Назва
+              </label>
               <Field
-                ref={fileInputRef}
-                type="file"
-                id="images"
-                name="images"
-                accept="image/*"
-                onChange={handleImageChange}
-                className={css["file-input"]}
+                type="text"
+                id="name"
+                name="name"
+                onChange={handleChange}
+                className={css.input}
+                placeholder="Введить назву"
               />
-              {imagePreview ? (
-                <div className={css["image-preview"]}>
-                  <Image
-                    src={imagePreview}
-                    alt="Превью"
-                    width={400}
-                    height={400}
-                    style={{ objectFit: "contain" }}
-                    unoptimized
-                  />
-                </div>
-              ) : (
-                <label
-                  htmlFor="images"
-                  className={css["image-placeholder"]}
-                ></label>
-              )}
-            </div>
-            <ErrorMessage
-              name="images"
-              component="span"
-              className={css.error}
-            />
-          </Form> */}
-        {/* </Formik> */}
+              <ErrorMessage
+                name="name"
+                component="span"
+                className={css.errorMessage}
+              />
+            </fieldset>
+          </Form>
+        </Formik>
       </div>
     </section>
   );
