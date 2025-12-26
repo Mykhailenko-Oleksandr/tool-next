@@ -1,15 +1,16 @@
-import AddEditToolForm from "@/components/AddEditToolForm/AddEditToolForm";
+"use client";
+
 import css from "./AddToolPage.module.css";
 import { Category } from "@/types/category";
 import * as Yup from "yup";
 import { useCreatingDraftStore } from "@/lib/store/createToolStore";
-import { useEffect, useId, useState } from "react";
+import { useId, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
 import { createTool } from "@/lib/api/clientApi";
 import toast from "react-hot-toast";
 import { ApiError } from "@/app/api/api";
-import Image from "next/image";
+import ImagePicker from "@/components/ImagePicker/ImagePicker";
 
 interface FormData {
   name: string;
@@ -18,7 +19,6 @@ interface FormData {
   rentalTerms: string;
   description: string;
   specifications: string;
-  images: File;
 }
 
 const ValidationSchema = Yup.object().shape({
@@ -61,19 +61,6 @@ const ValidationSchema = Yup.object().shape({
         });
       }
     ),
-  images: Yup.mixed()
-    .required("Фото інструменту обов'язкове")
-    .test("file-type", "Оберіть зображення", (value) => {
-      if (!value) return false;
-      return value instanceof File;
-    })
-    .test("file-size", "Розмір файлу не може перевищувати 1 МБ", (value) => {
-      if (!value || !(value instanceof File)) {
-        return true;
-      }
-      const maxSize = 1 * 1024 * 1024;
-      return value.size <= maxSize;
-    }),
 });
 
 interface Props {
@@ -81,55 +68,23 @@ interface Props {
 }
 
 export default function AddToolPageClient({ categories }: Props) {
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const { draft, setDraft, clearDraft } = useCreatingDraftStore();
-  const [previewUrl, setPreviewUrl] = useState<string>("");
-  const [error, setError] = useState<string>("");
   const fieldId = useId();
   const router = useRouter();
 
-  useEffect(() => {
-    if (profilePhotoUrl) {
-      setPreviewUrl(profilePhotoUrl);
-    }
-  }, [profilePhotoUrl]);
+  console.log("img", imageFile);
 
-  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    setError("");
+  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const key = e.target.name;
+  //   const value = e.target.value;
 
-    if (file) {
-      // Перевіримо тип файлу
-      if (!file.type.startsWith("image/")) {
-        setError("Only images");
-        return;
-      }
-
-      // Перевіримо розмір файлу (максимум 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        setError("Max file size 5MB");
-        return;
-      }
-
-      onChangePhoto(file); // передаємо файл у батьківський компонент
-
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewUrl(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const key = e.target.name;
-    const value = e.target.value;
-
-    const changeEl = {
-      ...draft,
-      [key]: value,
-    };
-    setDraft(changeEl);
-  };
+  //   const changeEl = {
+  //     ...draft,
+  //     [key]: value,
+  //   };
+  //   setDraft(changeEl);
+  // };
 
   const handleSubmit = async (
     values: FormData,
@@ -157,35 +112,8 @@ export default function AddToolPageClient({ categories }: Props) {
   return (
     <section className={css.pageSection}>
       <div className="container">
-        <h2 className={css["form-title"]}>Публікація інструменту</h2>
-        <div>
-          <div className={css.picker}>
-            {previewUrl && (
-              <Image
-                src={previewUrl}
-                alt="Preview"
-                width={300}
-                height={300}
-                className={css.avatar}
-              />
-            )}
-            <label
-              className={
-                previewUrl ? `${css.wrapper} ${css.reload}` : css.wrapper
-              }
-            >
-              📷 Choose photo
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className={css.input}
-              />
-            </label>
-          </div>
-          {error && <p className={css.error}>{error}</p>}
-        </div>
-
+        <h2 className={css.formTitle}>Публікація інструменту</h2>
+        <ImagePicker onChangeImage={setImageFile} />
         {/* 
         <Formik
           initialValues={{ }}
