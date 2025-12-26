@@ -22,7 +22,8 @@ export const useCreatingDraftStore = create<CreatingDraftStore>()(
   persist(
     (set) => ({
       draft: initialDraft,
-      setDraft: (value) => set((state) => ({ draft: { ...state.draft, ...value } })),
+      setDraft: (value) =>
+        set((state) => ({ draft: { ...state.draft, ...value } })),
       clearDraft: () => set(() => ({ draft: initialDraft })),
     }),
     {

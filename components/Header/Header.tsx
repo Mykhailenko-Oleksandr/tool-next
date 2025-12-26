@@ -2,6 +2,7 @@
 
 import Modal from "@/components/Modal/Modal";
 import { useAuthStore } from "@/lib/store/authStore";
+import { useCreatingDraftStore } from "@/lib/store/createToolStore";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,6 +10,16 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import styles from "./Header.module.css";
 import { logout } from "@/lib/api/clientApi";
+
+// v2807 [REMOVABLE BLOCK] Сигнал «открыть форму создания пустой»
+// v2807 Что: одноразовый ключ, который говорит странице `/tools/new` принудительно открыть пустую форму.
+// v2807 Зачем: Next может держать страницу/компонент `/tools/new` «живым» (без remount), а Zustand persist может догидратировать позже.
+// v2807       Без явного сигнала форма создания может на долю секунды показать сохранённый черновик.
+// v2807 Как используется:
+// v2807 - источники навигации ставят этот флаг в sessionStorage
+// v2807 - форма читает его в `useLayoutEffect` и дополнительно реагирует на window-event.
+const OPEN_CREATE_TOOL_EMPTY_KEY = "creating-draft:open-empty";
+// v2807 [/REMOVABLE BLOCK]
 
 export default function Header() {
   const router = useRouter();
@@ -22,6 +33,8 @@ export default function Header() {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
+
+  const clearCreateToolDraft = useCreatingDraftStore((state) => state.clearDraft);
 
   const firstLetter = user?.name?.[0]?.toUpperCase() ?? "";
   const userAvatar = user?.avatarUrl;
@@ -73,7 +86,33 @@ export default function Header() {
                     styles.tabletOnly,
                     styles.purpleButton
                   )}
-                  onClick={() => router.push("/tools/new")}>
+                  onClick={() => {
+                    // v2807 [REMOVABLE BLOCK] Принудительно открыть форму создания пустой (перед навигацией)
+                    // v2807 Что: чистим черновик и в store, и в persisted storage + подаём сигнал форме, чтобы она сбросила себя.
+                    // v2807 Зачем: чистить только store недостаточно (persist может догидратировать обратно); чистить только storage недостаточно
+                    // v2807       (Formik может держать старые значения, если компонент не remount-ится).
+                    // v2807 Как:
+                    // v2807 - sessionStorage-флаг = сработает при обычном переходе на `/tools/new`
+                    // v2807 - window-event = сработает даже если мы уже на `/tools/new` (роута не меняется)
+                    try {
+                      sessionStorage.setItem(OPEN_CREATE_TOOL_EMPTY_KEY, "1");
+                    } catch {
+                      // ignore
+                    }
+                    clearCreateToolDraft();
+                    try {
+                      useCreatingDraftStore.persist.clearStorage();
+                    } catch {
+                      // ignore
+                    }
+                    try {
+                      window.dispatchEvent(new Event("creating-draft:open-empty"));
+                    } catch {
+                      // ignore
+                    }
+                    router.push("/tools/new");
+                    // v2807 [/REMOVABLE BLOCK]
+                  }}>
                   Опублікувати оголошення
                 </button>
               )}
@@ -140,7 +179,28 @@ export default function Header() {
                       styles.desktopOnly,
                       styles.purpleButton
                     )}
-                    onClick={() => router.push("/tools/new")}>
+                    onClick={() => {
+                    // v2807 [REMOVABLE BLOCK] Та же логика «открыть пустой» для десктопной кнопки
+                    // v2807 См. комментарий выше (Next cache + Zustand persist + внутреннее состояние Formik).
+                      try {
+                        sessionStorage.setItem(OPEN_CREATE_TOOL_EMPTY_KEY, "1");
+                      } catch {
+                        // ignore
+                      }
+                      clearCreateToolDraft();
+                      try {
+                        useCreatingDraftStore.persist.clearStorage();
+                      } catch {
+                        // ignore
+                      }
+                      try {
+                        window.dispatchEvent(new Event("creating-draft:open-empty"));
+                      } catch {
+                        // ignore
+                      }
+                      router.push("/tools/new");
+                      // v2807 [/REMOVABLE BLOCK]
+                    }}>
                     Опублікувати оголошення
                   </button>
 

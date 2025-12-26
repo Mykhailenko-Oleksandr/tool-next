@@ -1,11 +1,18 @@
 "use client";
 
 import { useAuthStore } from "@/lib/store/authStore";
+import { useCreatingDraftStore } from "@/lib/store/createToolStore";
 import Link from "next/link";
 import styles from "./Footer.module.css";
 
+// v2807 [REMOVABLE BLOCK] Сигнал «открыть форму создания пустой»
+// v2807 Что/Зачем: то же, что и в Header — заставляет `/tools/new` открываться пустой несмотря на кеш Next и гидрацию Zustand persist.
+const OPEN_CREATE_TOOL_EMPTY_KEY = "creating-draft:open-empty";
+// v2807 [/REMOVABLE BLOCK]
+
 export default function Footer() {
   const { isAuthenticated, user } = useAuthStore();
+  const clearCreateToolDraft = useCreatingDraftStore((state) => state.clearDraft);
   const currentYear = new Date().getFullYear();
 
   return (
@@ -30,7 +37,32 @@ export default function Footer() {
                 <Link href="/profile" className={styles.navLink}>
                   Мій профіль
                 </Link>
-                <Link href="/tools/new" className={styles.navLink}>
+                <Link
+                  href="/tools/new"
+                  className={styles.navLink}
+                  onClick={() => {
+                    // v2807 [REMOVABLE BLOCK] Принудительно открыть форму создания пустой (ссылка в Footer)
+                    // v2807 Зачем: Footer использует <Link>, remount не гарантирован; Formik/Zustand могут удерживать старый черновик.
+                    // v2807 Как: одноразовый флаг + очистка store/storage + событие (покрывает кейс «уже на /tools/new»).
+                    try {
+                      sessionStorage.setItem(OPEN_CREATE_TOOL_EMPTY_KEY, "1");
+                    } catch {
+                      // ignore
+                    }
+                    clearCreateToolDraft();
+                    try {
+                      useCreatingDraftStore.persist.clearStorage();
+                    } catch {
+                      // ignore
+                    }
+                    try {
+                      window.dispatchEvent(new Event("creating-draft:open-empty"));
+                    } catch {
+                      // ignore
+                    }
+                    // v2807 [/REMOVABLE BLOCK]
+                  }}
+                >
                   Опублікувати
                 </Link>
               </>
