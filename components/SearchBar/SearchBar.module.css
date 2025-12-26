@@ -43,6 +43,12 @@
   color: var(--color-red-light);
 }
 
+.search-input:-webkit-autofill,
+.search-input:-webkit-autofill:hover,
+.search-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--color-white);
+}
+
 .search-error {
   width: 100%;
   font-weight: 400;

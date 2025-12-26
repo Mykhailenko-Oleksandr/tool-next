@@ -25,20 +25,20 @@ export default function RegistrationBlock() {
 
 <picture className={css.imageBlock}>
   <source 
-    srcSet="/images/home-down-desk.jpg 1x, /images/home-down-desk@2x.jpg 2x" 
+    srcSet="/images/home-down-desk.webp 1x, /images/home-down-desk@2x.webp 2x" 
     media="(min-width: 1440px)" 
   />
   <source 
-    srcSet="/images/home-down-tab.jpg, /images/home-down-tab@2x.jpg 2x" 
+    srcSet="/images/home-down-tab.webp, /images/home-down-tab@2x.webp 2x" 
     media="(min-width: 768px)" 
   />
     <source 
-    srcSet="/images/home-down-mob.jpg, /images/home-down-mob@2x.jpg 2x" 
+    srcSet="/images/home-down-mob.webp, /images/home-down-mob@2x.webp 2x" 
     media="(min-width: 375px)" 
   />
 
   <Image
-    src="/images/home-down-desk.jpg" 
+    src="/images/home-down-desk.webp" 
     alt="Tool's workshop"
     fill={true}
   />

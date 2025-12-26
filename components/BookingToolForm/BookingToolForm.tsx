@@ -7,11 +7,10 @@ import css from "./BookingToolForm.module.css";
 import { Tool } from "@/types/tool";
 import { bookingTool } from "@/lib/api/clientApi";
 import toast from "react-hot-toast";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useBookingDraftStore } from "@/lib/store/bookingStore";
 import DateRangeCalendar from "../DateRangeCalendar/DateRangeCalendar";
 import { ApiError } from "@/app/api/api";
-import DateRangeCalendar from "../DateRangeCalendar/DateRangeCalendar";
 
 function getDaysCount(startDate: string, endDate: string): number {
   const start = new Date(startDate);
@@ -35,15 +34,22 @@ interface FormData {
 
 const BookingSchema = Yup.object().shape({
   firstName: Yup.string()
-    .min(2, "Мінімум 2 символи")
+    .min(3, "Мінімум 3 символи")
+    .max(50, "Максимум 50 символів")
     .required("Імʼя обовʼязкове"),
   lastName: Yup.string()
     .min(2, "Мінімум 2 символи")
+    .max(50, "Максимум 50 символів")
     .required("Прізвище обовʼязкове"),
   phone: Yup.string()
     .matches(/^\+?[0-9]{10,15}$/, "Некоректний номер телефону")
     .required("Телефон обовʼязковий"),
-  startDate: Yup.date().required("Оберіть дату початку"),
+  startDate: Yup.date()
+    .required("Оберіть дату початку")
+    .min(
+      new Date().toISOString().split("T")[0],
+      "Дата не може бути в минулому"
+    ),
   endDate: Yup.date()
     .required("Оберіть дату завершення")
     .when("startDate", ([startDate], schema) => {
@@ -68,6 +74,7 @@ interface Props {
 export default function BookingToolForm({ tool }: Props) {
   const { draft, setDraft, clearDraft } = useBookingDraftStore();
   const fieldId = useId();
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const key = e.target.name;
@@ -85,11 +92,10 @@ export default function BookingToolForm({ tool }: Props) {
     formikHelpers: FormikHelpers<FormData>
   ) => {
     try {
-      const res = await bookingTool(values, tool._id);
-      console.log(res);
+      await bookingTool(values, tool._id);
       formikHelpers.resetForm();
       clearDraft();
-      redirect("/");
+      router.push("/confirm/booking");
     } catch (error: unknown) {
       const err = error as ApiError;
 
@@ -118,41 +124,47 @@ export default function BookingToolForm({ tool }: Props) {
             )
             : 0;
         return (
-          <Form className={css.form}>
-            <h1 className={css.title}>Підтвердження бронювання</h1>
-
-            {/* Name */}
-            <div className={css.grid}>
-              <div className={css.field}>
-                <label className={css.label}>Імʼя</label>
-                <Field
-                  name="firstName"
-                  placeholder="Ваше імʼя"
-                  className={css.input}
-                  onChange={handleChange}
-                />
-                <ErrorMessage
-                  name="firstName"
-                  component="span"
-                  className={css.error}
-                />
-              </div>
-
-              <div className={css.field}>
-                <label className={css.label}>Прізвище</label>
-                <Field
-                  name="lastName"
-                  placeholder="Ваше прізвище"
-                  className={css.input}
-                  onChange={handleChange}
-                />
-                <ErrorMessage
-                  name="lastName"
-                  component="span"
-                  className={css.error}
-                />
-              </div>
-            </div>
+          <div className={css.wrapper}>
+            <Form className={css.form}>
+              {/* Ім’я + Прізвище */}
+              <fieldset className={css.fieldset}>
+                <div className={css.control}>
+                  <label htmlFor={`${fieldId}-firstName`} className={css.label}>
+                    Ім&apos;я
+                  </label>
+                  <Field
+                    type="text"
+                    name="firstName"
+                    placeholder="Ваше ім'я"
+                    id={`${fieldId}-firstName`}
+                    className={css.input}
+                    onChange={handleChange}
+                  />
+                  <ErrorMessage
+                    name="firstName"
+                    component="span"
+                    className={css.error}
+                  />
+                </div>
+                <div className={css.control}>
+                  <label htmlFor={`${fieldId}-lastName`} className={css.label}>
+                    Прізвище
+                  </label>
+                  <Field
+                    type="text"
+                    name="lastName"
+                    placeholder="Ваше прізвище"
+                    id={`${fieldId}-lastName`}
+                    className={css.input}
+                    onChange={handleChange}
+                  />
+                  <ErrorMessage
+                    name="lastName"
+                    component="span"
+                    className={css.error}
+                  />
+                </div>
+              </fieldset>
 
               {/* Телефон */}
               <fieldset className={`${css.fieldset} ${css.single}`}>
@@ -279,14 +291,15 @@ export default function BookingToolForm({ tool }: Props) {
                 </div>
               </fieldset>
 
-            {/* Footer */}
-            <div className={css.footer}>
-              <span className={css.price}>Ціна: {totalPrice} грн</span>
-              <button type="submit" className={css.submit}>
-                Забронювати
-              </button>
-            </div>
-          </Form>
+              {/* Ціна + кнопка */}
+              <div className={css.priceRow}>
+                <p className={css.price}>Вартість: {totalPrice} грн</p>
+                <button type="submit" className={css.submitBtn}>
+                  Забронювати
+                </button>
+              </div>
+            </Form>
+          </div>
         );
       }}
     </Formik>

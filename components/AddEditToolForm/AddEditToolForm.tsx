@@ -2,7 +2,7 @@
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import toast from "react-hot-toast";
@@ -13,7 +13,8 @@ import CustomSelect from "@/components/CustomSelect/CustomSelect";
 import { Tool } from "@/types/tool";
 import { Category } from "@/types/category";
 import { getCategories } from "@/lib/api/clientApi";
-import { createTool, updateTool } from "@/lib/api/serverApi";
+import { createTool, updateTool } from "@/lib/api/clientApi";
+import { useCreatingDraftStore } from "@/lib/store/createToolStore";
 
 interface AddEditToolFormProps {
   toolId?: string;
@@ -34,7 +35,8 @@ const getValidationSchema = (isEdit: boolean) =>
   Yup.object().shape({
     name: Yup.string()
       .required("Назва обов'язкова")
-      .max(100, "Максимальна довжина назви - 100 символів"),
+      .min(3, "Назва має містити принаймні 3 символи")
+      .max(96, "Назва не може перевищувати 96 символів"),
     pricePerDay: Yup.number()
       .required("Ціна обов'язкова")
       .positive("Ціна повинна бути більше 0")
@@ -42,13 +44,34 @@ const getValidationSchema = (isEdit: boolean) =>
     category: Yup.string().required("Оберіть категорію"),
     rentalTerms: Yup.string()
       .required("Умови оренди обов'язкові")
-      .max(500, "Максимальна довжина - 500 символів"),
+      .min(20, "Мінімум 20 символів")
+      .max(1000, "Максимальна довжина - 1000 символів"),
     description: Yup.string()
       .required("Опис обов'язковий")
-      .max(1000, "Максимальна довжина опису - 1000 символів"),
+      .min(20, "Мінімум 20 символів")
+      .max(2000, "Максимальна довжина опису - 2000 символів"),
     specifications: Yup.string()
       .required("Характеристики обов'язкові")
-      .max(500, "Максимальна довжина характеристик - 500 символів"),
+      .max(500, "Максимальна довжина характеристик - 500 символів")
+      .test(
+        "format",
+        "Характеристики повинні бути у форматі 'ключ: значення' (наприклад: Потужність: 1.2 кВт)",
+        (value) => {
+          if (!value || !value.trim()) return true; // Пустое значение обработается required
+          const lines = value.trim().split("\n");
+          return lines.every((line) => {
+            const trimmed = line.trim();
+            if (!trimmed) return true; // Пустые строки разрешены
+            const colonIndex = trimmed.indexOf(":");
+            return (
+              colonIndex > 0 &&
+              colonIndex < trimmed.length - 1 &&
+              trimmed.substring(0, colonIndex).trim().length > 0 &&
+              trimmed.substring(colonIndex + 1).trim().length > 0
+            );
+          });
+        }
+      ),
     images: isEdit
       ? Yup.mixed().nullable()
       : Yup.mixed()
@@ -56,7 +79,18 @@ const getValidationSchema = (isEdit: boolean) =>
           .test("file-type", "Оберіть зображення", (value) => {
             if (!value) return false;
             return value instanceof File;
-          }),
+          })
+          .test(
+            "file-size",
+            "Розмір файлу не може перевищувати 1 МБ",
+            (value) => {
+              if (!value || !(value instanceof File)) {
+                return true;
+              }
+              const maxSize = 1 * 1024 * 1024; // 1 МБ (соответствует бэкенду)
+              return value.size <= maxSize;
+            }
+          ),
   });
 
 export default function AddEditToolForm({
@@ -64,6 +98,7 @@ export default function AddEditToolForm({
   initialData,
 }: AddEditToolFormProps) {
   const router = useRouter();
+  const { draft, setDraft, clearDraft } = useCreatingDraftStore();
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
@@ -74,13 +109,18 @@ export default function AddEditToolForm({
   const [displayErrors, setDisplayErrors] = useState<Record<string, string>>(
     {}
   );
+  const categoryInteractedRef = useRef(false);
+  const selectedFileRef = useRef<File | null>(null);
 
   useEffect(() => {
     const loadCategories = async () => {
       try {
         setIsLoadingCategories(true);
         const data = await getCategories();
-        setCategories(data);
+        const sortData = data.toSorted((a, b) =>
+          a.title.localeCompare(b.title)
+        );
+        setCategories(sortData);
       } catch (error: unknown) {
         const err = error as ApiError;
 
@@ -99,7 +139,8 @@ export default function AddEditToolForm({
 
   const updateDisplayErrors = (
     errors: Record<string, string | undefined>,
-    touched: Record<string, boolean | undefined>
+    touched: Record<string, boolean | undefined>,
+    values: FormValues
   ) => {
     const fields = [
       "name",
@@ -110,59 +151,153 @@ export default function AddEditToolForm({
       "specifications",
       "images",
     ];
+    const newDisplayErrors: Record<string, string> = {};
     fields.forEach((field) => {
+      // Для категории не показываем ошибку, если категории еще загружаются, пользователь не взаимодействовал с полем, или категория уже выбрана
+      if (field === "category") {
+        if (
+          isLoadingCategories ||
+          !categoryInteractedRef.current ||
+          values.category
+        ) {
+          return;
+        }
+      }
       if (errors[field] && touched[field]) {
-        setDisplayErrors((prev) => ({
-          ...prev,
-          [field]: errors[field] as string,
-        }));
+        newDisplayErrors[field] = errors[field] as string;
       }
     });
+    setDisplayErrors(newDisplayErrors);
   };
 
+  const initialValues = useMemo<FormValues>(
+    () =>
+      toolId
+        ? {
+            name: initialData?.name || "",
+            pricePerDay: initialData?.pricePerDay?.toString() || "",
+            category: initialData?.category || "",
+            rentalTerms: initialData?.rentalTerms || "",
+            description: initialData?.description || "",
+            specifications: (() => {
+              const specs = initialData?.specifications;
+              if (
+                specs &&
+                typeof specs === "object" &&
+                specs !== null &&
+                !Array.isArray(specs)
+              ) {
+                return Object.entries(specs)
+                  .map(([key, value]) => `${key}: ${value}`)
+                  .join("\n");
+              }
+              return "";
+            })(),
+            images: null,
+          }
+        : {
+            name: draft.name || "",
+            pricePerDay: draft.pricePerDay || "",
+            category: draft.category || "",
+            rentalTerms: draft.rentalTerms || "",
+            description: draft.description || "",
+            specifications: draft.specifications || "",
+            images: selectedFileRef.current, // Сохраняем выбранный файл при реинициализации
+          },
+    [
+      toolId,
+      initialData,
+      draft.name,
+      draft.pricePerDay,
+      draft.category,
+      draft.rentalTerms,
+      draft.description,
+      draft.specifications,
+    ] // Исключаем draft целиком, используем отдельные поля
+  );
+
   const formik = useFormik<FormValues>({
-    initialValues: {
-      name: initialData?.name || "",
-      pricePerDay: initialData?.pricePerDay?.toString() || "",
-      category: initialData?.category || "",
-      rentalTerms: initialData?.rentalTerms || "",
-      description: initialData?.description || "",
-      specifications:
-        typeof initialData?.specifications === "string"
-          ? initialData.specifications
-          : "",
-      images: null,
-    },
+    initialValues,
     validationSchema: getValidationSchema(!!toolId),
     validateOnChange: true,
     validateOnBlur: true,
+    enableReinitialize: !toolId,
     onSubmit: async (values) => {
+      // При попытке submit помечаем, что пользователь взаимодействовал с формой
+      categoryInteractedRef.current = true;
       try {
         setIsLoading(true);
 
-        /////////треба зробити щоб specifications став об"єктом по роздільнику </n> як мінімум.
-        ///////// а при створенні інструмента зображення обов"язкове
+        // Проверка размера файла перед отправкой (дополнительная проверка)
+        if (!toolId && values.images) {
+          const maxSize = 1 * 1024 * 1024; // 1 МБ (соответствует бэкенду)
+          if (values.images.size > maxSize) {
+            formik.setFieldError(
+              "images",
+              "Розмір файлу не може перевищувати 1 МБ"
+            );
+            formik.setFieldTouched("images", true);
+            setIsLoading(false);
+            return;
+          }
+        }
 
-        const toolData = {
+        const specificationsObj = (() => {
+          const trimmed = values.specifications.trim();
+          if (!trimmed) {
+            return {};
+          }
+          const parsed = trimmed
+            .split("\n")
+            .reduce<Record<string, string>>((acc, currentString) => {
+              const colonIndex = currentString.indexOf(":");
+              if (
+                colonIndex === -1 ||
+                colonIndex === 0 ||
+                colonIndex === currentString.length - 1
+              ) {
+                return acc;
+              }
+              const key = currentString.substring(0, colonIndex).trim();
+              const value = currentString.substring(colonIndex + 1).trim();
+              if (key && value) {
+                acc[key.trim()] = value.trim();
+              }
+              return acc;
+            }, {});
+          return Object.keys(parsed).length > 0 ? parsed : {};
+        })();
+
+        const baseToolData = {
           name: values.name.trim(),
           pricePerDay: parseFloat(values.pricePerDay),
           category: values.category,
           rentalTerms: values.rentalTerms.trim(),
           description: values.description.trim(),
-          specifications: values.specifications.trim(),
-          images: values.images || undefined,
+          specifications: specificationsObj,
         };
 
-        let result: Tool;
-        if (toolId) {
-          result = await updateTool({ ...toolData, id: toolId });
-        } else {
-          result = await createTool(toolData);
-        }
+        if (!toolId) {
+          if (!values.images) {
+            throw new Error("Image is required");
+          }
 
-        toast.success(
-          toolId ? "Інструмент успішно оновлено" : "Інструмент успішно створено"
-        );
+          const result = await createTool({
+            ...baseToolData,
+            images: values.images,
+          });
+          clearDraft();
+          toast.success("Інструмент успішно створено");
+          router.push(`/tools/${result._id}`);
+          return;
+        }
+        const result = await updateTool({
+          ...baseToolData,
+          id: toolId,
+          images: values.images || undefined,
+        });
+        clearDraft();
+        toast.success("Інструмент успішно оновлено");
         router.push(`/tools/${result._id}`);
       } catch (error: unknown) {
         const err = error as ApiError;
@@ -184,17 +319,55 @@ export default function AddEditToolForm({
   useEffect(() => {
     updateDisplayErrors(
       formik.errors as Record<string, string | undefined>,
-      formik.touched as Record<string, boolean | undefined>
+      formik.touched as Record<string, boolean | undefined>,
+      formik.values
     );
-  }, [formik.errors, formik.touched]);
+  }, [formik.errors, formik.touched, formik.values, isLoadingCategories]);
+
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (!toolId) {
+      if (isFirstRender.current) {
+        isFirstRender.current = false;
+        return;
+      }
+
+      const timeoutId = setTimeout(() => {
+        setDraft({
+          name: formik.values.name,
+          pricePerDay: formik.values.pricePerDay,
+          category: formik.values.category,
+          rentalTerms: formik.values.rentalTerms,
+          description: formik.values.description,
+          specifications: formik.values.specifications,
+          images: imagePreview || "",
+        });
+      }, 500);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [
+    formik.values.name,
+    formik.values.pricePerDay,
+    formik.values.category,
+    formik.values.rentalTerms,
+    formik.values.description,
+    formik.values.specifications,
+    imagePreview,
+    toolId,
+    setDraft,
+  ]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      selectedFileRef.current = file; // Сохраняем файл в ref
       formik.setFieldValue("images", file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result as string);
+        const base64 = reader.result as string;
+        setImagePreview(base64);
       };
       reader.readAsDataURL(file);
     }
@@ -243,6 +416,9 @@ export default function AddEditToolForm({
                 ></label>
               )}
             </div>
+            {formik.errors.images && formik.touched.images && !toolId && (
+              <div className={css["error-message"]}>{formik.errors.images}</div>
+            )}
             {formik.errors.images &&
               formik.touched.images &&
               !imagePreview &&
@@ -322,18 +498,34 @@ export default function AddEditToolForm({
               id="category"
               name="category"
               value={formik.values.category}
-              onChange={(value) => formik.setFieldValue("category", value)}
-              onBlur={() => formik.setFieldTouched("category", true)}
+              onChange={(value) => {
+                categoryInteractedRef.current = true;
+                formik.setFieldValue("category", value, false);
+                formik.setFieldTouched("category", true, false);
+              }}
+              onBlur={() => {
+                if (categoryInteractedRef.current) {
+                  formik.setFieldTouched("category", true, false);
+                }
+              }}
               options={categories.map((category) => ({
                 value: category._id,
                 label: category.title,
               }))}
               placeholder="Категорія"
               disabled={isLoadingCategories}
-              hasError={!!(formik.errors.category && formik.touched.category)}
+              hasError={
+                !!(
+                  formik.errors.category &&
+                  formik.touched.category &&
+                  categoryInteractedRef.current &&
+                  !isLoadingCategories &&
+                  !formik.values.category
+                )
+              }
             />
             <div
-              className={`${css["error-wrapper"]} ${formik.errors.category && formik.touched.category ? css["error-wrapper-visible"] : ""}`}
+              className={`${css["error-wrapper"]} ${formik.errors.category && formik.touched.category && categoryInteractedRef.current && !isLoadingCategories && !formik.values.category ? css["error-wrapper-visible"] : ""}`}
             >
               <div className={css["error-message"]}>
                 {displayErrors.category}
@@ -408,8 +600,15 @@ export default function AddEditToolForm({
                   ? css["input-error"]
                   : ""
               }`}
-              placeholder="Характеристики інструменту"
             />
+            {!formik.values.specifications && (
+              <p className={css.hint}>
+                Потужність: 1.2 кВт
+                <br />
+                Напруга: 220 В
+              </p>
+            )}
+
             <div
               className={`${css["error-wrapper"]} ${formik.errors.specifications && formik.touched.specifications ? css["error-wrapper-visible"] : ""}`}
             >

@@ -1,0 +1,69 @@
+"use client";
+
+import UserProfile from "@/components/UserProfile/UserProfile";
+import css from "./PublicProfile.module.css";
+import { User } from "@/types/user";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { fetchToolsUserId } from "@/lib/api/clientApi";
+import ToolGrid from "@/components/ToolGrid/ToolGrid";
+import LoadMoreButton from "@/components/LoadMoreButton/LoadMoreButton";
+import { Tool } from "@/types/tool";
+import Loader from "@/components/Loader/Loader";
+import PublicProfilePlaceholder from "@/components/PublicProfilePlaceholder/PublicProfilePlaceholder";
+
+interface ProfileClientProps {
+  user: User;
+}
+
+export default function PublicProfileClient({ user }: ProfileClientProps) {
+  const {
+    data,
+    isLoading,
+    isFetchingNextPage,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["tools", user._id],
+    queryFn: ({ pageParam = 1 }) => fetchToolsUserId(user._id, pageParam),
+    getNextPageParam: (lastPage) => {
+      return lastPage.page < lastPage.totalPages
+        ? lastPage.page + 1
+        : undefined;
+    },
+    initialPageParam: 1,
+  });
+
+  const tools: Tool[] = data?.pages.flatMap((page) => page.tools) ?? [];
+
+  return (
+    <section className={css.profilePage}>
+      <div className="container">
+        <UserProfile user={user} />
+        <div className={css.titleWrap}>
+          <h2 className={css.profileToolsTitle}>Інструменти</h2>
+        </div>
+
+        {!isLoading && tools.length === 0 && <PublicProfilePlaceholder />}
+
+        {isLoading && <Loader />}
+        {isError && !data && <p>Щось пішло не так... Спробуйте ще.</p>}
+        {isFetchingNextPage && !isLoading && <Loader />}
+
+        {tools.length > 0 && (
+          <>
+            <ToolGrid tools={tools} />
+
+            {hasNextPage && (
+              <LoadMoreButton
+                onClick={() => fetchNextPage()}
+                disabled={isFetchingNextPage}
+                loading={isFetchingNextPage}
+              />
+            )}
+          </>
+        )}
+      </div>
+    </section>
+  );
+}

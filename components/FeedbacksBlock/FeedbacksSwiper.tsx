@@ -16,8 +16,6 @@ type Props = {
   feedbacks: Feedback[];
 };
 
-const MAX_STARS = 5;
-
 export default function FeedbacksSwiper({ feedbacks }: Props) {
   return (
     <>
@@ -38,10 +36,9 @@ export default function FeedbacksSwiper({ feedbacks }: Props) {
           768: { slidesPerView: 2 },
           1440: { slidesPerView: 3 },
         }}
-        className={styles.swiper}
-      >
+        className={styles.swiper}>
         {feedbacks.map((fb) => {
-          const normalizedRate = Math.max(0, Math.min(MAX_STARS));
+          const normalizedRate = Math.max(0, Math.min(5, fb.rate));
 
           return (
             <SwiperSlide key={fb._id}>
@@ -68,9 +65,11 @@ export default function FeedbacksSwiper({ feedbacks }: Props) {
             <button
               className={`feedbacks-prev ${styles.navBtn}`}
               aria-label="Попередній відгук"
-              type="button"
-            >
-              <svg width="24" height="24" aria-hidden="true">
+              type="button">
+              <svg
+                width="24"
+                height="24"
+                aria-hidden="true">
                 <use href="/icons.svg#icon-arrow-back" />
               </svg>
             </button>
@@ -78,9 +77,11 @@ export default function FeedbacksSwiper({ feedbacks }: Props) {
             <button
               className={`feedbacks-next ${styles.navBtn}`}
               aria-label="Наступний відгук"
-              type="button"
-            >
-              <svg width="24" height="24" aria-hidden="true">
+              type="button">
+              <svg
+                width="24"
+                height="24"
+                aria-hidden="true">
                 <use href="/icons.svg#icon-arrow-forward" />
               </svg>
             </button>

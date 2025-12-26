@@ -1,0 +1,144 @@
+.container {
+  max-width: 375px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  padding: 32px 0;
+  width: 100%;
+  background: var(--color-scheme-3-background);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+
+  width: 100%;
+  max-width: 335px;
+  height: 273px;
+  border-radius: 12px;
+  padding: 32px 20px;
+  text-align: center;
+}
+
+.title {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 36px;
+
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+
+.text {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+
+  line-height: 1.5;
+  text-align: center;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 8px;
+
+  width: 335px;
+  height: 40px;
+
+  padding: 8px 20px;
+  border: 1px solid var(--color-electric-violet);
+  border-radius: 6px;
+
+  background: var(--color-electric-violet);
+  color: var(--color-white);
+
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.5;
+
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.button:hover,
+.button:focus {
+  background-color: var(--color-white);
+  color: var(--color-scheme-1-border);
+  border: 2px solid var(--color-scheme-1-border);
+  outline: none;
+}
+
+.button:active {
+  background-color: var(--color-scheme-2-background);
+  border: 2px solid var(--color-electric-violet);
+  color: var(--color-scheme-1-border);
+}
+
+@media only screen and (min-width: 768px) {
+  .container {
+    max-width: 768px;
+    padding: 0 32px;
+  }
+
+  .wrapper {
+    min-height: 489px;
+  }
+
+  .content {
+    gap: 16px;
+    width: 704px;
+    height: 238px;
+    max-width: 1280px;
+  }
+
+  .title {
+    font-size: 30px;
+  }
+
+  .button {
+    white-space: nowrap;
+    width: 129px;
+  }
+}
+
+@media only screen and (min-width: 1440px) {
+  .container {
+    max-width: 1440px;
+    padding: 0 64px;
+  }
+}
+
+.wrapper {
+  padding: 48px 64px;
+  min-height: 511px;
+}
+
+.content {
+  width: 100%;
+  max-width: 1312px;
+  height: 255px;
+}
+
+.title {
+  font-size: 42px;
+}
+
+.text {
+  font-size: 18px;
+}

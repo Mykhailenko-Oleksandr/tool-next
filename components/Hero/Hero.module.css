@@ -1,6 +1,6 @@
 .hero {
-  background: url("/images/hero-mob.jpg") center/cover no-repeat;
-  padding: 42px 0 42px 0; /* Без ошибки: нижний паддинг увеличен на 18px */
+  background: url("/images/hero-mob.webp") center/cover no-repeat;
+  padding: 42px 0 42px 0;
   margin: 0 auto;
   width: 100%;
   cursor: default;
@@ -13,14 +13,14 @@
   (min-resolution: 192dpi),
   (-webkit-min-device-pixel-ratio: 2) {
   .hero {
-    background: url("/images/hero-mob@2x.jpg") center/cover no-repeat;
+    background: url("/images/hero-mob@2x.webp") center/cover no-repeat;
   }
 }
 
 @media only screen and (min-width: 768px) {
   .hero {
-    background: url("/images/hero-tab.jpg") center/cover no-repeat;
-    padding: 103px 0 77px 0; /* Без ошибки: нижний паддинг увеличен на 18px */
+    background: url("/images/hero-tab.webp") center/cover no-repeat;
+    padding: 103px 0 77px 0;
     cursor: default;
     transition:
       padding-top 500ms cubic-bezier(0.4, 0, 0.2, 1),
@@ -31,14 +31,14 @@
     (min-resolution: 192dpi),
     (-webkit-min-device-pixel-ratio: 2) {
     .hero {
-      background: url("/images/hero-tab@2x.jpg") center/cover no-repeat;
+      background: url("/images/hero-tab@2x.webp") center/cover no-repeat;
     }
   }
 }
 
 @media only screen and (min-width: 1440px) {
   .hero {
-    background: url("/images/hero-desk.jpg") center/cover no-repeat;
+    background: url("/images/hero-desk.webp") center/cover no-repeat;
     padding: 192px 0 163px 0;
     cursor: default;
     transition:
@@ -50,7 +50,7 @@
     (min-resolution: 192dpi),
     (-webkit-min-device-pixel-ratio: 2) {
     .hero {
-      background: url("/images/hero-desk@2x.jpg") center/cover no-repeat;
+      background: url("/images/hero-desk@2x.webp") center/cover no-repeat;
     }
   }
 }

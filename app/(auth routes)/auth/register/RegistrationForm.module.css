@@ -6,12 +6,19 @@
   flex: 1;
 }
 
-.logoLink {
+.leftBoxContent {
+  height: 100vh;
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.logoLink {
+  display: inline-flex;
   align-items: center;
-  padding-top: 26px;
+  padding: 26px 8px;
   margin-left: 5px;
-  padding-bottom: 26px;
+  width: fit-content;
 }
 
 .logo {
@@ -159,6 +166,7 @@
   }
 
   .formImg {
+    margin: auto;
     display: block;
   }
 

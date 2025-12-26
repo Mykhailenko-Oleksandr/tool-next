@@ -3,7 +3,13 @@ import { cookies } from "next/headers";
 import { parse } from "cookie";
 import { checkSession } from "./lib/api/serverApi";
 
-const privateRoutes = ["/profile"];
+const privateRoutes = [
+  "/profile",
+  "/tools/new",
+  "/tools/edit",
+  "/tools/booking",
+  "/confirm",
+];
 const authRoutes = ["/auth/login", "/auth/register"];
 
 export async function middleware(request: NextRequest) {
@@ -20,6 +26,7 @@ export async function middleware(request: NextRequest) {
   if (!accessToken) {
     if (refreshToken) {
       const data = await checkSession();
+
       const setCookie = data.headers["set-cookie"];
 
       if (setCookie) {
@@ -35,6 +42,8 @@ export async function middleware(request: NextRequest) {
             cookieStore.set("accessToken", parsed.accessToken, options);
           if (parsed.refreshToken)
             cookieStore.set("refreshToken", parsed.refreshToken, options);
+          if (parsed.sessionId)
+            cookieStore.set("sessionId", parsed.sessionId, options);
         }
         if (isAuthRoute) {
           return NextResponse.redirect(new URL("/", request.url), {
@@ -70,5 +79,13 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/profile", "/auth/login", "/auth/register"],
+  matcher: [
+    "/profile",
+    "/tools/new/:path*",
+    "/tools/edit/:path*",
+    "/tools/booking/:path*",
+    "/confirm/:path*",
+    "/auth/login",
+    "/auth/register",
+  ],
 };

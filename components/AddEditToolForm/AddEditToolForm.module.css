@@ -52,6 +52,7 @@
 }
 
 .form-group {
+  position: relative;
   display: flex;
   flex-direction: column;
 }
@@ -60,7 +61,7 @@
   font-weight: 400;
   font-size: 18px;
   line-height: 1.5;
-  color: #000;
+  color: var(--color-neutral-darkest);
   margin-bottom: 8px;
 }
 
@@ -71,7 +72,7 @@
   padding: 8px 12px;
   width: 100%;
   height: 44px;
-  background: rgba(255, 255, 255, 0);
+  background: var(--opacity-transparent);
   outline: none;
   transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
   font-family: inherit;
@@ -87,7 +88,7 @@
   padding: 12px;
   width: 100%;
   height: 180px;
-  background: rgba(255, 255, 255, 0);
+  background: var(--opacity-transparent);
   outline: none;
   transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
   font-family: inherit;
@@ -99,6 +100,7 @@
 }
 
 .textarea-rental-terms {
+  position: relative;
   height: 80px;
 }
 
@@ -107,7 +109,19 @@
   font-weight: 400;
   font-size: 16px;
   line-height: 1.5;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--opacity-neutral-darkest-60);
+}
+
+.hint {
+  position: absolute;
+  left: 13px;
+  top: 49px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--opacity-neutral-darkest-60);
+  pointer-events: none;
+  white-space: pre-line;
 }
 
 .input:focus,
@@ -122,8 +136,8 @@
 .input.input-error:focus,
 .select.input-error:focus,
 .textarea.input-error:focus {
-  border: 2px solid #c40202;
-  color: #c40202;
+  border: 2px solid var(--color-red-dark);
+  color: var(--color-red-dark);
 }
 
 .input[type="number"]::-webkit-outer-spin-button,
@@ -155,7 +169,7 @@
   font-weight: 400;
   font-size: 12px;
   line-height: 1.5;
-  color: #c40202;
+  color: var(--color-red-dark);
   overflow: hidden;
 }
 
@@ -203,7 +217,7 @@
   height: 223px;
   border: 2px dashed var(--color-neutral-darkest);
   border-radius: 16px;
-  background: var(--color-neutral-lightest) url("/images/blank-image-mob.jpg")
+  background: var(--color-neutral-lightest) url("/images/blank-image-mob.webp")
     center/cover no-repeat;
   cursor: pointer;
   transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -348,7 +362,7 @@
     width: 704px;
     height: 468px;
     border-radius: 16px;
-    background-image: url("/images/blank-image-tab.jpg");
+    background-image: url("/images/blank-image-tab.webp");
   }
 
   .image-preview {
@@ -392,7 +406,7 @@
   .image-placeholder {
     width: 865px;
     height: 576px;
-    background-image: url("/images/blank-image-desk.jpg");
+    background-image: url("/images/blank-image-desk.webp");
   }
 
   .image-preview {
