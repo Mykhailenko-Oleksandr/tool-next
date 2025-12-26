@@ -9,6 +9,7 @@ import { bookingTool } from "@/lib/api/clientApi";
 import toast from "react-hot-toast";
 import { redirect } from "next/navigation";
 import { useBookingDraftStore } from "@/lib/store/bookingStore";
+import DateRangeCalendar from "../DateRangeCalendar/DateRangeCalendar";
 import { ApiError } from "@/app/api/api";
 import DateRangeCalendar from "../DateRangeCalendar/DateRangeCalendar";
 
@@ -94,8 +95,8 @@ export default function BookingToolForm({ tool }: Props) {
 
       toast.error(
         err.response?.data?.response?.validation?.body?.message ||
-          err.response?.data?.response?.message ||
-          err.message
+        err.response?.data?.response?.message ||
+        err.message
       );
     }
   };
@@ -110,7 +111,11 @@ export default function BookingToolForm({ tool }: Props) {
       {({ values, setFieldValue }) => {
         const totalPrice =
           values.startDate && values.endDate
-            ? getDaysCount(values.startDate, values.endDate) * tool.pricePerDay
+            ? Math.max(
+              0,
+              getDaysCount(values.startDate, values.endDate) *
+              tool.pricePerDay
+            )
             : 0;
         return (
           <Form className={css.form}>
@@ -149,73 +154,130 @@ export default function BookingToolForm({ tool }: Props) {
               </div>
             </div>
 
-            {/* Phone */}
-            <div className={css.field}>
-              <label className={css.label}>Номер телефону</label>
-              <Field
-                name="phone"
-                placeholder="+38 (XXX) XXX XX XX"
-                className={css.input}
-                onChange={handleChange}
-              />
-              <ErrorMessage
-                name="phone"
-                component="span"
-                className={css.error}
-              />
-            </div>
+              {/* Телефон */}
+              <fieldset className={`${css.fieldset} ${css.single}`}>
+                <div className={css.control}>
+                  <label htmlFor={`${fieldId}-phone`} className={css.label}>
+                    Номер телефону
+                  </label>
+                  <Field
+                    type="tel"
+                    name="phone"
+                    placeholder="+38 (XXX) XXX XX XX"
+                    id={`${fieldId}-phone`}
+                    className={css.input}
+                    onChange={handleChange}
+                  />
+                  <ErrorMessage
+                    name="phone"
+                    component="span"
+                    className={css.error}
+                  />
+                </div>
+              </fieldset>
 
-            {/* Calendar */}
-            <div className={css.calendarSection}>
-              <p className={css.calendarLabel}>Виберіть період бронювання</p>
-              <DateRangeCalendar
-                startDate={values.startDate ? new Date(values.startDate) : null}
-                endDate={values.endDate ? new Date(values.endDate) : null}
-                onRangeChange={(start, end) => {
-                  const formatDate = (date: Date) => {
-                    const year = date.getFullYear();
-                    const month = String(date.getMonth() + 1).padStart(2, "0");
-                    const day = String(date.getDate()).padStart(2, "0");
-                    return `${year}-${month}-${day}`;
-                  };
-                  setFieldValue("startDate", start ? formatDate(start) : "");
-                  setFieldValue("endDate", end ? formatDate(end) : "");
-                }}
-              />
-            </div>
+              {/* Дати */}
+              <fieldset className={css.fieldset}>
+                <div className={css.control}>
+                  <label htmlFor={`${fieldId}-startDate`} className={css.label}>
+                    Дата початку
+                  </label>
+                  <Field
+                    type="date"
+                    name="startDate"
+                    id={`${fieldId}-startDate`}
+                    className={css.input}
+                    onChange={handleChange}
+                  />
+                  <ErrorMessage
+                    name="startDate"
+                    component="span"
+                    className={css.error}
+                  />
+                </div>
+                <div className={css.control}>
+                  <label htmlFor={`${fieldId}-endDate`} className={css.label}>
+                    Дата завершення
+                  </label>
+                  <Field
+                    type="date"
+                    name="endDate"
+                    id={`${fieldId}-endDate`}
+                    className={css.input}
+                    onChange={handleChange}
+                  />
+                  <ErrorMessage
+                    name="endDate"
+                    component="span"
+                    className={css.error}
+                  />
+                </div>
+              </fieldset>
 
-            {/* Delivery */}
-            <div className={css.grid}>
-              <div className={css.field}>
-                <label className={css.label}>Місто доставки</label>
-                <Field
-                  name="deliveryCity"
-                  placeholder="Ваше місто"
-                  className={css.input}
-                  onChange={handleChange}
-                />
-                <ErrorMessage
-                  name="deliveryCity"
-                  component="span"
-                  className={css.error}
+              {/* Calendar */}
+              <div className={css.calendarSection}>
+                <p className={css.calendarLabel}>Виберіть період бронювання</p>
+                <DateRangeCalendar
+                  startDate={values.startDate ? new Date(values.startDate) : null}
+                  endDate={values.endDate ? new Date(values.endDate) : null}
+                  onRangeChange={(start, end) => {
+                    const formatDate = (date: Date) => {
+                      const year = date.getFullYear();
+                      const month = String(date.getMonth() + 1).padStart(2, "0");
+                      const day = String(date.getDate()).padStart(2, "0");
+                      return `${year}-${month}-${day}`;
+                    };
+                    setFieldValue("startDate", start ? formatDate(start) : "");
+                    setFieldValue("endDate", end ? formatDate(end) : "");
+                  }}
                 />
               </div>
 
-              <div className={css.field}>
-                <label className={css.label}>Відділення Нової Пошти</label>
-                <Field
-                  name="deliveryBranch"
-                  placeholder="24"
-                  className={css.input}
-                  onChange={handleChange}
-                />
-                <ErrorMessage
-                  name="deliveryBranch"
-                  component="span"
-                  className={css.error}
-                />
-              </div>
-            </div>
+              {/* Місто + Відділення */}
+              <fieldset className={css.fieldset}>
+                <div className={css.control}>
+                  <label
+                    htmlFor={`${fieldId}-deliveryCity`}
+                    className={css.label}
+                  >
+                    Місто доставки
+                  </label>
+                  <Field
+                    type="text"
+                    name="deliveryCity"
+                    placeholder="Ваше місто"
+                    id={`${fieldId}-deliveryCity`}
+                    className={css.input}
+                    onChange={handleChange}
+                  />
+                  <ErrorMessage
+                    name="deliveryCity"
+                    component="span"
+                    className={css.error}
+                  />
+                </div>
+                <div className={css.control}>
+                  <label
+                    htmlFor={`${fieldId}-deliveryBranch`}
+                    className={css.label}
+                  >
+                    Відділення Нової Пошти
+                  </label>
+                  <Field
+                    type="text"
+                    name="deliveryBranch"
+                    placeholder="24"
+                    id={`${fieldId}-deliveryBranch`}
+                    className={css.input}
+                    onChange={handleChange}
+                  />
+                  <ErrorMessage
+                    name="deliveryBranch"
+                    component="span"
+                    className={css.error}
+                  />
+                </div>
+              </fieldset>
 
             {/* Footer */}
             <div className={css.footer}>
