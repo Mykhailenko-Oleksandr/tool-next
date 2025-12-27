@@ -36,6 +36,19 @@ export default function ProfileClient({ user }: ProfileClientProps) {
 
   const tools: Tool[] = data?.pages.flatMap((page) => page.tools) ?? [];
 
+  const handleLoadMore = () => {
+    const currentScrollPosition = window.pageYOffset;
+
+    fetchNextPage().then(() => {
+      setTimeout(() => {
+        window.scrollTo({
+          top: currentScrollPosition + 600,
+          behavior: "smooth",
+        });
+      }, 100);
+    });
+  };
+
   return (
     <section className={css.profilePage}>
       <div className="container">
@@ -56,7 +69,7 @@ export default function ProfileClient({ user }: ProfileClientProps) {
 
             {hasNextPage && (
               <LoadMoreButton
-                onClick={() => fetchNextPage()}
+                onClick={handleLoadMore}
                 disabled={isFetchingNextPage}
                 loading={isFetchingNextPage}
               />

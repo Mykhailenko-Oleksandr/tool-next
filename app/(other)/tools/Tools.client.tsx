@@ -8,11 +8,11 @@ import ToolGrid from "@/components/ToolGrid/ToolGrid";
 import LoadMoreButton from "@/components/LoadMoreButton/LoadMoreButton";
 import FilterBar from "@/components/FilterBar/FilterBar";
 import EmptyToolCard from "@/components/EmptyToolCard/EmptyToolCard";
+import Loader from "@/components/Loader/Loader";
 
 import { fetchTools } from "@/lib/api/clientApi";
 import { Tool } from "@/types/tool";
 import { Category } from "@/types/category";
-import Loader from "@/components/Loader/Loader";
 
 interface Props {
   categories: Category[];
@@ -24,8 +24,8 @@ export default function ToolsClient({ categories, initialSearch }: Props) {
   const searchParams = useSearchParams();
 
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
-  const [perPage, setPerPage] = useState(16);
   const [searchValue, setSearchValue] = useState(initialSearch);
+  const [perPage, setPerPage] = useState<number | null>(null);
 
   useEffect(() => {
     const urlSearch = searchParams.get("search") ?? "";
@@ -33,13 +33,8 @@ export default function ToolsClient({ categories, initialSearch }: Props) {
   }, [searchParams]);
 
   useEffect(() => {
-    const updatePerPage = () => {
-      setPerPage(window.innerWidth < 1440 ? 8 : 16);
-    };
-
-    updatePerPage();
-    window.addEventListener("resize", updatePerPage);
-    return () => window.removeEventListener("resize", updatePerPage);
+    const value = window.innerWidth < 1440 ? 8 : 16;
+    setPerPage(value);
   }, []);
 
   const categoryIds = useMemo(
@@ -51,11 +46,12 @@ export default function ToolsClient({ categories, initialSearch }: Props) {
 
   const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =
     useInfiniteQuery({
+      enabled: perPage !== null,
       queryKey: ["tools", searchQuery, categoryIds, perPage],
       queryFn: ({ pageParam = 1 }) =>
         fetchTools({
           page: pageParam,
-          perPage,
+          perPage: perPage!,
           search: searchQuery,
           categories: categoryIds,
         }),
@@ -81,6 +77,23 @@ export default function ToolsClient({ categories, initialSearch }: Props) {
     router.replace("/tools");
   };
 
+  if (perPage === null) {
+    return <Loader />;
+  }
+
+  const handleLoadMore = () => {
+    const currentScrollPosition = window.pageYOffset;
+
+    fetchNextPage().then(() => {
+      setTimeout(() => {
+        window.scrollTo({
+          top: currentScrollPosition + 600,
+          behavior: "smooth",
+        });
+      }, 100);
+    });
+  };
+
   return (
     <div>
       <FilterBar
@@ -91,7 +104,7 @@ export default function ToolsClient({ categories, initialSearch }: Props) {
       />
 
       {isLoading ? (
-        <div>Завантаження...</div>
+        <Loader />
       ) : tools.length > 0 ? (
         <ToolGrid tools={tools} />
       ) : (
@@ -107,7 +120,7 @@ export default function ToolsClient({ categories, initialSearch }: Props) {
 
       {hasNextPage && (
         <LoadMoreButton
-          onClick={() => fetchNextPage()}
+          onClick={handleLoadMore}
           disabled={isFetching}
           loading={isFetching}
         />
