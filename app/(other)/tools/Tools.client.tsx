@@ -15,115 +15,116 @@ import { Tool } from "@/types/tool";
 import { Category } from "@/types/category";
 
 interface Props {
-	categories: Category[];
-	initialSearch: string;
+  categories: Category[];
+  initialSearch: string;
 }
 
 export default function ToolsClient({ categories, initialSearch }: Props) {
-	const router = useRouter();
-	const searchParams = useSearchParams();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-	const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
-	const [searchValue, setSearchValue] = useState(initialSearch);
-	const [perPage, setPerPage] = useState<number | null>(null);
+  const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
+  const [searchValue, setSearchValue] = useState(initialSearch);
+  const [perPage, setPerPage] = useState<number | null>(null);
 
-	useEffect(() => {
-		const urlSearch = searchParams.get("search") ?? "";
-		setSearchValue(urlSearch);
-	}, [searchParams]);
+  useEffect(() => {
+    const urlSearch = searchParams.get("search") ?? "";
+    setSearchValue(urlSearch);
+  }, [searchParams]);
 
-	useEffect(() => {
-		const value = window.innerWidth < 1440 ? 8 : 16;
-		setPerPage(value);
-	}, []);
+  useEffect(() => {
+    const value = window.innerWidth < 1440 ? 8 : 16;
+    setPerPage(value);
+  }, []);
 
-	const categoryIds = useMemo(
-		() => selectedCategories.map((c) => c._id),
-		[selectedCategories]
-	);
+  const categoryIds = useMemo(
+    () => selectedCategories.map((c) => c._id),
+    [selectedCategories]
+  );
 
-	const searchQuery = selectedCategories.length > 0 ? "" : searchValue;
+  const searchQuery = selectedCategories.length > 0 ? "" : searchValue;
 
-	const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =
-		useInfiniteQuery({
-			enabled: perPage !== null,
-			queryKey: ["tools", searchQuery, categoryIds, perPage],
-			queryFn: ({ pageParam = 1 }) =>
-				fetchTools({
-					page: pageParam,
-					perPage: perPage!,
-					search: searchQuery,
-					categories: categoryIds,
-				}),
-			initialPageParam: 1,
-			getNextPageParam: (lastPage, pages) =>
-				pages.length < lastPage.totalPages ? pages.length + 1 : undefined,
-		});
+  const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =
+    useInfiniteQuery({
+      enabled: perPage !== null,
+      queryKey: ["tools", searchQuery, categoryIds, perPage],
+      queryFn: ({ pageParam = 1 }) =>
+        fetchTools({
+          page: pageParam,
+          perPage: perPage!,
+          search: searchQuery,
+          categories: categoryIds,
+        }),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage, pages) =>
+        pages.length < lastPage.totalPages ? pages.length + 1 : undefined,
+    });
 
-	const tools: Tool[] = data?.pages.flatMap((page) => page.tools) ?? [];
+  const tools: Tool[] = data?.pages.flatMap((page) => page.tools) ?? [];
 
-	const handleCategoryChange = (newSelected: Category[]) => {
-		setSelectedCategories(newSelected);
-		setSearchValue("");
+  const handleCategoryChange = (newSelected: Category[]) => {
+    setSelectedCategories(newSelected);
+    setSearchValue("");
 
-		if (searchParams.get("search")) {
-			router.replace("/tools");
-		}
-	};
+    if (searchParams.get("search")) {
+      router.replace("/tools");
+    }
+  };
 
-	const handleResetFilters = () => {
-		setSelectedCategories([]);
-		setSearchValue("");
-		router.replace("/tools");
-	};
+  const handleResetFilters = () => {
+    setSelectedCategories([]);
+    setSearchValue("");
+    router.replace("/tools");
+  };
 
-	if (perPage === null) {
-		return <Loader />;
-	}
+  if (perPage === null) {
+    return <Loader />;
+  }
 
-	const handleLoadMore = () => {
-		const currentScrollPosition = window.pageYOffset;
+  const handleLoadMore = () => {
+    const currentScrollPosition = window.pageYOffset;
 
-		fetchNextPage().then(() => {
-			setTimeout(() => {
-				window.scrollTo({
-					top: currentScrollPosition + 500,
-					behavior: "smooth",
-				});
-			}, 100);
-		});
-	};
+    fetchNextPage().then(() => {
+      setTimeout(() => {
+        window.scrollTo({
+          top: currentScrollPosition + 600,
+          behavior: "smooth",
+        });
+      }, 100);
+    });
+  };
 
-	return (
-		<div>
-			<FilterBar
-				categories={categories}
-				selectedCategories={selectedCategories}
-				onChange={handleCategoryChange}
-				onReset={handleResetFilters}
-			/>
+  return (
+    <div>
+      <FilterBar
+        categories={categories}
+        selectedCategories={selectedCategories}
+        onChange={handleCategoryChange}
+        onReset={handleResetFilters}
+      />
 
-			{isLoading ? (
-				<Loader />
-			) : tools.length > 0 ? (
-				<ToolGrid tools={tools} />
-			) : (
-				!isFetching && (
-					<EmptyToolCard
-						searchQuery={searchQuery}
-						categoryName={selectedCategories.map((c) => c.title).join(", ")}
-					/>
-				)
-			)}
+      {isLoading ? (
+        <Loader />
+      ) : tools.length > 0 ? (
+        <ToolGrid tools={tools} />
+      ) : (
+        !isFetching && (
+          <EmptyToolCard
+            searchQuery={searchQuery}
+            categoryName={selectedCategories.map((c) => c.title).join(", ")}
+          />
+        )
+      )}
 
-			{hasNextPage && (
-				<LoadMoreButton
-					// onClick={() => fetchNextPage()}
-					onClick={handleLoadMore}
-					disabled={isFetching}
-					loading={isFetching}
-				/>
-			)}
-		</div>
-	);
+      {isFetching && <Loader />}
+
+      {hasNextPage && (
+        <LoadMoreButton
+          onClick={handleLoadMore}
+          disabled={isFetching}
+          loading={isFetching}
+        />
+      )}
+    </div>
+  );
 }
