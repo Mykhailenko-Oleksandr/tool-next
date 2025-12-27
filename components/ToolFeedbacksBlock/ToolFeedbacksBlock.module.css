@@ -1,0 +1,130 @@
+.container {
+  max-width: 375px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.sectionWrapper {
+  padding: 32px 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.title {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--color-neutral-darkest);
+  margin: 0;
+  padding: 0;
+}
+
+.addFeedbackButton {
+  font-weight: 500;
+  font-size: 16px;
+  border: 2px solid var(--color-neutral-darkest);
+  border-radius: 6px;
+  padding: 7px 19px;
+  transition: color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.addFeedbackButton:hover,
+.addFeedbackButton:focus {
+  border-color: var(--color-neutral-darkest);
+  background-color: var(--color-electric-violet-lighter);
+}
+
+.addFeedbackButton:active {
+  color: var(--color-white);
+  border-color: var(--color-white);
+  background-color: var(--color-electric-violet);
+}
+
+.addFeedbackButton:disabled {
+  opacity: 0.4;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+}
+
+.emptyTitle {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  color: var(--color-neutral-darkest);
+  padding-top: 40px;
+  margin: 0;
+}
+
+.emptyTitleMobile {
+  display: inline;
+}
+
+.emptyTitleDesktop {
+  display: none;
+}
+
+.emptyText {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color-neutral-darkest);
+  padding-top: 16px;
+  margin: 0;
+}
+
+@media only screen and (min-width: 768px) {
+  .container {
+    max-width: 768px;
+    padding: 0 32px;
+  }
+
+  .sectionWrapper {
+    padding: 32px 0;
+  }
+
+  .title {
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--color-neutral-darkest);
+  }
+}
+
+@media only screen and (min-width: 1440px) {
+  .container {
+    max-width: 1440px;
+    padding: 0 64px;
+  }
+
+  .title {
+    font-weight: 700;
+    font-size: 42px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--color-neutral-darkest);
+  }
+
+  .emptyTitleMobile {
+    display: none;
+  }
+
+  .emptyTitleDesktop {
+    display: inline;
+  }
+}
+
+

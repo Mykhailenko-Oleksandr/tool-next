@@ -5,7 +5,7 @@ import {
   HydrationBoundary,
 } from "@tanstack/react-query";
 import ToolDetailsClient from "./ToolDetails.client";
-import { fetchToolById } from "@/lib/api/clientApi";
+import { fetchToolById, fetchToolByIdWithFeedbacks } from "@/lib/api/clientApi";
 
 interface Props {
   params: Promise<{
@@ -15,7 +15,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { toolId } = await params;
-  const tool = await fetchToolById(toolId);
+  const tool = await fetchToolById(toolId); // Метаданные без отзывов (не нужны для SEO)
 
   return {
     title: tool.name,
@@ -40,8 +40,8 @@ export default async function ToolDetailsPage({ params }: Props) {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ["tool", toolId],
-    queryFn: () => fetchToolById(toolId),
+    queryKey: ["tool", toolId, "withFeedbacks"],
+    queryFn: () => fetchToolByIdWithFeedbacks(toolId), // V2807: Prefetch с отзывами
   });
 
   return (

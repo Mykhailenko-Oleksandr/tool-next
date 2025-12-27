@@ -151,8 +151,19 @@ export async function deleteTool(id: string) {
   return res.data;
 }
 
-export async function fetchToolById(id: string) {
+export async function fetchToolById(
+  id: string
+) {
+  // V2807: "Старая" функция — без populate отзывов. Возвращает инструмент как есть (feedbacks может быть массивом ID).
   const response = await nextServer.get<Tool>(`/tools/${id}`);
+  return response.data;
+}
+
+export async function fetchToolByIdWithFeedbacks(id: string) {
+  // V2807: Новая функция — явный запрос populated отзывов (feedbacks как объекты).
+  const response = await nextServer.get<Tool>(`/tools/${id}`, {
+    params: { populateFeedbacks: "true" },
+  });
   return response.data;
 }
 
@@ -208,6 +219,18 @@ export async function fetchFeedbacks(page?: number, perPage?: number) {
     },
   });
   return response.data.feedbacks;
+}
+
+export interface CreateFeedbackData {
+  name: string;
+  description: string;
+  rate: number;
+  toolId?: string;
+}
+
+export async function createFeedback(data: CreateFeedbackData) {
+  const response = await nextServer.post<Feedback>("/feedbacks", data);
+  return response.data;
 }
 
 export async function getCategories() {
