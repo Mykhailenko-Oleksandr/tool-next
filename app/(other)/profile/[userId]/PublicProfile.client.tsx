@@ -12,58 +12,70 @@ import Loader from "@/components/Loader/Loader";
 import PublicProfilePlaceholder from "@/components/PublicProfilePlaceholder/PublicProfilePlaceholder";
 
 interface ProfileClientProps {
-  user: User;
+	user: User;
 }
 
 export default function PublicProfileClient({ user }: ProfileClientProps) {
-  const {
-    data,
-    isLoading,
-    isFetchingNextPage,
-    isError,
-    fetchNextPage,
-    hasNextPage,
-  } = useInfiniteQuery({
-    queryKey: ["tools", user._id],
-    queryFn: ({ pageParam = 1 }) => fetchToolsUserId(user._id, pageParam),
-    getNextPageParam: (lastPage) => {
-      return lastPage.page < lastPage.totalPages
-        ? lastPage.page + 1
-        : undefined;
-    },
-    initialPageParam: 1,
-  });
+	const {
+		data,
+		isLoading,
+		isFetchingNextPage,
+		isError,
+		fetchNextPage,
+		hasNextPage,
+	} = useInfiniteQuery({
+		queryKey: ["tools", user._id],
+		queryFn: ({ pageParam = 1 }) => fetchToolsUserId(user._id, pageParam),
+		getNextPageParam: (lastPage) => {
+			return lastPage.page < lastPage.totalPages
+				? lastPage.page + 1
+				: undefined;
+		},
+		initialPageParam: 1,
+	});
 
-  const tools: Tool[] = data?.pages.flatMap((page) => page.tools) ?? [];
+	const tools: Tool[] = data?.pages.flatMap((page) => page.tools) ?? [];
+	const handleLoadMore = () => {
+		const currentScrollPosition = window.pageYOffset;
 
-  return (
-    <section className={css.profilePage}>
-      <div className="container">
-        <UserProfile user={user} />
-        <div className={css.titleWrap}>
-          <h2 className={css.profileToolsTitle}>Інструменти</h2>
-        </div>
+		fetchNextPage().then(() => {
+			setTimeout(() => {
+				window.scrollTo({
+					top: currentScrollPosition + 500,
+					behavior: "smooth",
+				});
+			}, 100);
+		});
+	};
 
-        {!isLoading && tools.length === 0 && <PublicProfilePlaceholder />}
+	return (
+		<section className={css.profilePage}>
+			<div className="container">
+				<UserProfile user={user} />
+				<div className={css.titleWrap}>
+					<h2 className={css.profileToolsTitle}>Інструменти</h2>
+				</div>
 
-        {isLoading && <Loader />}
-        {isError && !data && <p>Щось пішло не так... Спробуйте ще.</p>}
-        {isFetchingNextPage && !isLoading && <Loader />}
+				{!isLoading && tools.length === 0 && <PublicProfilePlaceholder />}
 
-        {tools.length > 0 && (
-          <>
-            <ToolGrid tools={tools} />
+				{isLoading && <Loader />}
+				{isError && !data && <p>Щось пішло не так... Спробуйте ще.</p>}
+				{isFetchingNextPage && !isLoading && <Loader />}
 
-            {hasNextPage && (
-              <LoadMoreButton
-                onClick={() => fetchNextPage()}
-                disabled={isFetchingNextPage}
-                loading={isFetchingNextPage}
-              />
-            )}
-          </>
-        )}
-      </div>
-    </section>
-  );
+				{tools.length > 0 && (
+					<>
+						<ToolGrid tools={tools} />
+
+						{hasNextPage && (
+							<LoadMoreButton
+								onClick={handleLoadMore}
+								disabled={isFetchingNextPage}
+								loading={isFetchingNextPage}
+							/>
+						)}
+					</>
+				)}
+			</div>
+		</section>
+	);
 }
