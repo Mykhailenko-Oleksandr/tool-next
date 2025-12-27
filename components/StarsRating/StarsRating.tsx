@@ -6,6 +6,7 @@ import css from "./StarsRating.module.css";
 
 interface PropsRating {
   rating: number;
+  onChange?: (value: number) => void;
 }
 
 const CustomStar = (
@@ -23,13 +24,15 @@ const myStyles = {
   inactiveStrokeColor: "var(--color-scheme-1-text)",
 };
 
-export default function StarsRating({ rating }: PropsRating) {
+export default function StarsRating({ rating, onChange }: PropsRating) {
   return (
     <Rating
       className={css.ratingBox}
       value={rating}
       itemStyles={myStyles}
-      readOnly
+      onChange={onChange} // якщо onChange не переданий — readOnly
+      readOnly={!onChange} // readOnly автоматично, якщо немає onChange
+      // підтримка дробових значень
     />
   );
 }

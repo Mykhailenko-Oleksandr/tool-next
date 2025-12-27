@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,7 +10,9 @@ import css from "./ToolDetailsPage.module.css";
 import { fetchToolById } from "@/lib/api/clientApi";
 import Loading from "@/app/loading";
 import Modal from "@/components/Modal/Modal";
-import ToolFeedbacksBlock from "../../../../components/FeedbacksBlock/ToolFeedbacksBlock";
+import ToolFeedbacksBlock from "@/components/ToolFeedbacksBlock/ToolFeedbacksBlock";
+import ToolInfoBlock from "../../../../components/ToolInfoBlock/ToolInfoBlock";
+import { useToolFeedbacks } from "@/lib/hooks/useFeedbacks";
 
 interface ToolDetailsClientProps {
   toolId: string;
@@ -31,6 +33,16 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
     refetchOnMount: false,
   });
 
+  // Підтягуємо відгуки для рейтингу і підрахунку кількості
+  const { data: feedbacks } = useToolFeedbacks(toolId);
+
+  // Рахуємо середній рейтинг та кількість відгуків
+  const { averageRating, feedbackCount } = useMemo(() => {
+    if (!feedbacks || feedbacks.length === 0) return { averageRating: 0, feedbackCount: 0 };
+    const total = feedbacks.reduce((acc, fb) => acc + fb.rate, 0);
+    return { averageRating: total / feedbacks.length, feedbackCount: feedbacks.length };
+  }, [feedbacks]);
+
   const handleBookClick = () => {
     if (isAuthenticated) {
       router.push(`/tools/booking/${toolId}`);
@@ -39,9 +51,7 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
     }
   };
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  if (isLoading) return <Loading />;
 
   if (error || !tool) {
     return (
@@ -137,9 +147,17 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
               <button type="button" className={css.bookButton} onClick={handleBookClick}>
                 Забронювати
               </button>
-
-              <ToolFeedbacksBlock toolId={tool._id} />
             </div>
+          </div>
+          <div className={css.detalisFeedbacks}>
+            <ToolFeedbacksBlock toolId={tool._id} />
+            <ToolInfoBlock
+              tool={{
+                ...tool,
+                averageRating,
+                feedbackCount,
+              }}
+            />
           </div>
         </div>
       </section>
