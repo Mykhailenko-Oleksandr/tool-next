@@ -61,20 +61,6 @@
   color: var(--color-red-dark);
   margin-top: 0;
 }
-.selectedDate {
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #ab52db;
-  border-radius: 6px 6px 0 0;
-  padding: 8px 12px;
-  height: 30px;
-  font-size: 16px;
-  font-weight: 400;
-  color: var(--color-scheme-1-text);
-  margin: 0;
-  background-color: #f3e6f9; /* той самий фон, що і календар */
-  /* border-bottom: 1px solid var(--color-scheme-1-border); */
-}
 
 .priceRow {
   display: flex;
@@ -219,4 +205,8 @@
 :global(.react-datepicker__current-month) {
   text-transform: capitalize; /* робить першу літеру великою */
 }
-
+:global(.react-datepicker__day) {
+  border: 1px solid var(--color-scheme-1-border);
+  box-sizing: border-box;
+  aspect-ratio: 1 / 1;
+}
