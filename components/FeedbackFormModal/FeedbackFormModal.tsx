@@ -12,9 +12,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuthStore } from "@/lib/store/authStore";
 import toast from "react-hot-toast";
 import styles from "./FeedbackFormModal.module.css";
-import InteractiveStarsRating from "@/components/InteractiveStarsRating/InteractiveStarsRating";
 import { createFeedback, CreateFeedbackData } from "@/lib/api/clientApi";
 import { ApiError } from "@/app/api/api";
+import StarsRating from "../StarsRating/StarsRating";
 
 interface FeedbackFormModalProps {
   isOpen: boolean;
@@ -200,7 +200,7 @@ export default function FeedbackFormModal({
           <div className={styles.formGroup}>
             <label className={styles.ratingLabel}>Оцінка</label>
             <div className={styles.ratingWrapper}>
-              <InteractiveStarsRating value={rate} onChange={setRate} />
+              <StarsRating rating={rate} onChange={setRate} />
             </div>
             {errors.rate && (
               <span className={styles.errorMessage}>{errors.rate}</span>
