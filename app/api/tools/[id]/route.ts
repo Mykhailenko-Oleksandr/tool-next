@@ -4,6 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { isAxiosError } from "axios";
 import { logErrorResponse } from "../../_utils/utils";
 
+// V2807: Этот роут — Next.js API прокси.
+// Важно прокидывать query-параметры на бэкенд (например, populateFeedbacks=true),
+// иначе бэкенд может вернуть feedbacks как массив ID вместо populated-объектов.
 type Props = {
   params: Promise<{ id: string }>;
 };
@@ -12,7 +15,13 @@ export async function GET(request: Request, { params }: Props) {
   try {
     const cookieStore = await cookies();
     const { id } = await params;
+
+    // V2807: Прокидываем query-параметры (например, populateFeedbacks=true) на бэкенд
+    const { searchParams } = new URL(request.url);
+    const forwardedParams = Object.fromEntries(searchParams.entries());
+
     const res = await api.get(`/tools/${id}`, {
+      params: Object.keys(forwardedParams).length > 0 ? forwardedParams : undefined,
       headers: {
         Cookie: cookieStore.toString(),
       },

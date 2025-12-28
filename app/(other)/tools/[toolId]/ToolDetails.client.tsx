@@ -1,15 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "@/lib/store/authStore";
+import toast from "react-hot-toast";
 import css from "./ToolDetailsPage.module.css";
-import { fetchToolById } from "@/lib/api/clientApi";
+import { fetchToolByIdWithFeedbacks } from "@/lib/api/clientApi";
 import Loading from "@/app/loading";
 import Modal from "@/components/Modal/Modal";
+import ToolInfoBlock from "@/components/ToolInfoBlock/ToolInfoBlock";
+import ToolFeedbacksBlock from "@/components/ToolFeedbacksBlock/ToolFeedbacksBlock";
+import FeedbackFormModal from "@/components/FeedbackFormModal/FeedbackFormModal";
+import { Feedback } from "@/types/feedback";
 
 interface ToolDetailsClientProps {
   toolId: string;
@@ -19,16 +24,17 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
   const router = useRouter();
   const { isAuthenticated, user } = useAuthStore();
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
 
   const {
     data: tool,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["tool", toolId],
-    queryFn: () => fetchToolById(toolId),
-    refetchOnMount: false,
+    queryKey: ["tool", toolId, "withFeedbacks"],
+    queryFn: () => fetchToolByIdWithFeedbacks(toolId), // V2807: явный запрос populated отзывов
   });
+
 
   const handleBookClick = () => {
     if (isAuthenticated) {
@@ -37,6 +43,39 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
       setShowAuthModal(true);
     }
   };
+
+  // Получаем отзывы из tool.feedbacks
+  // V2807: На этой странице tool загружается через fetchToolByIdWithFeedbacks(), поэтому feedbacks приходят populated-объектами.
+  const toolFeedbacks = useMemo(() => {
+    if (!tool?.feedbacks) return [];
+    
+    // Проверяем, является ли это массивом
+    if (!Array.isArray(tool.feedbacks)) {
+      return [];
+    }
+    
+    // Фильтруем только валидные отзывы (полные объекты с обязательными полями)
+    const filtered = tool.feedbacks
+      .filter((fb: unknown): fb is Feedback => {
+        if (typeof fb !== "object" || fb === null) {
+          return false;
+        }
+        // Если это строка (ID), пропускаем - значит populate не сработал
+        if (typeof fb === "string") {
+          return false;
+        }
+        // Проверяем наличие обязательных полей
+        return (
+          "_id" in fb &&
+          "rate" in fb &&
+          "description" in fb &&
+          "name" in fb
+        );
+      })
+      .map((fb) => fb as Feedback);
+    
+    return filtered;
+  }, [tool?.feedbacks]);
 
   if (isLoading) {
     return <Loading />;
@@ -84,6 +123,11 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
             <div className={css.details}>
               <h1 className={css.title}>{tool.name}</h1>
               <p className={css.price}>{tool.pricePerDay} грн/день</p>
+
+              <ToolInfoBlock
+                rating={tool.rating}
+                feedbacksCount={toolFeedbacks.length}
+              />
 
               <div className={css.ownerBlock}>
                 <div className={css.ownerInfo}>
@@ -155,6 +199,24 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
           </div>
         </div>
       </section>
+
+      <ToolFeedbacksBlock
+        feedbacks={toolFeedbacks}
+        onOpenFeedbackForm={() => {
+          if (isAuthenticated) {
+            setShowFeedbackModal(true);
+          } else {
+            toast.error("Спочатку авторизуйтесь для відправки відгуку");
+            setShowAuthModal(true);
+          }
+        }}
+      />
+
+      <FeedbackFormModal
+        isOpen={showFeedbackModal}
+        onClose={() => setShowFeedbackModal(false)}
+        toolId={toolId}
+      />
 
       {showAuthModal && (
         <Modal
