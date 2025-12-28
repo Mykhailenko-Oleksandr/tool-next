@@ -45,10 +45,6 @@
   cursor: not-allowed;
 }
 
-.placeholder {
-  color: var(--opacity-neutral-darkest-60);
-}
-
 .value {
   color: var(--color-neutral-darkest);
 }

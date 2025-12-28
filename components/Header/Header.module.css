@@ -193,6 +193,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  fill: var(--color-scheme-1-text);
 
   &:hover,
   &:focus {
@@ -209,7 +210,7 @@
   border: 2px solid var(--color-electric-violet);
   border-radius: 6px;
   background: var(--color-electric-violet);
-  color: var(--color-white);
+  color: var(--color-btn-white);
   font-family: var(--font-family);
   font-weight: 500;
   font-size: 16px;

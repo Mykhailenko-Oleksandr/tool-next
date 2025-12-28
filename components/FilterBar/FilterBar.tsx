@@ -93,18 +93,18 @@ export default function FilterBar({
 
 		placeholder: (base) => ({
 			...base,
-			color: "#000",
+			color: "var(--color-neutral-darkest)",
 		}),
 
 		multiValue: (base) => ({
 			...base,
-			backgroundColor: "#ede9fe",
+			backgroundColor: "var(--color-backgroun-filter)",
 			borderRadius: 6,
 		}),
 
 		multiValueLabel: (base) => ({
 			...base,
-			color: "#5b21b6",
+			color: "var(--color-backgroun-filter-text)",
 			fontWeight: 500,
 		}),
 
@@ -112,8 +112,8 @@ export default function FilterBar({
 			...base,
 			cursor: "pointer",
 			":hover": {
-				backgroundColor: "#8b5cf6",
-				color: "#fff",
+				backgroundColor: "var(--color-backgroun-filter-2)",
+				color: "var(--color-white)",
 			},
 		}),
 

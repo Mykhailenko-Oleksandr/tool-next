@@ -24,6 +24,7 @@
   --opacity-neutral-darkest-20: rgba(0, 0, 0, 0.2);
   --opacity-neutral-darkest-60: rgba(0, 0, 0, 0.6);
   --opacity-neutral-darkest-85: rgba(0, 0, 0, 0.85);
+  --opacity-neutral-darkest-1: rgba(0, 0, 0, 1);
   --color-electric-violet-lightest: #f3e6f9;
   --color-electric-violet-lighter: #e7cdf4;
   --color-electric-violet-light: #ab52db;
@@ -50,6 +51,11 @@
   --color-gradient-1: var(--color-neutral-lightest);
   --color-gradient-2: var(--color-neutral-lightest);
   --color-gradient-3: var(--color-neutral-lightest);
+  --color-btn-theme-dark: #1e1e1e;
+  --color-backgroun-filter: #ede9fe;
+  --color-backgroun-filter-2: #8b5cf6;
+  --color-backgroun-filter-text: #5b21b6;
+  --color-btn-white: var(--color-white);
 }
 
 /* =====================================
@@ -110,14 +116,14 @@ body.dark {
   --opacity-white-90: rgba(255, 255, 255, 0.9);
   --opacity-neutral-darkest-10: rgba(0, 0, 0, 0.1);
   --opacity-neutral-darkest-20: rgba(0, 0, 0, 0.2);
-  --opacity-neutral-darkest-60: rgba(0, 0, 0, 0.6);
+  --opacity-neutral-darkest-60: var(--opacity-white-60);
   --opacity-neutral-darkest-85: rgba(0, 0, 0, 0.85);
-  --color-electric-violet-lightest: #f3e6f9;
-  --color-electric-violet-lighter: #222222;
+  --color-electric-violet-lightest: var(--color-neutral-lightest);
+  --color-electric-violet-lighter: #282727;
   --color-electric-violet-light: #ab52db;
   --color-electric-violet: #8808cc;
   --color-electric-violet-dark: #6c06a3;
-  --color-scheme-2-background: var(--color-electric-violet-lightest);
+  --color-scheme-2-background: var(--opacity-neutral-darkest-20);
   --color-scheme-3-background: var(--color-neutral-lightest);
   --color-red-dark: #c40202;
   --color-red-light: #ea3131;
@@ -138,6 +144,15 @@ body.dark {
   --color-gradient-1: #1e1e1e;
   --color-gradient-2: #111;
   --color-gradient-3: #000;
+  --color-btn-theme-dark: var(--opacity-white-90);
+  --color-backgroun-filter: var(--color-neutral-dark);
+  --color-backgroun-filter-text: var(--color-neutral-darkest);
+
+  & .swiper-pagination-bullet,
+  & .swiper-pagination-bullet-active-next,
+  & .swiper-pagination-bullet-active {
+    background-color: var(--color-neutral-darkest);
+  }
 }
 
 /* =====================================
@@ -190,6 +205,17 @@ fieldset {
 
 input {
   font-family: inherit;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px var(--opacity-transparent) inset;
+  -webkit-text-fill-color: var(--color-neutral-darkest);
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 /* =====================================

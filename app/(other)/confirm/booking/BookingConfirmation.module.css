@@ -13,6 +13,7 @@
   padding: 32px 0;
   width: 100%;
   background: var(--color-scheme-3-background);
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .content {
@@ -60,11 +61,11 @@
   height: 40px;
 
   padding: 8px 20px;
-  border: 1px solid var(--color-electric-violet);
+  border: 2px solid var(--color-electric-violet);
   border-radius: 6px;
 
   background: var(--color-electric-violet);
-  color: var(--color-white);
+  color: var(--color-btn-white);
 
   font-family: "Inter", sans-serif;
   font-weight: 500;
@@ -73,7 +74,7 @@
 
   text-decoration: none;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 250ms ease;
 }
 
 .button:hover,

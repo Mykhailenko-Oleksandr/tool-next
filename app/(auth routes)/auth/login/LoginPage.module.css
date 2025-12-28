@@ -2,6 +2,10 @@
   display: none;
 }
 
+.pageWrapper {
+  background-color: var(--color-white);
+}
+
 .contentWrapper {
   flex: 1;
 }
@@ -15,6 +19,7 @@
 }
 
 .logo {
+  fill: var(--color-neutral-darkest);
   transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover,
@@ -55,6 +60,8 @@
   line-height: 1.5;
   padding: 12px;
   border: 2px solid var(--color-neutral-darkest);
+  background-color: var(--opacity-transparent);
+  color: var(--color-neutral-darkest);
   border-radius: 6px;
   height: 48px;
   outline: none;
@@ -81,7 +88,7 @@
 
 .btn {
   background: var(--color-electric-violet);
-  color: var(--color-white);
+  color: var(--color-btn-white);
   border: 2px solid var(--color-electric-violet);
   border-radius: 6px;
   padding: 9px 24px;

@@ -15,10 +15,10 @@
   &:focus {
     transform: scale(1.02);
     .image {
-      box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 1);
-      -webkit-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 1);
-      -moz-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 1);
-      outline: 1px solid black;
+      box-shadow: 0px 2px 15px 0px var(--opacity-neutral-darkest-1);
+      -webkit-box-shadow: 0px 2px 15px 0px var(--opacity-neutral-darkest-1);
+      -moz-box-shadow: 0px 2px 15px 0px var(--opacity-neutral-darkest-1);
+      outline: 1px solid var(--color-neutral-darkest);
     }
   }
 }
@@ -87,6 +87,7 @@
   justify-content: center;
   padding: 8px;
   border: 2px solid var(--color-neutral-darkest);
+  background-color: var(--opacity-transparent);
   border-radius: 6px;
 
   transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);

@@ -83,11 +83,12 @@
   background: var(--color-white);
   cursor: pointer;
   color: var(--color-neutral-darkest);
+  fill: var(--color-neutral-darkest);
   transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    border-radius 0.2s ease,
-    color 0.2s ease;
+    background-color 250ms ease,
+    border-color 250ms ease,
+    border-radius 250ms ease,
+    color 250ms ease;
 }
 
 .navBtn:hover,
