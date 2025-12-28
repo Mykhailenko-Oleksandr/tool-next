@@ -4,7 +4,6 @@ import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
 import css from "./InteractiveStarsRating.module.css";
 
-// V2807: Интерактивный рейтинг из 5 звёзд (используется внутри FeedbackFormModal).
 interface InteractiveStarsRatingProps {
   value: number;
   onChange: (value: number) => void;
@@ -17,7 +16,6 @@ const CustomStar = (
 const myStyles = {
   itemShapes: CustomStar,
   itemStrokeWidth: 2,
-  // V2807: активные/неактивные звёзды — как на проекте
   activeFillColor: "var(--color-scheme-1-text)",
   activeStrokeColor: "var(--color-scheme-1-text)",
   inactiveFillColor: "transparent",
@@ -38,5 +36,3 @@ export default function InteractiveStarsRating({
     />
   );
 }
-
-

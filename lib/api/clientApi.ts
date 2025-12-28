@@ -151,19 +151,8 @@ export async function deleteTool(id: string) {
   return res.data;
 }
 
-export async function fetchToolById(
-  id: string
-) {
-  // V2807: "Старая" функция — без populate отзывов. Возвращает инструмент как есть (feedbacks может быть массивом ID).
+export async function fetchToolById(id: string) {
   const response = await nextServer.get<Tool>(`/tools/${id}`);
-  return response.data;
-}
-
-export async function fetchToolByIdWithFeedbacks(id: string) {
-  // V2807: Новая функция — явный запрос populated отзывов (feedbacks как объекты).
-  const response = await nextServer.get<Tool>(`/tools/${id}`, {
-    params: { populateFeedbacks: "true" },
-  });
   return response.data;
 }
 
@@ -257,7 +246,7 @@ export async function updateTool(data: UpdateToolData) {
   if (toolData.description) {
     formData.append("description", toolData.description);
   }
-  // specifications всегда отправляем (даже если пустой объект)
+
   formData.append("specifications", JSON.stringify(data.specifications || {}));
   if (toolData.images) {
     formData.append("image", toolData.images);

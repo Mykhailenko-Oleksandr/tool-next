@@ -1,7 +1,13 @@
 "use client";
 
 import { createPortal } from "react-dom";
-import { useEffect, useState, useCallback, type MouseEvent, FormEvent } from "react";
+import {
+  useEffect,
+  useState,
+  useCallback,
+  type MouseEvent,
+  FormEvent,
+} from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuthStore } from "@/lib/store/authStore";
 import toast from "react-hot-toast";
@@ -10,8 +16,6 @@ import InteractiveStarsRating from "@/components/InteractiveStarsRating/Interact
 import { createFeedback, CreateFeedbackData } from "@/lib/api/clientApi";
 import { ApiError } from "@/app/api/api";
 
-// V2807: Модалка для отправки отзыва на странице деталей инструмента.
-// Валидирует форму, отправляет данные и инвалидирует react-query, чтобы страница обновилась.
 interface FeedbackFormModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -36,7 +40,6 @@ export default function FeedbackFormModal({
 
   const queryClient = useQueryClient();
 
-  // Автозаполнение имени из авторизованного пользователя
   useEffect(() => {
     if (isOpen && isAuthenticated && user?.name) {
       setName(user.name);
@@ -56,7 +59,7 @@ export default function FeedbackFormModal({
     onSuccess: () => {
       toast.success("Відгук успішно опубліковано!");
       handleClose();
-      // Инвалидируем кэш - React Query автоматически перезагрузит данные с правильным queryFn
+
       queryClient.invalidateQueries({
         queryKey: ["tool", toolId, "withFeedbacks"],
         exact: true,
@@ -66,8 +69,7 @@ export default function FeedbackFormModal({
     },
     onError: (error: unknown) => {
       const err = error as ApiError;
-      
-      // Проверка на ошибку авторизации
+
       if (err.response?.status === 401) {
         toast.error("Спочатку авторизуйтесь для відправки відгуку");
         handleClose();
@@ -151,11 +153,9 @@ export default function FeedbackFormModal({
           type="button"
           className={styles.closeBtn}
           onClick={handleClose}
-          aria-label="Закрити модалку">
-          <svg
-            width="32"
-            height="32"
-            viewBox="0 0 32 32">
+          aria-label="Закрити модалку"
+        >
+          <svg width="32" height="32" viewBox="0 0 32 32">
             <use href="/icons.svg#icon-close" />
           </svg>
         </button>
@@ -210,7 +210,8 @@ export default function FeedbackFormModal({
           <button
             type="submit"
             className={styles.submitButton}
-            disabled={mutation.isPending}>
+            disabled={mutation.isPending}
+          >
             {mutation.isPending ? "Відправка..." : "Надіслати"}
           </button>
         </form>
@@ -219,5 +220,3 @@ export default function FeedbackFormModal({
     document.body
   );
 }
-
-

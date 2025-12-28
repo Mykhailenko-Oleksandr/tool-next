@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "@/lib/store/authStore";
 import toast from "react-hot-toast";
 import css from "./ToolDetailsPage.module.css";
-import { fetchToolByIdWithFeedbacks } from "@/lib/api/clientApi";
+import { fetchToolById } from "@/lib/api/clientApi";
 import Loading from "@/app/loading";
 import Modal from "@/components/Modal/Modal";
 import ToolInfoBlock from "@/components/ToolInfoBlock/ToolInfoBlock";
@@ -32,9 +32,8 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
     error,
   } = useQuery({
     queryKey: ["tool", toolId, "withFeedbacks"],
-    queryFn: () => fetchToolByIdWithFeedbacks(toolId), // V2807: явный запрос populated отзывов
+    queryFn: () => fetchToolById(toolId),
   });
-
 
   const handleBookClick = () => {
     if (isAuthenticated) {
@@ -44,36 +43,27 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
     }
   };
 
-  // Получаем отзывы из tool.feedbacks
-  // V2807: На этой странице tool загружается через fetchToolByIdWithFeedbacks(), поэтому feedbacks приходят populated-объектами.
   const toolFeedbacks = useMemo(() => {
     if (!tool?.feedbacks) return [];
-    
-    // Проверяем, является ли это массивом
+
     if (!Array.isArray(tool.feedbacks)) {
       return [];
     }
-    
-    // Фильтруем только валидные отзывы (полные объекты с обязательными полями)
+
     const filtered = tool.feedbacks
       .filter((fb: unknown): fb is Feedback => {
         if (typeof fb !== "object" || fb === null) {
           return false;
         }
-        // Если это строка (ID), пропускаем - значит populate не сработал
         if (typeof fb === "string") {
           return false;
         }
-        // Проверяем наличие обязательных полей
         return (
-          "_id" in fb &&
-          "rate" in fb &&
-          "description" in fb &&
-          "name" in fb
+          "_id" in fb && "rate" in fb && "description" in fb && "name" in fb
         );
       })
       .map((fb) => fb as Feedback);
-    
+
     return filtered;
   }, [tool?.feedbacks]);
 

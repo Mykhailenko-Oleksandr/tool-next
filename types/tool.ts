@@ -1,3 +1,4 @@
+import { Feedback } from "./feedback";
 import { User } from "./user";
 export interface Tool {
   _id: string;
@@ -11,7 +12,7 @@ export interface Tool {
   specifications: object;
   rentalTerms: string;
   bookedDates?: BookedDate[] | [];
-  feedbacks: object[];
+  feedbacks: Feedback[] | [];
   createdAt?: string;
   updatedAt?: string;
 }
