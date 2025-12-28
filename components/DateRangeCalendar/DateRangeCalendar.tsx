@@ -186,8 +186,13 @@ export default function DateRangeCalendar({
         <table className={css.table}>
           <thead>
             <tr className={css.weekdays}>
-              <th>Пн</th> <th>Вт</th> <th>Ср</th> <th>Чт</th> <th>Пт</th>
-              <th>Сб</th> <th>Нд</th>
+              <th>Пн</th>
+              <th>Вт</th>
+              <th>Ср</th>
+              <th>Чт</th>
+              <th>Пт</th>
+              <th>Сб</th>
+              <th>Нд</th>
             </tr>
           </thead>
           <tbody>
