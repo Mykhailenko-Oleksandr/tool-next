@@ -62,15 +62,13 @@
   margin-top: 0;
 }
 
+.calendarSection {
+  position: relative;
+}
+
 .calendarHint {
   font-size: 14px;
   color: var(--color-scheme-1-text);
-  margin-top: 8px;
-}
-
-.calendarError {
-  font-size: 14px;
-  color: var(--color-red-dark);
   margin-top: 8px;
 }
 

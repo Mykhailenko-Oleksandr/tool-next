@@ -17,6 +17,6 @@ export interface Tool {
 }
 
 export interface BookedDate {
-  startDate: string;
   endDate: string;
+  startDate: string;
 }

@@ -54,7 +54,8 @@
   text-align: center;
   border: 1px solid black;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 16px;
+  color: var(--color-scheme-1-text);
 }
 
 .available:hover {
@@ -62,7 +63,7 @@
 }
 
 .selected {
-  background: #E7CDF4;
+  background: #e7cdf4;
   color: #333;
   border: 2px solid #c084fc;
 }
@@ -84,7 +85,7 @@
 }
 
 .reserved {
+  color: #a5b3bf;
   text-decoration: line-through;
-  color: #ff0000;
   cursor: not-allowed;
 }

@@ -4,7 +4,7 @@ import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
 import { useId } from "react";
 import * as Yup from "yup";
 import css from "./BookingToolForm.module.css";
-import { Tool } from "@/types/tool";
+import { BookedDate, Tool } from "@/types/tool";
 import { bookingTool } from "@/lib/api/clientApi";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -44,26 +44,43 @@ const BookingSchema = Yup.object().shape({
   phone: Yup.string()
     .matches(/^\+?[0-9]{10,15}$/, "Некоректний номер телефону")
     .required("Телефон обовʼязковий"),
-  startDate: Yup.date()
-    .min(
-      new Date().toISOString().split("T")[0],
-      "Дата не може бути в минулому"
-    ),
-  endDate: Yup.date()
-    .when("startDate", ([startDate], schema) => {
-      if (!startDate) return schema;
+  startDate: Yup.date().min(
+    new Date().toISOString().split("T")[0],
+    "Дата не може бути в минулому"
+  ),
+  endDate: Yup.date().when("startDate", ([startDate], schema) => {
+    if (!startDate) return schema;
 
-      const minDate = new Date(startDate);
-      minDate.setDate(minDate.getDate() + 1);
+    const minDate = new Date(startDate);
+    minDate.setDate(minDate.getDate() + 1);
 
-      return schema.min(
-        minDate,
-        "Дата завершення має бути пізніше за дату початку"
-      );
-    }),
+    return schema.min(
+      minDate,
+      "Дата завершення має бути пізніше за дату початку"
+    );
+  }),
   deliveryCity: Yup.string().required("Місто обовʼязкове"),
   deliveryBranch: Yup.string().required("Відділення обовʼязкове"),
 });
+
+function getAllDataBooked(dataBooked?: BookedDate[]) {
+  if (!dataBooked) {
+    return [];
+  }
+  const days: Date[] = [];
+
+  dataBooked.forEach((dates) => {
+    for (
+      let d = new Date(dates.startDate);
+      d <= new Date(dates.endDate);
+      d.setDate(d.getDate() + 1)
+    ) {
+      days.push(new Date(d));
+    }
+  });
+
+  return days;
+}
 
 interface Props {
   tool: Tool;
@@ -99,8 +116,8 @@ export default function BookingToolForm({ tool }: Props) {
 
       toast.error(
         err.response?.data?.response?.validation?.body?.message ||
-        err.response?.data?.response?.message ||
-        err.message
+          err.response?.data?.response?.message ||
+          err.message
       );
     }
   };
@@ -116,10 +133,10 @@ export default function BookingToolForm({ tool }: Props) {
         const totalPrice =
           values.startDate && values.endDate
             ? Math.max(
-              0,
-              getDaysCount(values.startDate, values.endDate) *
-              tool.pricePerDay
-            )
+                0,
+                getDaysCount(values.startDate, values.endDate) *
+                  tool.pricePerDay
+              )
             : 0;
         return (
           <div className={css.wrapper}>
@@ -188,15 +205,20 @@ export default function BookingToolForm({ tool }: Props) {
 
               {/* Calendar */}
               <div className={css.calendarSection}>
-                <p className={css.calendarLabel}>Виберіть період бронювання</p>
+                <p className={css.label}>Виберіть період бронювання</p>
                 <DateRangeCalendar
-                  startDate={values.startDate ? new Date(values.startDate) : null}
+                  startDate={
+                    values.startDate ? new Date(values.startDate) : null
+                  }
                   endDate={values.endDate ? new Date(values.endDate) : null}
-                  reservedDates={[]}
+                  reservedDates={getAllDataBooked(tool.bookedDates)}
                   onRangeChange={(start, end) => {
                     const formatDate = (date: Date) => {
                       const year = date.getFullYear();
-                      const month = String(date.getMonth() + 1).padStart(2, "0");
+                      const month = String(date.getMonth() + 1).padStart(
+                        2,
+                        "0"
+                      );
                       const day = String(date.getDate()).padStart(2, "0");
                       return `${year}-${month}-${day}`;
                     };
@@ -205,7 +227,7 @@ export default function BookingToolForm({ tool }: Props) {
                   }}
                 />
                 {submitCount > 0 && !values.startDate && !values.endDate && (
-                  <p className={css.calendarError}>Оберіть дату бронювання</p>
+                  <p className={css.error}>Оберіть дату бронювання</p>
                 )}
               </div>
 
