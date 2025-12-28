@@ -106,6 +106,10 @@ export default function BookingToolForm({ tool }: Props) {
     values: FormData,
     formikHelpers: FormikHelpers<FormData>
   ) => {
+    if (!values.startDate || !values.endDate) {
+      return;
+    }
+
     try {
       await bookingTool(values, tool._id);
       formikHelpers.resetForm();
@@ -262,7 +266,7 @@ export default function BookingToolForm({ tool }: Props) {
                     Відділення Нової Пошти
                   </label>
                   <Field
-                    type="text"
+                    type="number"
                     name="deliveryBranch"
                     placeholder="24"
                     id={`${fieldId}-deliveryBranch`}

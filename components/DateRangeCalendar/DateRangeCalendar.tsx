@@ -110,10 +110,8 @@ export default function DateRangeCalendar({
     }
 
     if (!startDate || (startDate && endDate)) {
-      // Start new selection
       onRangeChange(date, null);
     } else {
-      // Complete the range
       if (date < startDate) {
         onRangeChange(date, startDate);
       } else {
@@ -122,26 +120,16 @@ export default function DateRangeCalendar({
     }
   };
 
-  const [animating, setAnimating] = useState(false);
-
   const nextMonth = () => {
-    setAnimating(true);
-    setTimeout(() => {
-      setCurrentMonth(
-        new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1)
-      );
-      setAnimating(false);
-    }, 150);
+    setCurrentMonth(
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1)
+    );
   };
 
   const prevMonth = () => {
-    setAnimating(true);
-    setTimeout(() => {
-      setCurrentMonth(
-        new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1)
-      );
-      setAnimating(false);
-    }, 150);
+    setCurrentMonth(
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1)
+    );
   };
 
   const days = getDaysInMonth(currentMonth);
@@ -168,7 +156,9 @@ export default function DateRangeCalendar({
           <button
             type="button"
             onClick={prevMonth}
-            className={css.navBtn}>
+            className={css.navBtn}
+            aria-label="Переключити на місяць назад"
+          >
             ‹
           </button>
           <span className={css.month}>
@@ -177,7 +167,9 @@ export default function DateRangeCalendar({
           <button
             type="button"
             onClick={nextMonth}
-            className={css.navBtn}>
+            className={css.navBtn}
+            aria-label="Переключити на місяць вперед"
+          >
             ›
           </button>
         </div>
@@ -213,7 +205,8 @@ export default function DateRangeCalendar({
                           !isDateReserved(date)
                             ? () => handleDateClick(date)
                             : undefined
-                        }>
+                        }
+                      >
                         {date.getDate()}
                       </td>
                     );
