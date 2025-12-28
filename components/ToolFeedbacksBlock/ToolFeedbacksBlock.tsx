@@ -9,11 +9,15 @@ import { Feedback } from "@/types/feedback";
 interface ToolFeedbacksBlockProps {
   feedbacks: Feedback[];
   onOpenFeedbackForm?: () => void;
+  emptyTitleMobileText?: string;
+  emptyTitleDesktopText?: string;
 }
 
 export default function ToolFeedbacksBlock({
   feedbacks,
   onOpenFeedbackForm,
+  emptyTitleMobileText = "У вас немає жодного відгуку",
+  emptyTitleDesktopText = "У цього інструменту немає жодного відгуку",
 }: ToolFeedbacksBlockProps) {
   const visibleFeedbacks = useMemo(() => feedbacks ?? [], [feedbacks]);
 
@@ -42,8 +46,8 @@ export default function ToolFeedbacksBlock({
         {visibleFeedbacks.length === 0 && (
           <div className={styles.emptyState}>
             <p className={styles.emptyTitle}>
-              <span className={styles.emptyTitleMobile}>У вас немає жодного відгуку</span>
-              <span className={styles.emptyTitleDesktop}>У цього інструменту немає жодного відгуку</span>
+              <span className={styles.emptyTitleMobile}>{emptyTitleMobileText}</span>
+              <span className={styles.emptyTitleDesktop}>{emptyTitleDesktopText}</span>
             </p>
             <p className={styles.emptyText}>Ми впевнені скоро їх буде значно більше!</p>
           </div>
