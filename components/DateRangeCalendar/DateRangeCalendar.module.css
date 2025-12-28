@@ -1,0 +1,101 @@
+.calendar {
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  font-weight: 600;
+}
+
+.year {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.monthControls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.month {
+  font-weight: 700;
+  font-size: 16px;
+  min-width: 60px;
+  text-align: center;
+}
+
+.navBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.calendarTablet {
+  border: 2px solid var(--color-scheme-1-text);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.weekdays th {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.5;
+  text-align: center;
+  color: #222730;
+  height: 56px;
+  border: 2px solid var(--color-scheme-1-text);
+}
+
+.day {
+  height: 56px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--color-scheme-1-text);
+  border: 2px solid var(--color-scheme-1-text);
+}
+
+.available:hover {
+  background-color: #f3e8ff;
+}
+
+.selected {
+  background-color: #e7cdf4;
+}
+
+.inRange {
+  background-color: #e7cdf4;
+}
+
+.disabled {
+  color: #bbb;
+  cursor: not-allowed;
+}
+
+.otherMonth {
+  color: #bbb;
+  cursor: not-allowed;
+}
+
+.reserved {
+  color: #a5b3bf;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+@media only screen and (min-width: 1440px) {
+  .year,
+  .month {
+    font-size: 18px;
+  }
+}

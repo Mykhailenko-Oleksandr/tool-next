@@ -4,11 +4,12 @@ import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
 import { useId } from "react";
 import * as Yup from "yup";
 import css from "./BookingToolForm.module.css";
-import { Tool } from "@/types/tool";
+import { BookedDate, Tool } from "@/types/tool";
 import { bookingTool } from "@/lib/api/clientApi";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useBookingDraftStore } from "@/lib/store/bookingStore";
+import DateRangeCalendar from "../DateRangeCalendar/DateRangeCalendar";
 import { ApiError } from "@/app/api/api";
 
 function getDaysCount(startDate: string, endDate: string): number {
@@ -43,28 +44,43 @@ const BookingSchema = Yup.object().shape({
   phone: Yup.string()
     .matches(/^\+?[0-9]{10,15}$/, "Некоректний номер телефону")
     .required("Телефон обовʼязковий"),
-  startDate: Yup.date()
-    .required("Оберіть дату початку")
-    .min(
-      new Date().toISOString().split("T")[0],
-      "Дата не може бути в минулому"
-    ),
-  endDate: Yup.date()
-    .required("Оберіть дату завершення")
-    .when("startDate", ([startDate], schema) => {
-      if (!startDate) return schema;
+  startDate: Yup.date().min(
+    new Date().toISOString().split("T")[0],
+    "Дата не може бути в минулому"
+  ),
+  endDate: Yup.date().when("startDate", ([startDate], schema) => {
+    if (!startDate) return schema;
 
-      const minDate = new Date(startDate);
-      minDate.setDate(minDate.getDate() + 1);
+    const minDate = new Date(startDate);
+    minDate.setDate(minDate.getDate() + 1);
 
-      return schema.min(
-        minDate,
-        "Дата завершення має бути пізніше за дату початку"
-      );
-    }),
+    return schema.min(
+      minDate,
+      "Дата завершення має бути пізніше за дату початку"
+    );
+  }),
   deliveryCity: Yup.string().required("Місто обовʼязкове"),
   deliveryBranch: Yup.string().required("Відділення обовʼязкове"),
 });
+
+function getAllDataBooked(dataBooked?: BookedDate[]) {
+  if (!dataBooked) {
+    return [];
+  }
+  const days: Date[] = [];
+
+  dataBooked.forEach((dates) => {
+    for (
+      let d = new Date(dates.startDate);
+      d <= new Date(dates.endDate);
+      d.setDate(d.getDate() + 1)
+    ) {
+      days.push(new Date(d));
+    }
+  });
+
+  return days;
+}
 
 interface Props {
   tool: Tool;
@@ -113,7 +129,7 @@ export default function BookingToolForm({ tool }: Props) {
       validationSchema={BookingSchema}
       enableReinitialize
     >
-      {({ values }) => {
+      {({ values, setFieldValue, submitCount }) => {
         const totalPrice =
           values.startDate && values.endDate
             ? Math.max(
@@ -187,43 +203,33 @@ export default function BookingToolForm({ tool }: Props) {
                 </div>
               </fieldset>
 
-              {/* Дати */}
-              <fieldset className={css.fieldset}>
-                <div className={css.control}>
-                  <label htmlFor={`${fieldId}-startDate`} className={css.label}>
-                    Дата початку
-                  </label>
-                  <Field
-                    type="date"
-                    name="startDate"
-                    id={`${fieldId}-startDate`}
-                    className={css.input}
-                    onChange={handleChange}
-                  />
-                  <ErrorMessage
-                    name="startDate"
-                    component="span"
-                    className={css.error}
-                  />
-                </div>
-                <div className={css.control}>
-                  <label htmlFor={`${fieldId}-endDate`} className={css.label}>
-                    Дата завершення
-                  </label>
-                  <Field
-                    type="date"
-                    name="endDate"
-                    id={`${fieldId}-endDate`}
-                    className={css.input}
-                    onChange={handleChange}
-                  />
-                  <ErrorMessage
-                    name="endDate"
-                    component="span"
-                    className={css.error}
-                  />
-                </div>
-              </fieldset>
+              {/* Calendar */}
+              <div className={css.calendarSection}>
+                <p className={css.label}>Виберіть період бронювання</p>
+                <DateRangeCalendar
+                  startDate={
+                    values.startDate ? new Date(values.startDate) : null
+                  }
+                  endDate={values.endDate ? new Date(values.endDate) : null}
+                  reservedDates={getAllDataBooked(tool.bookedDates)}
+                  onRangeChange={(start, end) => {
+                    const formatDate = (date: Date) => {
+                      const year = date.getFullYear();
+                      const month = String(date.getMonth() + 1).padStart(
+                        2,
+                        "0"
+                      );
+                      const day = String(date.getDate()).padStart(2, "0");
+                      return `${year}-${month}-${day}`;
+                    };
+                    setFieldValue("startDate", start ? formatDate(start) : "");
+                    setFieldValue("endDate", end ? formatDate(end) : "");
+                  }}
+                />
+                {submitCount > 0 && !values.startDate && !values.endDate && (
+                  <p className={css.error}>Оберіть дату бронювання</p>
+                )}
+              </div>
 
               {/* Місто + Відділення */}
               <fieldset className={css.fieldset}>
