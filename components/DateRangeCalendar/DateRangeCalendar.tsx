@@ -6,12 +6,14 @@ import css from "./DateRangeCalendar.module.css";
 interface DateRangeCalendarProps {
   startDate: Date | null;
   endDate: Date | null;
+  reservedDates: Date[];
   onRangeChange: (start: Date | null, end: Date | null) => void;
 }
 
 export default function DateRangeCalendar({
   startDate,
   endDate,
+  reservedDates,
   onRangeChange,
 }: DateRangeCalendarProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -66,6 +68,10 @@ export default function DateRangeCalendar({
   const isDateInRange = (date: Date) => {
     if (!startDate || !endDate) return false;
     return date >= startDate && date <= endDate;
+  };
+
+  const isDateReserved = (date: Date) => {
+    return reservedDates.some(reserved => date.toDateString() === reserved.toDateString());
   };
 
   const isDateSelected = (date: Date) => {
@@ -188,19 +194,18 @@ export default function DateRangeCalendar({
           return (
             <div
               key={index}
-              className={`${css.day} ${
-                !isCurrentMonth
+              className={`${css.day} ${!isCurrentMonth
                   ? css.otherMonth
-                  : date < today
+                  : date < today || isDateReserved(date)
                     ? css.disabled
                     : isDateSelected(date)
                       ? css.selected
                       : isDateInRange(date)
                         ? css.inRange
                         : css.available
-              }`}
+                } ${isDateReserved(date) ? css.reserved : ''}`}
               onClick={
-                isCurrentMonth && date >= today
+                isCurrentMonth && date >= today && !isDateReserved(date)
                   ? () => handleDateClick(date)
                   : undefined
               }

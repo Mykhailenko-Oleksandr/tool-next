@@ -62,9 +62,9 @@
 }
 
 .selected {
-  background: #7c3aed;
-  color: #fff;
-  border: 2px solid #5b21b6;
+  background: #E7CDF4;
+  color: #333;
+  border: 2px solid #c084fc;
 }
 
 .inRange {
@@ -80,5 +80,11 @@
 
 .otherMonth {
   color: #bbb;
+  cursor: not-allowed;
+}
+
+.reserved {
+  text-decoration: line-through;
+  color: #ff0000;
   cursor: not-allowed;
 }

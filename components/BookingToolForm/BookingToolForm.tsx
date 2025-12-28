@@ -45,13 +45,11 @@ const BookingSchema = Yup.object().shape({
     .matches(/^\+?[0-9]{10,15}$/, "Некоректний номер телефону")
     .required("Телефон обовʼязковий"),
   startDate: Yup.date()
-    .required("Оберіть дату початку")
     .min(
       new Date().toISOString().split("T")[0],
       "Дата не може бути в минулому"
     ),
   endDate: Yup.date()
-    .required("Оберіть дату завершення")
     .when("startDate", ([startDate], schema) => {
       if (!startDate) return schema;
 
@@ -114,7 +112,7 @@ export default function BookingToolForm({ tool }: Props) {
       validationSchema={BookingSchema}
       enableReinitialize
     >
-      {({ values, setFieldValue }) => {
+      {({ values, setFieldValue, submitCount }) => {
         const totalPrice =
           values.startDate && values.endDate
             ? Math.max(
@@ -188,50 +186,13 @@ export default function BookingToolForm({ tool }: Props) {
                 </div>
               </fieldset>
 
-              {/* Дати */}
-              <fieldset className={css.fieldset}>
-                <div className={css.control}>
-                  <label htmlFor={`${fieldId}-startDate`} className={css.label}>
-                    Дата початку
-                  </label>
-                  <Field
-                    type="date"
-                    name="startDate"
-                    id={`${fieldId}-startDate`}
-                    className={css.input}
-                    onChange={handleChange}
-                  />
-                  <ErrorMessage
-                    name="startDate"
-                    component="span"
-                    className={css.error}
-                  />
-                </div>
-                <div className={css.control}>
-                  <label htmlFor={`${fieldId}-endDate`} className={css.label}>
-                    Дата завершення
-                  </label>
-                  <Field
-                    type="date"
-                    name="endDate"
-                    id={`${fieldId}-endDate`}
-                    className={css.input}
-                    onChange={handleChange}
-                  />
-                  <ErrorMessage
-                    name="endDate"
-                    component="span"
-                    className={css.error}
-                  />
-                </div>
-              </fieldset>
-
               {/* Calendar */}
               <div className={css.calendarSection}>
                 <p className={css.calendarLabel}>Виберіть період бронювання</p>
                 <DateRangeCalendar
                   startDate={values.startDate ? new Date(values.startDate) : null}
                   endDate={values.endDate ? new Date(values.endDate) : null}
+                  reservedDates={[]}
                   onRangeChange={(start, end) => {
                     const formatDate = (date: Date) => {
                       const year = date.getFullYear();
@@ -243,6 +204,9 @@ export default function BookingToolForm({ tool }: Props) {
                     setFieldValue("endDate", end ? formatDate(end) : "");
                   }}
                 />
+                {submitCount > 0 && !values.startDate && !values.endDate && (
+                  <p className={css.calendarError}>Оберіть дату бронювання</p>
+                )}
               </div>
 
               {/* Місто + Відділення */}
