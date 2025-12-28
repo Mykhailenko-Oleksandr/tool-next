@@ -71,7 +71,9 @@ export default function DateRangeCalendar({
   };
 
   const isDateReserved = (date: Date) => {
-    return reservedDates.some(reserved => date.toDateString() === reserved.toDateString());
+    return reservedDates.some(
+      (reserved) => date.toDateString() === reserved.toDateString()
+    );
   };
 
   const isDateSelected = (date: Date) => {
@@ -166,54 +168,62 @@ export default function DateRangeCalendar({
       <div className={css.header}>
         <div className={css.year}>{currentMonth.getFullYear()}</div>
         <div className={css.monthControls}>
-          <button type="button" onClick={prevMonth} className={css.navBtn}>
+          <button
+            type="button"
+            onClick={prevMonth}
+            className={css.navBtn}>
             ‹
           </button>
           <span className={css.month}>
             {monthNames[currentMonth.getMonth()]}
           </span>
-          <button type="button" onClick={nextMonth} className={css.navBtn}>
+          <button
+            type="button"
+            onClick={nextMonth}
+            className={css.navBtn}>
             ›
           </button>
         </div>
       </div>
-      <div className={css.weekdays}>
-        <div>Пн</div>
-        <div>Вт</div>
-        <div>Ср</div>
-        <div>Чт</div>
-        <div>Пт</div>
-        <div>Сб</div>
-        <div>Нд</div>
-      </div>
-      <div className={css.days}>
-        {days.map((dayObj, index) => {
-          const date = dayObj.date;
-          const isCurrentMonth = dayObj.isCurrentMonth;
+      <div className={css.calendarTablet}>
+        <div className={css.weekdays}>
+          <div>Пн</div>
+          <div>Вт</div>
+          <div>Ср</div>
+          <div>Чт</div>
+          <div>Пт</div>
+          <div>Сб</div>
+          <div>Нд</div>
+        </div>
+        <div className={css.days}>
+          {days.map((dayObj, index) => {
+            const date = dayObj.date;
+            const isCurrentMonth = dayObj.isCurrentMonth;
 
-          return (
-            <div
-              key={index}
-              className={`${css.day} ${!isCurrentMonth
-                  ? css.otherMonth
-                  : date < today || isDateReserved(date)
-                    ? css.disabled
-                    : isDateSelected(date)
-                      ? css.selected
-                      : isDateInRange(date)
-                        ? css.inRange
-                        : css.available
-                } ${isDateReserved(date) ? css.reserved : ''}`}
-              onClick={
-                isCurrentMonth && date >= today && !isDateReserved(date)
-                  ? () => handleDateClick(date)
-                  : undefined
-              }
-            >
-              {date.getDate()}
-            </div>
-          );
-        })}
+            return (
+              <div
+                key={index}
+                className={`${css.day} ${
+                  !isCurrentMonth
+                    ? css.otherMonth
+                    : date < today || isDateReserved(date)
+                      ? css.disabled
+                      : isDateSelected(date)
+                        ? css.selected
+                        : isDateInRange(date)
+                          ? css.inRange
+                          : css.available
+                } ${isDateReserved(date) ? css.reserved : ""}`}
+                onClick={
+                  isCurrentMonth && date >= today && !isDateReserved(date)
+                    ? () => handleDateClick(date)
+                    : undefined
+                }>
+                {date.getDate()}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

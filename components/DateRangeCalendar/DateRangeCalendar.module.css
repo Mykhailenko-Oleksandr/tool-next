@@ -1,5 +1,4 @@
 .calendar {
-  border-radius: 4px;
   width: 100%;
 }
 
@@ -8,12 +7,12 @@
   justify-content: space-between;
   align-items: center;
   padding: 8px 12px;
-  border-bottom: 1px solid #dcdcdc;
   font-weight: 600;
 }
 
 .year {
-  font-size: 14px;
+  font-weight: 700;
+  font-size: 16px;
 }
 
 .monthControls {
@@ -23,7 +22,8 @@
 }
 
 .month {
-  font-size: 14px;
+  font-weight: 700;
+  font-size: 16px;
   min-width: 60px;
   text-align: center;
 }
@@ -35,43 +35,58 @@
   font-size: 16px;
 }
 
+.calendarTablet {
+  border: 2px solid var(--color-scheme-1-text);
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: var(--color-scheme-1-text);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
 .weekdays,
 .days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
 }
 
 .weekdays div {
-  font-weight: bolder;
-  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.5;
   text-align: center;
-  font-size: 14px;
-  border: 1px solid black;
+  color: #222730;
+  height: 56px;
+  background-color: var(--color-scheme-3-background);
 }
 
 .day {
-  padding: 8px;
+  background-color: var(--color-scheme-3-background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 56px;
   text-align: center;
-  border: 1px solid black;
   cursor: pointer;
   font-size: 16px;
   color: var(--color-scheme-1-text);
 }
 
 .available:hover {
-  background: #f3e8ff;
+  background-color: #f3e8ff;
 }
 
 .selected {
-  background: #e7cdf4;
-  color: #333;
-  border: 2px solid #c084fc;
+  background-color: #e7cdf4;
 }
 
 .inRange {
-  background: #ede9fe;
-  border-top: 1px solid #c4b5fd;
-  border-bottom: 1px solid #c4b5fd;
+  background-color: #e7cdf4;
 }
 
 .disabled {
@@ -88,4 +103,14 @@
   color: #a5b3bf;
   text-decoration: line-through;
   cursor: not-allowed;
+}
+
+@media only screen and (min-width: 768px) {
+}
+
+@media only screen and (min-width: 1440px) {
+  .year,
+  .month {
+    font-size: 18px;
+  }
 }
