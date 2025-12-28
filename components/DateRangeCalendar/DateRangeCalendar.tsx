@@ -31,7 +31,6 @@ export default function DateRangeCalendar({
 
     const days = [];
 
-    // Add days from previous month
     const prevMonthLastDay = new Date(year, month, 0);
     const prevMonthDays = prevMonthLastDay.getDate();
     for (let i = startingDayOfWeek - 1; i >= 0; i--) {
@@ -42,7 +41,6 @@ export default function DateRangeCalendar({
       });
     }
 
-    // Add days of the current month
     for (let day = 1; day <= daysInMonth; day++) {
       days.push({
         date: new Date(year, month, day),
@@ -84,7 +82,6 @@ export default function DateRangeCalendar({
   };
 
   const handleDateClick = (date: Date) => {
-    // If clicking on start date, deselect it
     if (
       startDate &&
       date.toDateString() === startDate.toDateString() &&
@@ -93,7 +90,7 @@ export default function DateRangeCalendar({
       onRangeChange(null, null);
       return;
     }
-    // If clicking on end date when range is complete, deselect it
+
     if (
       endDate &&
       date.toDateString() === endDate.toDateString() &&
@@ -102,7 +99,7 @@ export default function DateRangeCalendar({
       onRangeChange(startDate, null);
       return;
     }
-    // If clicking on start date when range is complete, deselect start
+
     if (
       startDate &&
       date.toDateString() === startDate.toDateString() &&
@@ -186,44 +183,40 @@ export default function DateRangeCalendar({
         </div>
       </div>
       <div className={css.calendarTablet}>
-        <div className={css.weekdays}>
-          <div>Пн</div>
-          <div>Вт</div>
-          <div>Ср</div>
-          <div>Чт</div>
-          <div>Пт</div>
-          <div>Сб</div>
-          <div>Нд</div>
-        </div>
-        <div className={css.days}>
-          {days.map((dayObj, index) => {
-            const date = dayObj.date;
-            const isCurrentMonth = dayObj.isCurrentMonth;
-
-            return (
-              <div
-                key={index}
-                className={`${css.day} ${
-                  !isCurrentMonth
-                    ? css.otherMonth
-                    : date < today || isDateReserved(date)
-                      ? css.disabled
-                      : isDateSelected(date)
-                        ? css.selected
-                        : isDateInRange(date)
-                          ? css.inRange
-                          : css.available
-                } ${isDateReserved(date) ? css.reserved : ""}`}
-                onClick={
-                  isCurrentMonth && date >= today && !isDateReserved(date)
-                    ? () => handleDateClick(date)
-                    : undefined
-                }>
-                {date.getDate()}
-              </div>
-            );
-          })}
-        </div>
+        <table className={css.table}>
+          <thead>
+            <tr className={css.weekdays}>
+              <th>Пн</th> <th>Вт</th> <th>Ср</th> <th>Чт</th> <th>Пт</th>
+              <th>Сб</th> <th>Нд</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Array.from({ length: 6 }).map((_, weekIndex) => (
+              <tr key={weekIndex}>
+                {days
+                  .slice(weekIndex * 7, weekIndex * 7 + 7)
+                  .map((dayObj, index) => {
+                    const date = dayObj.date;
+                    const isCurrentMonth = dayObj.isCurrentMonth;
+                    return (
+                      <td
+                        key={index}
+                        className={`${css.day} ${!isCurrentMonth ? css.otherMonth : date < today || isDateReserved(date) ? css.disabled : isDateSelected(date) ? css.selected : isDateInRange(date) ? css.inRange : css.available} ${isDateReserved(date) ? css.reserved : ""}`}
+                        onClick={
+                          isCurrentMonth &&
+                          date >= today &&
+                          !isDateReserved(date)
+                            ? () => handleDateClick(date)
+                            : undefined
+                        }>
+                        {date.getDate()}
+                      </td>
+                    );
+                  })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

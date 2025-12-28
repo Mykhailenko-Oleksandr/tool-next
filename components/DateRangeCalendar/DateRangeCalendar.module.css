@@ -39,42 +39,30 @@
   border: 2px solid var(--color-scheme-1-text);
   border-radius: 6px;
   overflow: hidden;
-  background-color: var(--color-scheme-1-text);
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
 }
 
-.weekdays,
-.days {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 2px;
+.table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.weekdays div {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.weekdays th {
   font-weight: 700;
   font-size: 18px;
   line-height: 1.5;
   text-align: center;
   color: #222730;
   height: 56px;
-  background-color: var(--color-scheme-3-background);
+  border: 2px solid var(--color-scheme-1-text);
 }
 
 .day {
-  background-color: var(--color-scheme-3-background);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   height: 56px;
   text-align: center;
   cursor: pointer;
   font-size: 16px;
   color: var(--color-scheme-1-text);
+  border: 2px solid var(--color-scheme-1-text);
 }
 
 .available:hover {
@@ -103,9 +91,6 @@
   color: #a5b3bf;
   text-decoration: line-through;
   cursor: not-allowed;
-}
-
-@media only screen and (min-width: 768px) {
 }
 
 @media only screen and (min-width: 1440px) {
