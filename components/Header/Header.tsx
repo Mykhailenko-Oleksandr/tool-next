@@ -6,7 +6,7 @@ import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./Header.module.css";
 import { logout } from "@/lib/api/clientApi";
 
@@ -21,11 +21,28 @@ export default function Header() {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
+  const menuRef = useRef<HTMLElement>(null);
+  const burgerRef = useRef<HTMLButtonElement>(null);
 
   const firstLetter = user?.name?.[0]?.toUpperCase() ?? "";
   const userAvatar = user?.avatarUrl;
 
   const closeMenu = () => setIsMenuOpen(false);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        isMenuOpen &&
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node) &&
+        burgerRef.current &&
+        !burgerRef.current.contains(event.target as Node)
+      ) {
+        closeMenu();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isMenuOpen]);
 
   useEffect(() => {
     document.body.classList.toggle("no-scroll", isMenuOpen);
@@ -74,6 +91,7 @@ export default function Header() {
               )}
 
               <button
+                ref={burgerRef}
                 type="button"
                 className={clsx(styles.burger, {
                   [styles.burgerActive]: isMenuOpen,
@@ -101,6 +119,7 @@ export default function Header() {
             </div>
 
             <nav
+              ref={menuRef}
               id="mobile-menu"
               className={clsx(styles.nav, { [styles.navOpen]: isMenuOpen })}
             >

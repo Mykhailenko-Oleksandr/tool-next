@@ -47,6 +47,7 @@
 .search-input:-webkit-autofill:hover,
 .search-input:-webkit-autofill:focus {
   -webkit-text-fill-color: #fff;
+  caret-color: #fff;
 }
 
 .search-error {

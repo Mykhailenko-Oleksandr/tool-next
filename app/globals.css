@@ -215,7 +215,8 @@ textarea:-webkit-autofill:hover,
 textarea:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0px 1000px var(--opacity-transparent) inset;
   -webkit-text-fill-color: var(--color-neutral-darkest);
-  transition: background-color 5000s ease-in-out 0s;
+  transition: all 5000s ease-in-out 0s;
+  caret-color: var(--color-neutral-darkest);
 }
 
 /* =====================================
