@@ -25,9 +25,6 @@
   align-items: flex-start;
   justify-content: flex-start;
   gap: 32px;
-  /* V2807: Карточка должна подстраиваться под ширину swiper-slide.
-     Фиксированные 335/424px приводили к тому, что на некоторых брейкпоинтах
-     карточка становилась шире слайда, и текст визуально "вылазил" вправо. */
   width: 100%;
   box-sizing: border-box;
   min-height: 193px;
@@ -42,9 +39,6 @@
   line-height: 1.5;
   color: var(--color-neutral-darkest);
   width: 100%;
-  /* V2807: Фикс переполнения текста в карточках отзывов.
-     Иногда в тексте встречаются неразрывные пробелы/склеенные символы (визуально "есть пробелы"),
-     из-за чего строка не переносится и "вылазит" вправо. */
   min-width: 0;
   overflow-wrap: anywhere;
   word-break: break-word;
@@ -66,20 +60,17 @@
 .swiperNavInner {
   display: flex;
   align-items: center;
-  /* V2807: Пагинация слева, кнопки справа (как в макете). */
   justify-content: space-between;
   flex-direction: row;
   width: 100%;
   height: 100%;
 }
 
-/* .swiper-pagination-bullets-dynamic {
-  margin-left: 40px;
-} */
+.pagination {
+  margin-left: 35px;
+}
 
 .pagination:global(.swiper-pagination-lock) {
-  /* V2807: Swiper прячет пагинацию, но нам важно сохранить разметку,
-     чтобы кнопки оставались справа. */
   display: flex !important;
   visibility: hidden;
   pointer-events: none;

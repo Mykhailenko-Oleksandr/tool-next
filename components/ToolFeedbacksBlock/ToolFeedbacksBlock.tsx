@@ -23,45 +23,43 @@ export default function ToolFeedbacksBlock({
   return (
     <section
       className={styles.sectionWrapper}
-      aria-labelledby="tool-feedbacks-title">
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <h2
-            id="tool-feedbacks-title"
-            className={styles.title}>
-            Відгуки
-          </h2>
-          {onOpenFeedbackForm && (
-            <button
-              type="button"
-              className={styles.addFeedbackButton}
-              onClick={onOpenFeedbackForm}
-              aria-label="Додати відгук">
-              Залишити відгук
-            </button>
-          )}
-        </div>
-
-        {visibleFeedbacks.length === 0 && (
-          <div className={styles.emptyState}>
-            <p className={styles.emptyTitle}>
-              <span className={styles.emptyTitleMobile}>
-                {emptyTitleMobileText}
-              </span>
-              <span className={styles.emptyTitleDesktop}>
-                {emptyTitleDesktopText}
-              </span>
-            </p>
-            <p className={styles.emptyText}>
-              Ми впевнені скоро їх буде значно більше!
-            </p>
-          </div>
-        )}
-
-        {visibleFeedbacks.length > 0 && (
-          <FeedbacksSwiper feedbacks={visibleFeedbacks} />
+      aria-labelledby="tool-feedbacks-title"
+    >
+      <div className={styles.header}>
+        <h2 id="tool-feedbacks-title" className={styles.title}>
+          Відгуки
+        </h2>
+        {onOpenFeedbackForm && (
+          <button
+            type="button"
+            className={styles.addFeedbackButton}
+            onClick={onOpenFeedbackForm}
+            aria-label="Додати відгук"
+          >
+            Залишити відгук
+          </button>
         )}
       </div>
+
+      {visibleFeedbacks.length === 0 && (
+        <div className={styles.emptyState}>
+          <p className={styles.emptyTitle}>
+            <span className={styles.emptyTitleMobile}>
+              {emptyTitleMobileText}
+            </span>
+            <span className={styles.emptyTitleDesktop}>
+              {emptyTitleDesktopText}
+            </span>
+          </p>
+          <p className={styles.emptyText}>
+            Ми впевнені скоро їх буде значно більше!
+          </p>
+        </div>
+      )}
+
+      {visibleFeedbacks.length > 0 && (
+        <FeedbacksSwiper feedbacks={visibleFeedbacks} />
+      )}
     </section>
   );
 }

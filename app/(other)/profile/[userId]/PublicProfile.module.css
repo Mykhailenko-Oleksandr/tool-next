@@ -3,6 +3,10 @@
   padding-bottom: 64px;
 }
 
+.content {
+  padding-bottom: 64px;
+}
+
 .titleWrap {
   display: flex;
   flex-direction: column;

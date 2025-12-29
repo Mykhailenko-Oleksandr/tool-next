@@ -66,30 +66,32 @@ export default function PublicProfileClient({ user }: ProfileClientProps) {
   return (
     <section className={css.profilePage}>
       <div className="container">
-        <UserProfile user={user} />
-        <div className={css.titleWrap}>
-          <h2 className={css.profileToolsTitle}>Інструменти</h2>
+        <div className={css.content}>
+          <UserProfile user={user} />
+          <div className={css.titleWrap}>
+            <h2 className={css.profileToolsTitle}>Інструменти</h2>
+          </div>
+
+          {!isLoading && tools.length === 0 && <PublicProfilePlaceholder />}
+
+          {isLoading && <Loader />}
+          {isError && !data && <p>Щось пішло не так... Спробуйте ще.</p>}
+          {isFetchingNextPage && !isLoading && <Loader />}
+
+          {tools.length > 0 && (
+            <>
+              <ToolGrid tools={tools} />
+
+              {hasNextPage && (
+                <LoadMoreButton
+                  onClick={handleLoadMore}
+                  disabled={isFetchingNextPage}
+                  loading={isFetchingNextPage}
+                />
+              )}
+            </>
+          )}
         </div>
-
-        {!isLoading && tools.length === 0 && <PublicProfilePlaceholder />}
-
-        {isLoading && <Loader />}
-        {isError && !data && <p>Щось пішло не так... Спробуйте ще.</p>}
-        {isFetchingNextPage && !isLoading && <Loader />}
-
-        {tools.length > 0 && (
-          <>
-            <ToolGrid tools={tools} />
-
-            {hasNextPage && (
-              <LoadMoreButton
-                onClick={handleLoadMore}
-                disabled={isFetchingNextPage}
-                loading={isFetchingNextPage}
-              />
-            )}
-          </>
-        )}
 
         {isFeedbacksLoading && <Loader />}
         {!isFeedbacksLoading && isFeedbacksError && (

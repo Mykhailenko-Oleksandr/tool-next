@@ -3,7 +3,6 @@
 import StarsRating from "@/components/StarsRating/StarsRating";
 import styles from "./ToolInfoBlock.module.css";
 
-// V2807: Показывает рейтинг инструмента (звёзды + число) и количество отзывов.
 interface ToolInfoBlockProps {
   rating: number;
   feedbacksCount: number;
@@ -20,14 +19,18 @@ export default function ToolInfoBlock({
     <div className={styles.wrapper}>
       <div className={styles.ratingBlock}>
         <StarsRating rating={normalizedRating} />
-        <span className={styles.ratingValue}>{normalizedRating.toFixed(1)}</span>
+        <span className={styles.ratingValue}>
+          {normalizedRating.toFixed(1)}
+        </span>
       </div>
       <span className={styles.feedbacksCount}>
-        {feedbacksCount} {feedbacksCount === 1 ? "відгук" : feedbacksCount < 5 ? "відгуки" : "відгуків"}
+        {feedbacksCount}
+        {feedbacksCount === 1
+          ? "відгук"
+          : feedbacksCount < 5
+            ? "відгуки"
+            : "відгуків"}
       </span>
     </div>
   );
 }
-
-
-

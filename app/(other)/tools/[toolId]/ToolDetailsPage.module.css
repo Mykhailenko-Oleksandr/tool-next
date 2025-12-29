@@ -1,12 +1,13 @@
 .main {
   padding-top: 32px;
-  padding-bottom: 64px;
+  padding-bottom: 32px;
 }
 
 .content {
   display: flex;
   gap: 32px;
   flex-direction: column;
+  padding-bottom: 64px;
 }
 
 @media only screen and (min-width: 1440px) {

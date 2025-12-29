@@ -187,20 +187,20 @@ export default function ToolDetailsClient({ toolId }: ToolDetailsClientProps) {
                 )}
             </div>
           </div>
+
+          <ToolFeedbacksBlock
+            feedbacks={toolFeedbacks}
+            onOpenFeedbackForm={() => {
+              if (isAuthenticated) {
+                setShowFeedbackModal(true);
+              } else {
+                toast.error("Спочатку авторизуйтесь для відправки відгуку");
+                setShowAuthModal(true);
+              }
+            }}
+          />
         </div>
       </section>
-
-      <ToolFeedbacksBlock
-        feedbacks={toolFeedbacks}
-        onOpenFeedbackForm={() => {
-          if (isAuthenticated) {
-            setShowFeedbackModal(true);
-          } else {
-            toast.error("Спочатку авторизуйтесь для відправки відгуку");
-            setShowAuthModal(true);
-          }
-        }}
-      />
 
       <FeedbackFormModal
         isOpen={showFeedbackModal}
