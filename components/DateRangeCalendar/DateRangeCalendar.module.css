@@ -89,17 +89,16 @@
 }
 
 .disabled {
-  color: #a5b3bf;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
 .otherMonth {
-  color: #a5b3bf;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
 .reserved {
-  color: #a5b3bf;
   text-decoration: line-through;
   cursor: not-allowed;
 }

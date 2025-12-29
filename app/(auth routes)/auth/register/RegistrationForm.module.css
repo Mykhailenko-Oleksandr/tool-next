@@ -1,3 +1,7 @@
+.pageWrapper {
+  background-color: var(--color-white);
+}
+
 .formImg {
   display: none;
 }
