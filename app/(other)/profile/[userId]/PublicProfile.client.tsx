@@ -14,7 +14,7 @@ import ToolFeedbacksBlock from "@/components/ToolFeedbacksBlock/ToolFeedbacksBlo
 import { Feedback } from "@/types/feedback";
 
 interface ProfileClientProps {
-  user: User;
+  user: UserByIdResponse;
 }
 
 export default function PublicProfileClient({ user }: ProfileClientProps) {
