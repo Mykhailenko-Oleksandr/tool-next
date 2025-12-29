@@ -21,7 +21,7 @@ export default function Header() {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
-  const menuRef = useRef<HTMLElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const burgerRef = useRef<HTMLButtonElement>(null);
 
   const firstLetter = user?.name?.[0]?.toUpperCase() ?? "";
@@ -119,107 +119,108 @@ export default function Header() {
             </div>
 
             <nav
-              ref={menuRef}
               id="mobile-menu"
               className={clsx(styles.nav, { [styles.navOpen]: isMenuOpen })}
             >
-              <Link
-                href="/"
-                onClick={closeMenu}
-                className={clsx(styles.navLink, {
-                  [styles.activeLink]: isActive("/"),
-                })}
-              >
-                Головна
-              </Link>
+              <div ref={menuRef} className={styles.menu}>
+                <Link
+                  href="/"
+                  onClick={closeMenu}
+                  className={clsx(styles.navLink, {
+                    [styles.activeLink]: isActive("/"),
+                  })}
+                >
+                  Головна
+                </Link>
 
-              <Link
-                href="/tools"
-                onClick={closeMenu}
-                className={clsx(styles.navLink, {
-                  [styles.activeLink]: isActive("/tools"),
-                })}
-              >
-                Інструменти
-              </Link>
+                <Link
+                  href="/tools"
+                  onClick={closeMenu}
+                  className={clsx(styles.navLink, {
+                    [styles.activeLink]: isActive("/tools"),
+                  })}
+                >
+                  Інструменти
+                </Link>
 
-              {user ? (
-                <>
-                  <Link
-                    href="/profile"
-                    onClick={closeMenu}
-                    className={clsx(styles.navLink, {
-                      [styles.activeLink]: isActive("/profile"),
-                    })}
-                  >
-                    Мій профіль
-                  </Link>
-
-                  <button
-                    className={clsx(
-                      styles.createPost,
-                      styles.desktopOnly,
-                      styles.purpleButton
-                    )}
-                    onClick={() => router.push("/tools/new")}
-                  >
-                    Опублікувати оголошення
-                  </button>
-
-                  <div className={styles.user}>
-                    <div className={styles.userWrapper}>
-                      <div className={styles.avatarContainer}>
-                        {userAvatar ? (
-                          <Image
-                            src={userAvatar}
-                            alt="User avatar"
-                            className={styles.avatar}
-                            priority
-                            width={40}
-                            height={40}
-                          />
-                        ) : (
-                          <span className={clsx(styles.avatar)}>
-                            {firstLetter}
-                          </span>
-                        )}
-                      </div>
-                      <span className={styles.username}>{user.name}</span>
-                    </div>
-
-                    <span className={styles.divider}></span>
+                {user ? (
+                  <>
+                    <Link
+                      href="/profile"
+                      onClick={closeMenu}
+                      className={clsx(styles.navLink, {
+                        [styles.activeLink]: isActive("/profile"),
+                      })}
+                    >
+                      Мій профіль
+                    </Link>
 
                     <button
-                      className={styles.logoutButton}
-                      onClick={() => setIsLogoutOpen(true)}
-                      aria-label="Вийти"
+                      className={clsx(
+                        styles.createPost,
+                        styles.desktopOnly,
+                        styles.purpleButton
+                      )}
+                      onClick={() => router.push("/tools/new")}
                     >
-                      <svg width="18" height="18">
-                        <use href="/icons.svg#icon-logout" />
-                      </svg>
+                      Опублікувати оголошення
                     </button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <Link
-                    href="/auth/login"
-                    onClick={closeMenu}
-                    className={clsx(styles.navLink, {
-                      [styles.activeLink]: isActive("/auth/login"),
-                    })}
-                  >
-                    Увійти
-                  </Link>
 
-                  <button
-                    className={clsx(styles.register, styles.purpleButton)}
-                    onClick={() => router.push("/auth/register")}
-                  >
-                    Зареєструватися
-                  </button>
-                </>
-              )}
+                    <div className={styles.user}>
+                      <div className={styles.userWrapper}>
+                        <div className={styles.avatarContainer}>
+                          {userAvatar ? (
+                            <Image
+                              src={userAvatar}
+                              alt="User avatar"
+                              className={styles.avatar}
+                              priority
+                              width={40}
+                              height={40}
+                            />
+                          ) : (
+                            <span className={clsx(styles.avatar)}>
+                              {firstLetter}
+                            </span>
+                          )}
+                        </div>
+                        <span className={styles.username}>{user.name}</span>
+                      </div>
+
+                      <span className={styles.divider}></span>
+
+                      <button
+                        className={styles.logoutButton}
+                        onClick={() => setIsLogoutOpen(true)}
+                        aria-label="Вийти"
+                      >
+                        <svg width="18" height="18">
+                          <use href="/icons.svg#icon-logout" />
+                        </svg>
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/auth/login"
+                      onClick={closeMenu}
+                      className={clsx(styles.navLink, {
+                        [styles.activeLink]: isActive("/auth/login"),
+                      })}
+                    >
+                      Увійти
+                    </Link>
+
+                    <button
+                      className={clsx(styles.register, styles.purpleButton)}
+                      onClick={() => router.push("/auth/register")}
+                    >
+                      Зареєструватися
+                    </button>
+                  </>
+                )}
+              </div>
             </nav>
           </div>
         </div>

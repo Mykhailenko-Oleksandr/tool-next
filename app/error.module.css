@@ -1,6 +1,6 @@
 .errorPage {
   padding: 40px 0;
-  background: var(--color-white);
+  background: var(--color-scheme-3-background);
   font-family: var(--font-Inter), var(--font-NunitoSans), sans-serif;
 }
 
@@ -9,12 +9,14 @@
 }
 
 .errorBg {
+  padding-top: 10px;
   background-image: url("/images/error.gif");
   height: 400px;
   background-position: center;
 }
 
 .errorBg h1 {
+  color: #000;
   font-size: 35px;
   text-align: center;
 }
@@ -24,7 +26,7 @@
 }
 
 .errorBtn {
-  color: var(--color-white);
+  color: var(--color-btn-white);
   border: 1px solid var(--color-electric-violet);
   border-radius: 6px;
   display: inline-block;
@@ -54,7 +56,9 @@
   border: 2px solid var(--color-electric-violet);
   background: var(--color-electric-violet-lighter);
 }
-.errorContantBox {
+.errorContentBox {
+  background-color: var(--color-scheme-3-background);
+  color: var(--color-scheme-1-text);
   margin-top: -50px;
   text-align: center;
 }

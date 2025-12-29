@@ -16,7 +16,7 @@ export default function Error({ reset }: Props) {
                 <h1 className="text-center ">Oops</h1>
               </div>
 
-              <div className={css.errorContantBox}>
+              <div className={css.errorContentBox}>
                 <h3 className={css.h2}>Помилка при завантаженні</h3>
                 <p>При виконанні запита сталася помилка</p>
                 <button onClick={reset} className={css.errorBtn}>
