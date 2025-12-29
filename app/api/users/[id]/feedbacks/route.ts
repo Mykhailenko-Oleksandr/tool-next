@@ -1,0 +1,44 @@
+import { NextRequest, NextResponse } from "next/server";
+import { isAxiosError } from "axios";
+import { api } from "@/app/api/api";
+import { logErrorResponse } from "@/app/api/_utils/utils";
+import { cookies } from "next/headers";
+
+type Props = {
+  params: Promise<{ id: string }>;
+};
+
+export async function GET(request: NextRequest, { params }: Props) {
+  try {
+    const cookieStore = await cookies();
+    const { id } = await params;
+    const { searchParams } = new URL(request.url);
+    const page = Number(searchParams.get("page")) || 1;
+    const perPage = Number(searchParams.get("perPage")) || 8;
+
+    const res = await api.get(`/users/${id}/feedbacks`, {
+      params: {
+        page,
+        perPage,
+      },
+      headers: {
+        Cookie: cookieStore.toString(),
+      },
+    });
+
+    return NextResponse.json(res.data, { status: res.status });
+  } catch (error) {
+    if (isAxiosError(error)) {
+      logErrorResponse(error.response?.data);
+      return NextResponse.json(
+        { error: error.message, response: error.response?.data },
+        { status: error.status }
+      );
+    }
+    logErrorResponse({ message: (error as Error).message });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}

@@ -292,3 +292,28 @@ export async function checkSession() {
   const res = await nextServer.get<CheckSessionRequest>("/auth/refresh");
   return res.data;
 }
+
+interface UsersFeedbacksResponse {
+  page: number;
+  perPage: number;
+  totalItems: number;
+  totalPages: number;
+  feedbacks: Feedback[];
+}
+
+export async function fetchUserFeedbacks(
+  userId: string,
+  page?: number,
+  perPage?: number
+) {
+  const res = await nextServer.get<UsersFeedbacksResponse>(
+    `/users/${userId}/feedbacks`,
+    {
+      params: {
+        page,
+        perPage,
+      },
+    }
+  );
+  return res.data;
+}

@@ -49,7 +49,7 @@ export default function PublicProfileClient({ user }: ProfileClientProps) {
     staleTime: 5 * 60 * 1000,
   });
 
-  const feedbacks: Feedback[] = userFeedbacks ?? [];
+  const feedbacks: Feedback[] = userFeedbacks?.feedbacks ?? [];
 
   const handleLoadMore = () => {
     const currentScrollPosition = window.pageYOffset;
