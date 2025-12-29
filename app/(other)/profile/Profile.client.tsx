@@ -38,7 +38,6 @@ export default function ProfileClient({ user }: ProfileClientProps) {
 
   const tools: Tool[] = data?.pages.flatMap((page) => page.tools) ?? [];
 
-  // V2807: Отзывы для личного профиля — тот же блок/стили, что и у инструмента (без кнопки).
   const {
     data: userFeedbacks,
     isLoading: isFeedbacksLoading,
@@ -92,7 +91,6 @@ export default function ProfileClient({ user }: ProfileClientProps) {
           </>
         )}
 
-        {/* V2807: Отзывы ниже инструментов и выше футера (как в карточке инструмента, без кнопки). */}
         {isFeedbacksLoading && <Loader />}
         {!isFeedbacksLoading && isFeedbacksError && (
           <p>Щось пішло не так... Спробуйте ще.</p>
@@ -100,7 +98,6 @@ export default function ProfileClient({ user }: ProfileClientProps) {
         {!isFeedbacksLoading && !isFeedbacksError && (
           <ToolFeedbacksBlock
             feedbacks={feedbacks}
-            // V2807: Личный профиль — текст как в фигме ("У вас..."), стили как у блока отзывов инструмента.
             emptyTitleMobileText="У вас немає жодного відгуку"
             emptyTitleDesktopText="У вас немає жодного відгуку"
           />

@@ -5,21 +5,16 @@ import { useQuery } from "@tanstack/react-query";
 
 import styles from "./FeedbacksBlock.module.css";
 import FeedbacksSwiper from "./FeedbacksSwiper";
-import { fetchFeedbacks, fetchUserFeedbacks } from "@/lib/api/clientApi";
+import { fetchFeedbacks } from "@/lib/api/clientApi";
 
-interface FeedbacksBlockProps {
-  userId?: string;
-  title?: string;
-}
-
-export default function FeedbacksBlock({ userId, title }: FeedbacksBlockProps) {
+export default function FeedbacksBlock() {
   const {
     data: feedbacks,
     isLoading,
     error,
   } = useQuery({
-    queryKey: userId ? ["feedbacks", "user", userId] : ["feedbacks"],
-    queryFn: () => (userId ? fetchUserFeedbacks(userId) : fetchFeedbacks()),
+    queryKey: ["feedbacks"],
+    queryFn: () => fetchFeedbacks(),
     staleTime: 5 * 60 * 1000,
   });
 
@@ -33,7 +28,7 @@ export default function FeedbacksBlock({ userId, title }: FeedbacksBlockProps) {
         <h2
           id="feedbacks-title"
           className={styles.title}>
-          {title || "Останні відгуки"}
+          Останні відгуки
         </h2>
 
         {isLoading && (

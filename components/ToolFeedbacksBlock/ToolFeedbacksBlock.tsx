@@ -5,7 +5,6 @@ import styles from "./ToolFeedbacksBlock.module.css";
 import FeedbacksSwiper from "@/components/FeedbacksBlock/FeedbacksSwiper";
 import { Feedback } from "@/types/feedback";
 
-// V2807: Блок отзывов для страницы инструмента (переиспользуем основной FeedbacksSwiper).
 interface ToolFeedbacksBlockProps {
   feedbacks: Feedback[];
   onOpenFeedbackForm?: () => void;
@@ -46,10 +45,16 @@ export default function ToolFeedbacksBlock({
         {visibleFeedbacks.length === 0 && (
           <div className={styles.emptyState}>
             <p className={styles.emptyTitle}>
-              <span className={styles.emptyTitleMobile}>{emptyTitleMobileText}</span>
-              <span className={styles.emptyTitleDesktop}>{emptyTitleDesktopText}</span>
+              <span className={styles.emptyTitleMobile}>
+                {emptyTitleMobileText}
+              </span>
+              <span className={styles.emptyTitleDesktop}>
+                {emptyTitleDesktopText}
+              </span>
             </p>
-            <p className={styles.emptyText}>Ми впевнені скоро їх буде значно більше!</p>
+            <p className={styles.emptyText}>
+              Ми впевнені скоро їх буде значно більше!
+            </p>
           </div>
         )}
 
@@ -60,5 +65,3 @@ export default function ToolFeedbacksBlock({
     </section>
   );
 }
-
-

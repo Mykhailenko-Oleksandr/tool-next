@@ -2,7 +2,6 @@
 
 import UserProfile from "@/components/UserProfile/UserProfile";
 import css from "./PublicProfile.module.css";
-import { User } from "@/types/user";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { fetchToolsUserId, fetchUserFeedbacks } from "@/lib/api/clientApi";
 import ToolGrid from "@/components/ToolGrid/ToolGrid";
@@ -12,6 +11,7 @@ import Loader from "@/components/Loader/Loader";
 import PublicProfilePlaceholder from "@/components/PublicProfilePlaceholder/PublicProfilePlaceholder";
 import ToolFeedbacksBlock from "@/components/ToolFeedbacksBlock/ToolFeedbacksBlock";
 import { Feedback } from "@/types/feedback";
+import { UserByIdResponse } from "@/lib/api/serverApi";
 
 interface ProfileClientProps {
   user: UserByIdResponse;
@@ -38,7 +38,6 @@ export default function PublicProfileClient({ user }: ProfileClientProps) {
 
   const tools: Tool[] = data?.pages.flatMap((page) => page.tools) ?? [];
 
-  // V2807: Отзывы для профиля — стили/разметка как на странице инструмента (без кнопки "Залишити відгук").
   const {
     data: userFeedbacks,
     isLoading: isFeedbacksLoading,
@@ -92,7 +91,6 @@ export default function PublicProfileClient({ user }: ProfileClientProps) {
           </>
         )}
 
-        {/* V2807: Блок отзывов должен быть ниже инструментов и выше футера. */}
         {isFeedbacksLoading && <Loader />}
         {!isFeedbacksLoading && isFeedbacksError && (
           <p>Щось пішло не так... Спробуйте ще.</p>
@@ -100,7 +98,6 @@ export default function PublicProfileClient({ user }: ProfileClientProps) {
         {!isFeedbacksLoading && !isFeedbacksError && (
           <ToolFeedbacksBlock
             feedbacks={feedbacks}
-            // V2807: Публичный профиль — текст как в фигме ("У користувача..."), стили как у блока отзывов инструмента.
             emptyTitleMobileText="У цього користувача немає жодного відгуку"
             emptyTitleDesktopText="У цього користувача немає жодного відгуку"
           />
