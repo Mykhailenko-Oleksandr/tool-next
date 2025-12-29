@@ -109,7 +109,6 @@
   font-weight: 400;
   font-size: 16px;
   line-height: 1.5;
-  color: var(--opacity-neutral-darkest-60);
 }
 
 .hint {
@@ -295,9 +294,9 @@
 }
 
 .submit-button {
-  border: 1px solid var(--color-electric-violet);
+  border: 2px solid var(--color-electric-violet);
   background: var(--color-electric-violet);
-  color: var(--color-white);
+  color: var(--color-btn-white);
 }
 
 .submit-button:hover:not(:disabled),
@@ -314,7 +313,7 @@
 }
 
 .submit-button:disabled {
-  border: 1px solid var(--color-electric-violet);
+  border: 2px solid var(--color-electric-violet);
   background: var(--color-electric-violet);
   opacity: 0.4;
   color: var(--color-white);

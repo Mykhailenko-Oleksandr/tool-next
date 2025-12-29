@@ -29,10 +29,10 @@
   border-radius: 6px;
   padding: 10px 24px;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.5;
-  border: 1px solid var(--color-electric-violet);
-  color: var(--color-white);
+  border: 2px solid var(--color-electric-violet);
+  color: var(--color-btn-white);
   margin-bottom: 32px;
   min-width: 335px;
   transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -59,6 +59,7 @@
   object-fit: cover;
   height: 223px;
   border-radius: 16px;
+  overflow: hidden;
 }
 
 @media only screen and (min-width: 768px) {

@@ -55,6 +55,7 @@
 
 .benefitsListIcon {
   margin-bottom: 24px;
+  fill: var(--color-neutral-darkest);
 }
 
 .benefitsListItemTitle {
