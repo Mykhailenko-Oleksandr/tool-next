@@ -3,7 +3,7 @@ import { nextServer } from "./api";
 import { User } from "@/types/user";
 import { CheckSessionRequest, UserToolsResponse } from "./clientApi";
 
-interface UserByIdResponse {
+export interface UserByIdResponse {
   _id: string;
   name: string;
   avatarUrl: string;

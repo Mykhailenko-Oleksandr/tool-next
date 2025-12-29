@@ -1,9 +1,10 @@
-import { User } from "@/types/user";
 import css from "./UserProfile.module.css";
 import Image from "next/image";
+import { UserByIdResponse } from "@/lib/api/serverApi";
+import { User } from "@/types/user";
 
 interface UserProfileProps {
-  user: User;
+  user: UserByIdResponse | User;
 }
 
 const UserProfile = ({ user }: UserProfileProps) => {

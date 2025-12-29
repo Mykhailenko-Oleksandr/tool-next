@@ -2,7 +2,6 @@
 
 import UserProfile from "@/components/UserProfile/UserProfile";
 import css from "./PublicProfile.module.css";
-import { User } from "@/types/user";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { fetchToolsUserId } from "@/lib/api/clientApi";
 import ToolGrid from "@/components/ToolGrid/ToolGrid";
@@ -10,9 +9,10 @@ import LoadMoreButton from "@/components/LoadMoreButton/LoadMoreButton";
 import { Tool } from "@/types/tool";
 import Loader from "@/components/Loader/Loader";
 import PublicProfilePlaceholder from "@/components/PublicProfilePlaceholder/PublicProfilePlaceholder";
+import { UserByIdResponse } from "@/lib/api/serverApi";
 
 interface ProfileClientProps {
-  user: User;
+  user: UserByIdResponse;
 }
 
 export default function PublicProfileClient({ user }: ProfileClientProps) {
